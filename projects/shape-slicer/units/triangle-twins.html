@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Triangle Twins · Shape Slicer · REDS Hall of Discovery</title>
+<link rel="stylesheet" href="../shared/slicer.css"/>
+<style>
+  /* ═══════ UNIT 02 PALETTE — "the hall of mirrors" (icy indigo) ═══════ */
+  :root{
+    --bg:#050B1F; --deep:#0D1B3E; --ice:#BFE9FF; --sky:#5AB8FF; --lilac:#B8A6FF; --mint:#7CF5D9; --silver:#E6EEF5; --rose:#FF8FB1; --cream:#FFF8E7;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+    --sc-accent:var(--sky); --sc-accent-2:var(--mint); --sc-ink:#061128; --sc-panel:#0D1B3E; --sc-line:rgba(191,233,255,.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body); color:var(--silver); min-height:100vh; overflow-x:hidden; -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(90,184,255,.22), transparent 55%),
+      radial-gradient(ellipse at 10% 80%, rgba(184,166,255,.16), transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(124,245,217,.12), transparent 50%),
+      linear-gradient(180deg, #050B1F 0%, #0A1330 55%, #04081A 100%);
+    background-attachment:fixed}
+  /* mirror sheen: a soft vertical glint down the centre of the page */
+  body::before{content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+    background:linear-gradient(90deg, transparent 47%, rgba(255,255,255,.05) 49.5%, rgba(255,255,255,.12) 50%, rgba(255,255,255,.05) 50.5%, transparent 53%)}
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  button{font:inherit}
+
+  .topbar{position:sticky; top:0; z-index:20; backdrop-filter:blur(14px); background:linear-gradient(180deg, rgba(5,11,31,.92), rgba(5,11,31,.72)); border-bottom:1px solid rgba(191,233,255,.14)}
+  .topbar-inner{max-width:1280px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px}
+  .brand-group{display:flex; align-items:center; gap:16px}
+  .back{display:inline-flex; align-items:center; gap:8px; padding:9px 14px; border-radius:999px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); font-family:var(--font-display); font-size:13px; transition:transform .15s, background .15s}
+  .back:hover{transform:translateX(-3px); background:rgba(255,255,255,.14)}
+  .brand{display:flex; align-items:center; gap:12px}
+  .brand .logo{width:44px; height:44px; filter:drop-shadow(0 0 12px rgba(90,184,255,.55))}
+  .brand .eyebrow{font-family:var(--font-display); font-size:10px; letter-spacing:.24em; text-transform:uppercase; opacity:.8}
+  .brand .wordmark{font-family:var(--font-display); font-weight:800; font-size:19px; line-height:1.1}
+  .brand .wordmark .unit{color:var(--sky); font-weight:600}
+  .class-pill{display:inline-flex; align-items:center; gap:8px; padding:9px 15px; border-radius:999px; font-family:var(--font-display); font-size:12px; background:linear-gradient(135deg, rgba(90,184,255,.25), rgba(184,166,255,.25)); border:1px solid rgba(255,255,255,.18)}
+  .class-pill .dot{width:8px;height:8px;border-radius:999px;background:var(--mint);box-shadow:0 0 12px var(--mint);animation:blink 2s infinite}
+  @keyframes blink{50%{opacity:.35}}
+
+  .hero{position:relative; min-height:72vh; display:flex; align-items:center; justify-content:center; overflow:hidden; z-index:1}
+  #hero-canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+  .hero-inner{position:relative; z-index:2; text-align:center; padding:60px 24px; max-width:900px}
+  .hero .eyebrow{font-family:var(--font-display); letter-spacing:.34em; text-transform:uppercase; font-size:13px; color:var(--ice); margin-bottom:16px}
+  .hero h1{font-size:clamp(50px, 8.5vw, 118px); letter-spacing:-.02em; line-height:.95; margin-bottom:18px;
+    background:linear-gradient(95deg, #E6EEF5, #5AB8FF 50%, #B8A6FF); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 10px 40px rgba(90,184,255,.35))}
+  .hero .tag{font-size:clamp(17px,2vw,22px); line-height:1.55; opacity:.95; text-shadow:0 2px 12px rgba(0,0,0,.6)}
+  .scroll-cue{position:absolute; bottom:22px; left:50%; transform:translateX(-50%); z-index:2; font-family:var(--font-display); font-size:12px; letter-spacing:.2em; opacity:.7; animation:nudge 2.4s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translate(-50%, 8px)}}
+
+  section.concept, section.lab, section.facts, section.nextup{position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:56px 28px 20px}
+  .kicker{font-family:var(--font-display); font-size:12px; letter-spacing:.26em; text-transform:uppercase; color:var(--sky); margin-bottom:10px}
+  .kicker::before{content:'🪞 '}
+  h2.title{font-size:clamp(30px, 4vw, 50px); margin-bottom:14px; letter-spacing:-.01em}
+  h2.title em{font-style:normal; color:var(--mint)}
+  p.blurb{font-size:18px; line-height:1.65; max-width:820px; opacity:.94}
+  p.blurb strong{color:var(--ice)}
+  .concept-row{display:grid; grid-template-columns:1.2fr 1fr; gap:26px; align-items:center; margin-top:22px}
+  @media (max-width:860px){ .concept-row{grid-template-columns:1fr} }
+  .concept-card{padding:24px 26px; border-radius:20px; background:rgba(13,27,62,.6); border:1px solid rgba(191,233,255,.2); backdrop-filter:blur(8px)}
+  .concept-card h3{font-size:20px; color:var(--ice); margin-bottom:8px}
+  .concept-card p{font-size:15px; line-height:1.6; opacity:.92}
+  .concept-card .formula{margin-top:12px; font-family:var(--font-display); font-size:22px; padding:12px 16px; border-radius:12px; background:rgba(90,184,255,.12); border:1px dashed rgba(191,233,255,.4); text-align:center}
+  .concept-card .formula b{color:var(--mint)}
+  svg.figure{width:100%; height:auto; display:block}
+
+  .panel{margin-top:22px; border-radius:24px; overflow:hidden; background:linear-gradient(180deg, rgba(90,184,255,.10), rgba(5,11,31,.6)); border:1px solid rgba(191,233,255,.22); box-shadow:0 30px 70px rgba(0,0,0,.5)}
+  .panel-top{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:14px 20px; border-bottom:1px solid rgba(191,233,255,.16); background:rgba(0,0,0,.3)}
+  .panel-top .name{display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:800; font-size:17px}
+  .panel-top .dot{width:10px; height:10px; border-radius:999px; background:var(--sky); box-shadow:0 0 12px var(--sky); animation:blink 1.6s infinite}
+  .panel-top .hint{font-family:var(--font-mono); font-size:12px; opacity:.75}
+  .panel-body{padding:18px 20px 22px}
+  .lab-grid{display:grid; grid-template-columns:1fr 300px; gap:18px}
+  @media (max-width:900px){ .lab-grid{grid-template-columns:1fr} }
+  .controls{display:flex; flex-direction:column; gap:12px}
+  .control{padding:12px 14px; border-radius:14px; background:rgba(0,0,0,.3); border:1px solid rgba(191,233,255,.16)}
+  .control label{display:flex; justify-content:space-between; font-family:var(--font-display); font-size:13px; letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px}
+  .control p{font-size:14px; line-height:1.5; opacity:.9}
+  .btn-row{display:flex; flex-wrap:wrap; gap:8px}
+  .caption{margin-top:14px; font-size:15px; line-height:1.6; opacity:.92}
+  .caption strong{color:var(--ice)}
+  .big-btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 20px; border-radius:16px; border:none; cursor:pointer; color:#061128;
+    font-family:var(--font-display); font-weight:800; font-size:17px; background:linear-gradient(135deg, var(--ice), var(--sky)); box-shadow:0 12px 30px rgba(90,184,255,.4); transition:transform .15s, box-shadow .15s}
+  .big-btn:hover{transform:translateY(-2px); box-shadow:0 18px 40px rgba(90,184,255,.55)}
+  .big-btn[disabled]{opacity:.5; cursor:not-allowed; transform:none}
+  .steps{list-style:none; display:flex; flex-direction:column; gap:6px; font-size:14px}
+  .steps li{display:flex; gap:10px; align-items:flex-start; padding:8px 10px; border-radius:10px; background:rgba(255,255,255,.04)}
+  .steps li .n{flex:0 0 22px; height:22px; border-radius:999px; background:var(--sky); color:#061128; font-family:var(--font-display); font-weight:800; font-size:12px; display:flex; align-items:center; justify-content:center}
+  .steps li.done{opacity:.55; text-decoration:line-through}
+  .steps li.done .n{background:var(--mint)}
+
+  .facts-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:22px}
+  @media (max-width:900px){ .facts-grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:560px){ .facts-grid{grid-template-columns:1fr} }
+  .fact{padding:22px; border-radius:20px; background:rgba(13,27,62,.55); border:1px solid rgba(191,233,255,.18); transition:transform .2s}
+  .fact:hover{transform:translateY(-4px)}
+  .fact .emoji{font-size:44px; line-height:1; margin-bottom:10px}
+  .fact h4{font-size:18px; margin-bottom:6px; color:var(--ice)}
+  .fact p{font-size:14px; line-height:1.55; opacity:.9}
+
+  .nextup-card{border-radius:26px; padding:34px 36px; background:linear-gradient(145deg, #2A0F4A, #C2255C 55%, #FFB347); color:#fff;
+    display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between; box-shadow:0 30px 70px rgba(0,0,0,.5)}
+  .nextup-card h3{font-size:14px; letter-spacing:.24em; text-transform:uppercase; opacity:.85}
+  .nextup-card .big{font-family:var(--font-display); font-size:clamp(26px,3.5vw,40px); font-weight:800; margin:6px 0 8px}
+  .nextup-card p{max-width:560px; font-size:15px; line-height:1.55}
+  .chip{display:inline-flex; align-items:center; gap:8px; padding:12px 18px; border-radius:999px; font-family:var(--font-display); font-weight:700; font-size:14px; background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.3); color:#fff; transition:transform .15s}
+  .chip:hover{transform:translateY(-2px)}
+  .chip.active{background:#fff; color:#2A0F4A}
+  .chip-row{display:flex; gap:10px; flex-wrap:wrap}
+
+  footer{position:relative; z-index:1; max-width:1280px; margin:40px auto 0; padding:30px 28px; border-top:1px solid rgba(191,233,255,.14); display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:13px; opacity:.75}
+  footer .heart{color:var(--rose)}
+  .sound-toggle{position:fixed; right:18px; bottom:18px; z-index:50; width:46px; height:46px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(0,0,0,.5); color:#fff; font-size:20px; cursor:pointer; backdrop-filter:blur(8px)}
+  @media (max-width:640px){ .topbar-inner{padding:12px 16px} .class-pill{display:none} section.concept, section.lab, section.facts, section.nextup{padding:40px 16px 10px} .panel-body{padding:14px} }
+  @media (prefers-reduced-motion: reduce){ .scroll-cue, .class-pill .dot, .panel-top .dot{animation:none} }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand-group">
+      <a class="back" href="../index.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 5l-7 7 7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        All units
+      </a>
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="60" height="60" rx="18" fill="#050B1F" stroke="url(#lg)" stroke-width="2"/>
+          <path d="M12 44 L36 44 L24 20 Z" fill="#5AB8FF"/>
+          <path d="M52 20 L28 20 L40 44 Z" fill="#B8A6FF" opacity=".9"/>
+          <defs><linearGradient id="lg" x1="0" y1="0" x2="64" y2="64"><stop offset="0" stop-color="#BFE9FF"/><stop offset="1" stop-color="#B8A6FF"/></linearGradient></defs>
+        </svg>
+        <div>
+          <div class="eyebrow">REDS Hall of Discovery</div>
+          <div class="wordmark">Shape Slicer <span class="unit">· Unit 02 · Triangles</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="class-pill"><span class="dot"></span>Grades 5 &amp; 6</div>
+  </div>
+</header>
+
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 02 · The hall of mirrors</div>
+    <h1>Triangle Twins</h1>
+    <p class="tag">Every triangle has a secret twin. Spin the twin around, snap them together, and you get a parallelogram — which means a triangle is always exactly <strong>half</strong>.</p>
+  </div>
+  <div class="scroll-cue">▼ SCROLL TO MEET THE TWINS</div>
+</section>
+
+<!-- ═══════ CONCEPT 01 ═══════ -->
+<section class="concept" id="c1">
+  <div class="kicker">Concept 01 · The twin trick</div>
+  <h2 class="title">Every triangle is <em>half</em> of a parallelogram.</h2>
+  <p class="blurb">
+    Make an exact copy of any triangle. Spin the copy <strong>180°</strong> (a half-turn, upside down) and slide it against the original along one side.
+    The two fit perfectly and make a <strong>parallelogram</strong>. You learned last unit that a parallelogram's area is base × height.
+    The triangle is one of two identical halves, so its area is <strong>half of base × height</strong>.
+  </p>
+  <div class="concept-row">
+    <div>
+      <svg class="figure" viewBox="0 0 640 220" aria-label="A triangle plus its half-turned twin makes a parallelogram">
+        <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#BFE9FF"/></marker></defs>
+        <g transform="translate(20,30)">
+          <polygon points="0,150 180,150 60,30" fill="#5AB8FF" opacity=".9"/>
+          <text x="60" y="185" fill="#E6EEF5" font-size="15" font-family="system-ui">one triangle</text>
+        </g>
+        <path d="M230 95 L280 95" stroke="#BFE9FF" stroke-width="3" marker-end="url(#arr)"/>
+        <g transform="translate(310,30)">
+          <polygon points="0,150 180,150 60,30" fill="#5AB8FF" opacity=".9"/>
+          <polygon points="180,150 240,30 60,30" fill="#B8A6FF" opacity=".9"/>
+          <text x="60" y="185" fill="#E6EEF5" font-size="15" font-family="system-ui">+ its twin, spun 180°</text>
+          <text x="250" y="90" fill="#7CF5D9" font-size="14" font-family="system-ui">= a</text>
+          <text x="250" y="108" fill="#7CF5D9" font-size="14" font-family="system-ui">parallelogram</text>
+        </g>
+      </svg>
+    </div>
+    <div class="concept-card">
+      <h3>Half of what you already know</h3>
+      <p>Parallelogram = base × height. The triangle is half of that parallelogram — same base, same height.</p>
+      <div class="formula">Area of a triangle = <b>base × height ÷ 2</b></div>
+      <p style="margin-top:12px">Some people write it as ½ × base × height. Same thing. Build it yourself below.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ LAB 01 — THE TWIN MAKER ═══════ -->
+<section class="lab" id="lab1">
+  <div class="kicker">Lab 01 · Hands on</div>
+  <h2 class="title">The <em>Twin Maker</em></h2>
+  <p class="blurb">Drag the glowing dot to reshape the triangle. Press <strong>Make a twin</strong>, then spin the twin and drag it into the dashed outline. It only fits one way!</p>
+  <div class="panel">
+    <div class="panel-top">
+      <div class="name"><span class="dot"></span>The Twin Maker</div>
+      <div class="hint">drag the dot · make a twin · spin it · drop it in the outline</div>
+    </div>
+    <div class="panel-body">
+      <div class="lab-grid">
+        <div>
+          <div class="board-wrap">
+            <canvas class="board" id="twin"></canvas>
+            <div class="board-tools">
+              <button class="tool-btn" id="tw-spin">🔁 Spin 180°</button>
+              <button class="tool-btn" id="tw-flip">↔ Flip (mirror)</button>
+              <span class="spacer"></span>
+              <button class="tool-btn" id="tw-reset">↺ Reset</button>
+            </div>
+          </div>
+          <div class="readouts">
+            <div class="readout"><div class="label">Base</div><div class="value" id="tw-base">6</div></div>
+            <div class="readout"><div class="label">Height</div><div class="value" id="tw-h">4</div></div>
+            <div class="readout"><div class="label">Parallelogram</div><div class="value" id="tw-par">?</div><div class="formula" id="tw-parf">base × height</div></div>
+            <div class="readout hot"><div class="label">One triangle</div><div class="value" id="tw-tri">?</div><div class="formula" id="tw-trif">half of that</div></div>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="big-btn" id="tw-make">✨ Make a twin</button>
+          <div class="control">
+            <label>How to</label>
+            <ul class="steps" id="tw-steps">
+              <li><span class="n">1</span>Drag the dot to make any triangle you like.</li>
+              <li><span class="n">2</span>Make a twin. It's an exact copy.</li>
+              <li><span class="n">3</span>Tap the twin, spin it 180°, and drag it into the outline.</li>
+            </ul>
+          </div>
+          <div class="control">
+            <label>Try this</label>
+            <p>What happens if you <strong>flip</strong> the twin instead of spinning it? Does it still fit?</p>
+          </div>
+        </div>
+      </div>
+      <div class="caption" id="tw-cap"><strong>Watch the numbers:</strong> the parallelogram's area appears when the twins snap together. The triangle is always exactly half — no matter how pointy or lopsided it is.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ LAB 02 — THE HALF-HEIGHT FOLD ═══════ -->
+<section class="lab" id="lab2">
+  <div class="kicker">Lab 02 · Another way</div>
+  <h2 class="title">The <em>Half-Height</em> Fold</h2>
+  <p class="blurb">
+    Here's a second proof, with scissors this time. Cut the triangle along the dotted line at <strong>half its height</strong>. Then cut the little top triangle straight down through its tip.
+    Spin the two tiny pieces into the corners and you get a rectangle that's <strong>base × half the height</strong>. Same answer, new route.
+  </p>
+  <div class="panel">
+    <div class="panel-top">
+      <div class="name"><span class="dot"></span>The Half-Height Fold</div>
+      <div class="hint">✂ cut mode: drag a line · ✋ move mode: drag pieces · spin with buttons</div>
+    </div>
+    <div class="panel-body">
+      <div class="lab-grid">
+        <div>
+          <div class="board-wrap">
+            <canvas class="board" id="fold"></canvas>
+            <div class="board-tools">
+              <button class="tool-btn active" id="fd-cut">✂️ Cut</button>
+              <button class="tool-btn" id="fd-move">✋ Move</button>
+              <button class="tool-btn" id="fd-rl">⟲ 90°</button>
+              <button class="tool-btn" id="fd-rr">⟳ 90°</button>
+              <button class="tool-btn" id="fd-180">🔁 180°</button>
+              <span class="spacer"></span>
+              <button class="tool-btn" id="fd-undo">↶ Undo</button>
+              <button class="tool-btn" id="fd-reset">↺ Reset</button>
+            </div>
+          </div>
+          <div class="readouts">
+            <div class="readout"><div class="label">Cuts made</div><div class="value" id="fd-cuts">0</div></div>
+            <div class="readout"><div class="label">Pieces</div><div class="value" id="fd-pieces">1</div></div>
+            <div class="readout"><div class="label">Total area</div><div class="value" id="fd-area">12</div><div class="formula">never changes</div></div>
+            <div class="readout hot"><div class="label">Rectangle</div><div class="value" id="fd-rect">?</div><div class="formula" id="fd-rectf">base × (height ÷ 2)</div></div>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="control">
+            <label>Pick a triangle</label>
+            <div class="btn-row">
+              <button class="tool-btn active" data-tri="0">Pointy</button>
+              <button class="tool-btn" data-tri="1">Right angle</button>
+              <button class="tool-btn" data-tri="2">Wide</button>
+            </div>
+          </div>
+          <div class="control">
+            <label>Steps</label>
+            <ul class="steps" id="fd-steps">
+              <li><span class="n">1</span>Cut along the dotted half-height line.</li>
+              <li><span class="n">2</span>Cut the small top triangle straight down through its tip.</li>
+              <li><span class="n">3</span>Spin each small piece 180° and fit it into a corner of the outline.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="caption" id="fd-cap"><strong>Why it works:</strong> the two tiny corner triangles are exact twins of the two gaps. Half the height, full base — that's the same as full height, half the base. Both give base × height ÷ 2.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ LAB 03 — WHICH BASE? ═══════ -->
+<section class="lab" id="lab3">
+  <div class="kicker">Lab 03 · The big secret</div>
+  <h2 class="title">Which side is the <em>base</em>?</h2>
+  <p class="blurb">
+    Trick question: <strong>any side</strong> can be the base. But then the height has to be measured from the <em>opposite corner</em>, straight down to that base (or to the line it sits on).
+    Drag the corners around and click a side to make it the base. The area comes out the same every time.
+  </p>
+  <div class="panel">
+    <div class="panel-top">
+      <div class="name"><span class="dot"></span>Which Base?</div>
+      <div class="hint">drag corners · click a side to make it the base</div>
+    </div>
+    <div class="panel-body">
+      <div class="lab-grid">
+        <div>
+          <div class="board-wrap"><canvas class="board" id="which"></canvas></div>
+          <div class="readouts">
+            <div class="readout"><div class="label">Base (side <span id="wb-side">1</span>)</div><div class="value" id="wb-base">6</div></div>
+            <div class="readout"><div class="label">Height to it</div><div class="value" id="wb-h">4</div></div>
+            <div class="readout hot"><div class="label">Area</div><div class="value" id="wb-area">12</div><div class="formula" id="wb-f">6 × 4 ÷ 2</div></div>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="control">
+            <label>Choose the base</label>
+            <div class="btn-row">
+              <button class="tool-btn active" data-side="0">Side 1</button>
+              <button class="tool-btn" data-side="1">Side 2</button>
+              <button class="tool-btn" data-side="2">Side 3</button>
+            </div>
+          </div>
+          <div class="control">
+            <label>All three areas</label>
+            <div id="wb-all" style="font-family:var(--font-mono);font-size:13px;line-height:1.8"></div>
+          </div>
+          <div class="btn-row"><button class="tool-btn" id="wb-reset">↺ Reset triangle</button><button class="tool-btn" id="wb-obtuse">Try a leaning one</button></div>
+        </div>
+      </div>
+      <div class="caption"><strong>Look for it:</strong> with a "leaning" triangle, the height sometimes lands outside the shape, on the dotted extension of the base. That's still the height. Three bases, three heights, one area.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FACTS ═══════ -->
+<section class="facts">
+  <div class="kicker">Bonus</div>
+  <h2 class="title">Six wild <em>triangle</em> facts.</h2>
+  <div class="facts-grid">
+    <div class="fact"><div class="emoji">🧱</div><h4>The strongest shape</h4><p>Push on a square and it leans into a parallelogram. Push on a triangle and it refuses to budge. That's why bridges and roofs are full of triangles.</p></div>
+    <div class="fact"><div class="emoji">🔺</div><h4>Three twins, not one</h4><p>A triangle has three sides, so it has three different parallelogram twins — one for each side you attach the copy to. All three have the same area.</p></div>
+    <div class="fact"><div class="emoji">🇪🇬</div><h4>Ancient rope-stretchers</h4><p>Egyptian surveyors used knotted ropes to make right triangles and measure fields after the Nile flooded. Triangle area = your share of farmland.</p></div>
+    <div class="fact"><div class="emoji">🧩</div><h4>Every polygon is triangles</h4><p>Any shape with straight sides can be chopped into triangles. Computer games draw everything — dragons, mountains, faces — out of millions of tiny triangles.</p></div>
+    <div class="fact"><div class="emoji">🎪</div><h4>Half-height trick, tent-style</h4><p>Cut at half height and fold the top down. Tent makers and paper-airplane folders use this exact move to turn a triangle into a rectangle of cloth.</p></div>
+    <div class="fact"><div class="emoji">🤯</div><h4>Same base, same height, same area</h4><p>Slide the top corner of a triangle sideways — as far as you like. As long as it stays the same height, the area never changes. Try it in Lab 03!</p></div>
+  </div>
+</section>
+
+<section class="nextup">
+  <div class="nextup-card">
+    <div>
+      <h3>Next up · Unit 03</h3>
+      <div class="big">🪁 Flip &amp; Fit</div>
+      <p>Trapezoids, kites, and rhombuses have strange names but no strange secrets. Double them, flip them, or slice them along the diagonals — and they turn into shapes you already own.</p>
+    </div>
+    <div class="chip-row">
+      <a class="chip" href="../index.html">← All units</a>
+      <a class="chip active" href="flip-and-fit.html">Go to Unit 03 →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>REDS Hall of Discovery · Shape Slicer · Unit 02: Triangle Twins</div>
+  <div>Made with <span class="heart">♥</span> for Mrs. Guyer's classes</div>
+</footer>
+<button class="sound-toggle" id="soundToggle" aria-label="Turn sound off">🔊</button>
+
+<script src="../shared/slicer-core.js"></script>
+<script>
+const SC = window.SlicerCore;
+SC.bindSoundToggle(document.getElementById('soundToggle'));
+const REDUCE = SC.reduceMotion();
+const el = id => document.getElementById(id);
+const PAL = ['#5AB8FF','#B8A6FF','#7CF5D9','#FF8FB1','#BFE9FF','#FFD27F'];
+
+/* =========================================================
+   HERO — triangles and their half-turned twins pulse together
+   in a mirrored hall; shimmer streaks sweep across.
+   ========================================================= */
+(() => {
+  const c = el('hero-canvas'); let ctx, W, H;
+  const fit = () => { ({ctx, w:W, h:H} = SC.fitCanvas(c)); }; fit(); addEventListener('resize', fit);
+  const twins = Array.from({length: 9}, (_, i) => ({
+    x: Math.random(), y: Math.random(), s: 26 + Math.random()*30, rot: Math.random()*6.28, vr: (Math.random()-.5)*.003,
+    ax: -.3 + Math.random()*1.4, ah: .6 + Math.random()*.8, phase: Math.random()*6.28, col: PAL[i % PAL.length], drift: (Math.random()-.5)*.00006
+  }));
+  const streaks = Array.from({length: 5}, () => ({ x: Math.random(), sp: .00006 + Math.random()*.0001, w: 40 + Math.random()*80 }));
+  function tick(t){
+    ctx.clearRect(0,0,W,H);
+    for (const s of streaks){
+      const x = ((s.x + t*s.sp) % 1.3 - .15) * W;
+      const g = ctx.createLinearGradient(x - s.w, 0, x + s.w, 0);
+      g.addColorStop(0,'rgba(255,255,255,0)'); g.addColorStop(.5,'rgba(191,233,255,.08)'); g.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.fillStyle = g; ctx.fillRect(x - s.w, 0, s.w*2, H);
+    }
+    for (const tw of twins){
+      const k = .5 + .5*Math.sin(t*.0009 + tw.phase);   // 0 = apart, 1 = joined
+      const x = ((tw.x + t*tw.drift) % 1 + 1) % 1 * W, y = tw.y * H;
+      tw.rot += REDUCE ? 0 : tw.vr;
+      const S = tw.s;
+      const A = [SC.P(-.5*S, .35*S), SC.P(.5*S, .35*S), SC.P((tw.ax-.5)*S, (.35 - tw.ah)*S)];
+      // twin rotated 180° about the midpoint of the right side, then pulled away by (1-k)
+      const mid = SC.P((A[1].x + A[2].x)/2, (A[1].y + A[2].y)/2);
+      const B = A.map(p => SC.P(2*mid.x - p.x + (1-k)*S*.9, 2*mid.y - p.y - (1-k)*S*.5));
+      ctx.save(); ctx.translate(x, y); ctx.rotate(tw.rot);
+      for (const [poly, alpha] of [[A, .55], [B, .35 + .3*k]]){
+        ctx.beginPath(); poly.forEach((p,i)=> i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)); ctx.closePath();
+        ctx.fillStyle = tw.col; ctx.globalAlpha = alpha*.35; ctx.fill(); ctx.globalAlpha = alpha; ctx.strokeStyle = tw.col; ctx.lineWidth = 1.5; ctx.stroke();
+      }
+      ctx.restore(); ctx.globalAlpha = 1;
+    }
+    if (!REDUCE) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 1 — THE TWIN MAKER
+   ========================================================= */
+(() => {
+  const canvas = el('twin');
+  const st = { b:6, ax:2, ah:4, twin:null, base:null, solved:false };
+  const tri = () => [SC.P(0,0), SC.P(st.b,0), SC.P(st.ax, st.ah)];
+  const target = () => [SC.P(0,0), SC.P(st.b,0), SC.P(st.b+st.ax, st.ah), SC.P(st.ax, st.ah)];
+  const board = new SC.Board(canvas, {
+    world:{minX:-3, minY:-1.5, maxX:15, maxY:8}, rotateStep: Math.PI/2, colors:['#5AB8FF','#B8A6FF'],
+    handles: () => st.twin ? [] : [{ x: st.ax, y: st.ah, color:'#7CF5D9', onDrag: w => { st.ax = Math.max(-2.5, Math.min(st.b+2.5, Math.round(w.x*2)/2)); st.ah = Math.max(1, Math.min(6.5, Math.round(w.y*2)/2)); board.reshape(st.base, tri()); board.setTarget(target()); update(); } }],
+    onChange: update, onSolved: solved, draw: overlay,
+  });
+  function overlay(ctx, b, layer){
+    if (layer !== 'over') return;
+    b.dim(SC.P(0,0), SC.P(st.b,0), `base ${st.b}`, '#BFE9FF', -0.5);
+    const hx = Math.max(-2.5, Math.min(st.b + 2.5, st.ax));
+    ctx.save(); ctx.setLineDash([6,5]); ctx.strokeStyle = '#7CF5D9'; ctx.lineWidth = 2;
+    const t = b.toScreen(SC.P(st.ax, st.ah)), bt = b.toScreen(SC.P(st.ax, 0));
+    ctx.beginPath(); ctx.moveTo(t.x,t.y); ctx.lineTo(bt.x,bt.y); ctx.stroke();
+    if (st.ax < 0 || st.ax > st.b){ const e = b.toScreen(SC.P(st.ax < 0 ? st.ax - .3 : st.ax + .3, 0)), o = b.toScreen(SC.P(st.ax < 0 ? 0 : st.b, 0)); ctx.strokeStyle = 'rgba(191,233,255,.6)'; ctx.beginPath(); ctx.moveTo(o.x,o.y); ctx.lineTo(e.x,e.y); ctx.stroke(); }
+    ctx.restore();
+    b.dim(SC.P(st.ax,0), SC.P(st.ax,st.ah), `height ${st.ah}`, '#7CF5D9', st.ax > st.b/2 ? 0.55 : -0.55);
+  }
+  function update(){
+    el('tw-base').textContent = st.b; el('tw-h').textContent = st.ah;
+    if (!board.solved){ el('tw-par').textContent = '?'; el('tw-parf').textContent = 'base × height'; el('tw-tri').textContent = '?'; el('tw-trif').textContent = 'half of that'; }
+  }
+  function solved(b){
+    const par = st.b * st.ah;
+    el('tw-par').textContent = par; el('tw-parf').textContent = `${st.b} × ${st.ah} = ${par}`;
+    el('tw-tri').textContent = SC.fmt(par/2); el('tw-trif').textContent = `${par} ÷ 2 = ${SC.fmt(par/2)}`;
+    SC.sfx.win(); SC.confetti({colors: PAL});
+    SC.toast(`Twins! Parallelogram = ${par}, so each triangle = ${SC.fmt(par/2)}.`, 'good', 3200);
+    [...el('tw-steps').children].forEach(li => li.classList.add('done'));
+    el('tw-cap').innerHTML = `<strong>They fit.</strong> The parallelogram is ${st.b} × ${st.ah} = ${par} square units, so one triangle is ${SC.fmt(par/2)}. Press Reset, drag the dot to a totally different shape, and check it's <em>still</em> half.`;
+  }
+  function reset(){
+    board.clear(); st.twin = null; board.solved = false;
+    st.base = board.addPiece(tri(), {locked:true, color:'#5AB8FF'});
+    board.setTarget(target()); board.setMode('move'); update();
+    [...el('tw-steps').children].forEach(li => li.classList.remove('done'));
+    el('tw-make').disabled = false;
+  }
+  el('tw-make').onclick = () => {
+    if (st.twin) return;
+    st.twin = board.addPiece(tri().map(p => SC.P(p.x + st.b + 3, p.y + 1)), {color:'#B8A6FF'});
+    board.select(st.twin); el('tw-make').disabled = true; SC.sfx.snap();
+    el('tw-steps').children[0].classList.add('done'); el('tw-steps').children[1].classList.add('done');
+    SC.toast('A twin appears! Spin it 180° and drag it into the outline.', 'hint');
+  };
+  el('tw-spin').onclick = () => { if (!st.twin){ SC.toast('Make a twin first.', 'hint'); return; } board.select(st.twin); board.rotateSelected(1, Math.PI); SC.sfx.click(); };
+  el('tw-flip').onclick = () => { if (!st.twin){ SC.toast('Make a twin first.', 'hint'); return; } board.select(st.twin); board.flipSelected(); SC.sfx.click();
+    if (!board.solved) SC.toast('Flipped! A mirror twin makes a kite shape, not a parallelogram. Try spinning instead.', 'hint', 3600); };
+  el('tw-reset').onclick = () => { reset(); SC.sfx.click(); };
+  reset();
+})();
+
+/* =========================================================
+   LAB 2 — THE HALF-HEIGHT FOLD (cut + rotate)
+   ========================================================= */
+(() => {
+  const canvas = el('fold');
+  const TRIS = [ {b:6, ax:2, ah:4}, {b:6, ax:0, ah:4}, {b:8, ax:5, ah:3} ];
+  let spec = TRIS[0], history = [];
+  const board = new SC.Board(canvas, {
+    world:{minX:-1.5, minY:-1.5, maxX:10.5, maxY:6.5}, rotateStep: Math.PI/2, colors:['#5AB8FF','#B8A6FF','#7CF5D9','#FF8FB1'],
+    onChange: update, onSolved: solved, draw: overlay, onCut: (b, created) => { SC.sfx.snip(); update(); }
+  });
+  function overlay(ctx, b, layer){
+    if (layer !== 'under') return;
+    const y = spec.ah/2, a = b.toScreen(SC.P(-1, y)), c = b.toScreen(SC.P(spec.b + 1.5, y));
+    ctx.save(); ctx.setLineDash([5,6]); ctx.strokeStyle = 'rgba(124,245,217,.55)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(c.x,c.y); ctx.stroke(); ctx.restore();
+    ctx.font = '700 12px ui-rounded, system-ui'; ctx.fillStyle = 'rgba(124,245,217,.85)'; ctx.textAlign = 'left'; ctx.fillText('half height', c.x - 78, c.y - 6);
+  }
+  function update(b){
+    el('fd-cuts').textContent = board.cuts; el('fd-pieces').textContent = board.pieces.length; el('fd-area').textContent = SC.fmt(board.totalArea());
+    if (!board.solved){ el('fd-rect').textContent = '?'; el('fd-rectf').textContent = 'base × (height ÷ 2)'; }
+    const steps = el('fd-steps').children;
+    steps[0].classList.toggle('done', board.cuts >= 1); steps[1].classList.toggle('done', board.cuts >= 2);
+  }
+  function solved(){
+    const a = spec.b * spec.ah / 2;
+    el('fd-rect').textContent = SC.fmt(a); el('fd-rectf').textContent = `${spec.b} × ${SC.fmt(spec.ah/2)} = ${SC.fmt(a)}`;
+    el('fd-steps').children[2].classList.add('done');
+    SC.sfx.win(); SC.confetti({colors: PAL});
+    SC.toast(`A rectangle! ${spec.b} × ${SC.fmt(spec.ah/2)} = ${SC.fmt(a)} — same as ${spec.b} × ${spec.ah} ÷ 2.`, 'good', 3600);
+    el('fd-cap').innerHTML = `<strong>Folded!</strong> Rectangle = base × half-height = ${spec.b} × ${SC.fmt(spec.ah/2)} = ${SC.fmt(a)}. The triangle formula base × height ÷ 2 gives ${spec.b} × ${spec.ah} ÷ 2 = ${SC.fmt(a)}. Same number, two roads. You used ${board.cuts} cut${board.cuts===1?'':'s'}.`;
+  }
+  function reset(){
+    history = []; board.clear();
+    board.addPiece([SC.P(0,0), SC.P(spec.b,0), SC.P(spec.ax, spec.ah)], {color:'#5AB8FF'});
+    board.setTarget([SC.P(0,0), SC.P(spec.b,0), SC.P(spec.b, spec.ah/2), SC.P(0, spec.ah/2)]);
+    setMode('cut'); update(); [...el('fd-steps').children].forEach(li => li.classList.remove('done'));
+    el('fd-cap').innerHTML = `<strong>Why it works:</strong> the two tiny corner triangles are exact twins of the two gaps. Half the height, full base — that's the same as full height, half the base. Both give base × height ÷ 2.`;
+  }
+  function setMode(m){ board.setMode(m); el('fd-cut').classList.toggle('active', m === 'cut'); el('fd-move').classList.toggle('active', m === 'move'); }
+  const snap = () => history.push(board.snapshot());
+  canvas.addEventListener('pointerdown', () => { if (board.mode === 'cut') snap(); });
+  el('fd-cut').onclick = () => setMode('cut');
+  el('fd-move').onclick = () => setMode('move');
+  const needSel = () => { if (!board.selected){ SC.toast('Tap a piece first (in Move mode).', 'hint'); setMode('move'); return false; } return true; };
+  el('fd-rl').onclick = () => { if (needSel()){ snap(); board.rotateSelected(1); SC.sfx.click(); } };
+  el('fd-rr').onclick = () => { if (needSel()){ snap(); board.rotateSelected(-1); SC.sfx.click(); } };
+  el('fd-180').onclick = () => { if (needSel()){ snap(); board.rotateSelected(1, Math.PI); SC.sfx.click(); } };
+  el('fd-undo').onclick = () => { const s = history.pop(); if (s){ board.restore(s); update(); SC.sfx.click(); } else SC.toast('Nothing to undo.', 'hint'); };
+  el('fd-reset').onclick = () => { reset(); SC.sfx.click(); };
+  document.querySelectorAll('[data-tri]').forEach(btn => btn.onclick = () => { document.querySelectorAll('[data-tri]').forEach(b => b.classList.remove('active')); btn.classList.add('active'); spec = TRIS[+btn.dataset.tri]; reset(); SC.sfx.click(); });
+  reset();
+})();
+
+/* =========================================================
+   LAB 3 — WHICH BASE? (drag corners, pick a base)
+   ========================================================= */
+(() => {
+  const canvas = el('which');
+  let V = [SC.P(1,1), SC.P(7,1), SC.P(3,5)], side = 0, drag = -1;
+  const view = { ctx:null, w:0, h:0, scale:1, ox:0, oy:0 };
+  const S = p => SC.P(view.ox + p.x*view.scale, view.oy - p.y*view.scale);
+  const Wd = (sx, sy) => SC.P((sx - view.ox)/view.scale, (view.oy - sy)/view.scale);
+  function fit(){ ({ctx:view.ctx, w:view.w, h:view.h} = SC.fitCanvas(canvas)); view.scale = Math.min(view.w/13, view.h/8.5); view.ox = view.w/2 - 5.5*view.scale; view.oy = view.h/2 + 3.25*view.scale; draw(); }
+  new ResizeObserver(fit).observe(canvas);
+  function calc(i){
+    const a = V[i], b = V[(i+1)%3], c = V[(i+2)%3];
+    const base = Math.hypot(b.x-a.x, b.y-a.y);
+    const area = SC.area(V);
+    const h = 2*area/base;
+    // foot of the perpendicular from c to line ab
+    const dx = b.x-a.x, dy = b.y-a.y, t = ((c.x-a.x)*dx + (c.y-a.y)*dy)/(dx*dx+dy*dy);
+    return { a, b, c, base, h, area, foot: SC.P(a.x + t*dx, a.y + t*dy), t };
+  }
+  function draw(){
+    const ctx = view.ctx; if (!ctx) return;
+    ctx.clearRect(0,0,view.w,view.h);
+    ctx.strokeStyle = 'rgba(255,255,255,.06)'; ctx.lineWidth = 1;
+    for (let x=-2;x<=13;x++){ const p=S(SC.P(x,-2)), q=S(SC.P(x,9)); ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
+    for (let y=-2;y<=9;y++){ const p=S(SC.P(-2,y)), q=S(SC.P(13,y)); ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
+    const r = calc(side);
+    ctx.beginPath(); V.forEach((p,i)=>{ const s=S(p); i?ctx.lineTo(s.x,s.y):ctx.moveTo(s.x,s.y); }); ctx.closePath();
+    ctx.fillStyle = 'rgba(90,184,255,.45)'; ctx.fill(); ctx.strokeStyle = 'rgba(230,238,245,.8)'; ctx.lineWidth = 2; ctx.stroke();
+    // side labels
+    for (let i=0;i<3;i++){ const a=V[i], b=V[(i+1)%3]; const m = S(SC.P((a.x+b.x)/2, (a.y+b.y)/2)); const cen = S(SC.centroid(V)); const dx = m.x-cen.x, dy = m.y-cen.y, L = Math.hypot(dx,dy)||1;
+      const lx = m.x + dx/L*18, ly = m.y + dy/L*18;
+      ctx.fillStyle = i===side ? '#BFE9FF' : 'rgba(230,238,245,.5)'; ctx.beginPath(); ctx.arc(lx, ly, 12, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#061128'; ctx.font = '800 13px ui-rounded, system-ui'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(String(i+1), lx, ly+1); ctx.textBaseline='alphabetic'; }
+    // base highlight
+    const a = S(r.a), b = S(r.b); ctx.strokeStyle = '#BFE9FF'; ctx.lineWidth = 6; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    // extension if foot outside
+    if (r.t < 0 || r.t > 1){ const f = S(r.foot), o = r.t < 0 ? a : b; ctx.save(); ctx.setLineDash([4,6]); ctx.strokeStyle='rgba(191,233,255,.6)'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(o.x,o.y); ctx.lineTo(f.x,f.y); ctx.stroke(); ctx.restore(); }
+    // height
+    const c = S(r.c), f = S(r.foot);
+    ctx.save(); ctx.setLineDash([6,5]); ctx.strokeStyle = '#7CF5D9'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(c.x,c.y); ctx.lineTo(f.x,f.y); ctx.stroke(); ctx.restore();
+    // right-angle marker at foot
+    const ux = (b.x-a.x)/Math.hypot(b.x-a.x,b.y-a.y), uy = (b.y-a.y)/Math.hypot(b.x-a.x,b.y-a.y); const vx = (c.x-f.x), vy = (c.y-f.y), vl = Math.hypot(vx,vy)||1;
+    const m = 10; ctx.strokeStyle = '#7CF5D9'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(f.x + ux*m, f.y + uy*m); ctx.lineTo(f.x + ux*m + vx/vl*m, f.y + uy*m + vy/vl*m); ctx.lineTo(f.x + vx/vl*m, f.y + vy/vl*m); ctx.stroke();
+    // labels
+    const lm = SC.P((r.c.x+r.foot.x)/2, (r.c.y+r.foot.y)/2); const lms = S(lm);
+    ctx.font = '800 14px ui-rounded, system-ui'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    const put = (txt, x, y, col) => { const tw = ctx.measureText(txt).width + 12; ctx.fillStyle='rgba(0,0,0,.6)'; SC.roundRect(ctx, x-tw/2, y-11, tw, 22, 7); ctx.fill(); ctx.fillStyle = col; ctx.fillText(txt, x, y+1); };
+    put(`h = ${SC.fmt(r.h)}`, lms.x + 34, lms.y, '#7CF5D9');
+    const bm = S(SC.P((r.a.x+r.b.x)/2, (r.a.y+r.b.y)/2)); put(`b = ${SC.fmt(r.base)}`, bm.x, bm.y + 26, '#BFE9FF');
+    ctx.textBaseline='alphabetic';
+    // vertices
+    V.forEach((p,i)=>{ const s=S(p); ctx.save(); ctx.shadowColor='#fff'; ctx.shadowBlur=10; ctx.fillStyle = i===drag?'#fff':'#E6EEF5'; ctx.beginPath(); ctx.arc(s.x,s.y,8,0,Math.PI*2); ctx.fill(); ctx.restore(); });
+    // readouts
+    el('wb-side').textContent = side+1; el('wb-base').textContent = SC.fmt(r.base); el('wb-h').textContent = SC.fmt(r.h);
+    el('wb-area').textContent = SC.fmt(r.area); el('wb-f').textContent = `${SC.fmt(r.base)} × ${SC.fmt(r.h)} ÷ 2`;
+    el('wb-all').innerHTML = [0,1,2].map(i => { const q = calc(i); return `<div${i===side?' style="color:#BFE9FF"':''}>side ${i+1}: ${SC.fmt(q.base)} × ${SC.fmt(q.h)} ÷ 2 = <b>${SC.fmt(q.area)}</b></div>`; }).join('');
+  }
+  function evt(e){ const r = canvas.getBoundingClientRect(); return Wd(e.clientX - r.left, e.clientY - r.top); }
+  canvas.addEventListener('pointerdown', e => {
+    const w = evt(e); canvas.setPointerCapture(e.pointerId);
+    drag = V.findIndex(p => Math.hypot(p.x-w.x, p.y-w.y)*view.scale < 16);
+    if (drag < 0){ // click a side?
+      for (let i=0;i<3;i++){ if (SC.distPointSeg(w, V[i], V[(i+1)%3])*view.scale < 14){ setSide(i); SC.sfx.click(); break; } }
+    }
+    draw();
+  });
+  canvas.addEventListener('pointermove', e => { if (drag < 0) return; const w = evt(e); V[drag] = SC.P(Math.max(-1, Math.min(12, Math.round(w.x*2)/2)), Math.max(-1, Math.min(8, Math.round(w.y*2)/2))); if (SC.area(V) < 0.5) return; draw(); });
+  canvas.addEventListener('pointerup', () => { if (drag >= 0) SC.sfx.snap(); drag = -1; draw(); });
+  function setSide(i){ side = i; document.querySelectorAll('[data-side]').forEach(b => b.classList.toggle('active', +b.dataset.side === i)); draw(); }
+  document.querySelectorAll('[data-side]').forEach(b => b.onclick = () => { setSide(+b.dataset.side); SC.sfx.click(); });
+  el('wb-reset').onclick = () => { V = [SC.P(1,1), SC.P(7,1), SC.P(3,5)]; draw(); };
+  el('wb-obtuse').onclick = () => { V = [SC.P(1,1), SC.P(5,1), SC.P(9,5)]; setSide(0); SC.toast('Look: the height lands outside the triangle, on the dotted line.', 'hint', 3200); };
+  fit();
+})();
+</script>
+</body>
+</html>

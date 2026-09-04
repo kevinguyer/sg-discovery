@@ -1,0 +1,1472 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Invisible Energy · Investigating Waves · REDS Hall of Discovery</title>
+<style>
+  :root{
+    --bg:       #001219;
+    --deep:     #002B36;
+    --mid:      #005F73;
+    --teal:     #0A9396;
+    --seafoam:  #94D2BD;
+    --cream:    #FFF8E7;
+    --amber:    #FFB800;
+    --wifi:     #0AEFFF;
+    --radar:    #00F5A0;
+    --xray:     #FF4D9F;
+    --gamma:    #C77DFF;
+    --warn:     #FFB800;
+    --hot:      #FF5D73;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{
+    font-family:var(--font-body); color:var(--cream); background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(10,239,255,.15), transparent 55%),
+      radial-gradient(ellipse at 100% 80%, rgba(255,77,159,.18), transparent 55%),
+      radial-gradient(ellipse at 0% 60%, rgba(0,245,160,.12), transparent 55%),
+      linear-gradient(180deg, #001219 0%, #000812 100%);
+    background-attachment:fixed;
+  }
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  img,svg{display:block;max-width:100%}
+
+  /* ---------- Topbar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:20; backdrop-filter: blur(14px);
+    background:linear-gradient(180deg, rgba(0,18,25,.88), rgba(0,18,25,.6));
+    border-bottom:1px solid rgba(10,239,255,.22);
+  }
+  .topbar-inner{
+    max-width:1280px; margin:0 auto; padding:14px 28px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+  }
+  .back{
+    display:inline-flex; align-items:center; gap:8px; padding:8px 14px;
+    border-radius:999px; background:rgba(255,255,255,.08); font-family:var(--font-display); font-size:13px;
+    transition:background .15s;
+  }
+  .back:hover{background:rgba(10,239,255,.2)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand .logo{width:44px;height:44px; filter: drop-shadow(0 0 8px rgba(10,239,255,.6));}
+  .brand .eyebrow{font-family:var(--font-display);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--seafoam);opacity:.9}
+  .brand .wordmark{font-family:var(--font-display);font-size:18px}
+  .brand .unit{font-family:var(--font-display);font-size:13px;color:var(--radar)}
+  .class-pill{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 14px; border-radius:999px;
+    background:linear-gradient(135deg, rgba(10,239,255,.22), rgba(0,245,160,.22));
+    border:1px solid rgba(255,255,255,.18);
+    font-family:var(--font-display); font-size:12px;
+  }
+  .class-pill .dot{width:7px;height:7px;border-radius:999px;background:var(--radar);box-shadow:0 0 10px var(--radar); animation: pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    min-height:72vh;
+    display:flex; align-items:center;
+  }
+  #hero-canvas{position:absolute; inset:0; width:100%; height:100%; z-index:0;}
+  .hero-inner{
+    position:relative; z-index:2;
+    max-width:1280px; margin:0 auto; padding:40px 36px; width:100%;
+    text-align:center;
+  }
+  .hero .eyebrow{
+    font-family:var(--font-display); color:var(--seafoam);
+    letter-spacing:.4em; font-size:12px; text-transform:uppercase; margin-bottom:18px;
+  }
+  .hero h1{
+    font-size: clamp(60px, 12vw, 180px);
+    line-height:.85; letter-spacing:-.03em;
+    background: linear-gradient(95deg, #FFB800 0%, #FF5D73 25%, #FF4D9F 45%, #C77DFF 65%, #0AEFFF 85%, #00F5A0 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter: drop-shadow(0 12px 50px rgba(10,239,255,.45));
+    margin-bottom: 22px;
+  }
+  .hero .tag{
+    max-width:760px; margin:0 auto;
+    font-size: clamp(18px, 2vw, 24px); color:var(--cream); opacity:.95;
+  }
+  .hero .scroll-cue{
+    position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+    font-family:var(--font-display); font-size:12px; letter-spacing:.3em;
+    color:var(--seafoam); opacity:.85; animation: nudge 2.4s ease-in-out infinite;
+  }
+  @keyframes nudge{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,6px)}}
+
+  /* ---------- Section scaffolding ---------- */
+  section.concept, section.lab, section.facts, section.nextup{
+    max-width:1280px; margin: 0 auto; padding: 28px 28px;
+  }
+  .kicker{
+    font-family:var(--font-display); font-size:12px; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--radar); margin-bottom:4px;
+  }
+  .title{font-size:clamp(26px,3.2vw,40px); margin-bottom:6px; line-height:1;}
+  .blurb{max-width:740px; font-size:15px; line-height:1.5; color:rgba(255,248,231,.88)}
+
+  .panel{
+    margin-top:8px; border-radius:20px; overflow:hidden;
+    border:1px solid rgba(10,239,255,.22);
+    background: linear-gradient(180deg, rgba(10,239,255,.05), rgba(0,245,160,.02));
+    box-shadow: 0 20px 50px rgba(0,0,0,.6), 0 0 40px rgba(10,239,255,.08);
+    display:flex; flex-direction:column;
+  }
+  .panel-top{
+    padding:10px 18px; display:flex; justify-content:space-between; align-items:center;
+    background: linear-gradient(135deg, rgba(10,239,255,.22), rgba(255,77,159,.15));
+    border-bottom:1px solid rgba(10,239,255,.2);
+    font-family:var(--font-display); font-size:13px; letter-spacing:.08em;
+  }
+  .panel-top .dot{width:9px;height:9px;border-radius:999px;background:var(--radar);box-shadow:0 0 12px var(--radar);margin-right:8px;display:inline-block;vertical-align:middle;animation:pulse 2s ease-in-out infinite}
+
+  canvas.demo{display:block; width:100%; background:#000812; height: clamp(220px, 48vh, 460px);}
+  .caption{
+    padding:10px 18px; font-size:13px; line-height:1.45; color:rgba(255,248,231,.82);
+    border-top:1px solid rgba(10,239,255,.15);
+  }
+
+  /* ---------- Controls ---------- */
+  .controls{
+    display:flex; flex-wrap:wrap; gap:18px 22px; padding:12px 18px;
+    border-top:1px solid rgba(10,239,255,.15);
+    background: rgba(0,8,18,.6);
+    align-items:center;
+  }
+  .control{ flex:1 1 180px; min-width:160px; }
+  .control label{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--font-display); font-size:12px; letter-spacing:.05em; margin-bottom:4px;
+  }
+  .control .val{color:var(--radar); font-family:var(--font-mono); font-size:13px; background:rgba(0,245,160,.12); padding:2px 8px; border-radius:6px;}
+  .control input[type=range]{
+    width:100%; -webkit-appearance:none; appearance:none;
+    height:6px; border-radius:999px; outline:none;
+    background: linear-gradient(90deg, #FFB800 0%, #FF5D73 20%, #FF4D9F 40%, #C77DFF 60%, #0AEFFF 80%, #00F5A0 100%);
+  }
+  .control input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none;
+    width:22px;height:22px;border-radius:50%;
+    background:var(--radar); border:3px solid #fff;
+    box-shadow:0 4px 12px rgba(0,0,0,.5), 0 0 12px rgba(0,245,160,.8);
+    cursor:pointer;
+  }
+  .control input[type=range]::-moz-range-thumb{
+    width:22px;height:22px;border-radius:50%;
+    background:var(--radar); border:3px solid #fff; cursor:pointer;
+  }
+  .plain-slider{ background: linear-gradient(90deg, var(--mid), var(--radar)) !important; }
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 16px; border-radius:999px;
+    font-family:var(--font-display); font-size:13px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(10,239,255,.3);
+    transition:all .15s;
+  }
+  .chip:hover{background:rgba(10,239,255,.2); transform:translateY(-2px)}
+  .chip.active{background:linear-gradient(135deg,var(--radar),var(--wifi)); border-color:transparent; color:#001219}
+
+  /* ---------- Facts ---------- */
+  .facts-grid{
+    display:grid; grid-template-columns: repeat(3, 1fr);
+    gap:22px; margin-top:32px;
+  }
+  @media (max-width: 900px){ .facts-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px){ .facts-grid{ grid-template-columns: 1fr; } }
+  .fact{
+    padding:30px 28px; border-radius:24px;
+    background: linear-gradient(135deg, rgba(10,239,255,.16), rgba(255,77,159,.10));
+    border:1px solid rgba(10,239,255,.25);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .fact:hover{transform: translateY(-6px) rotate(-.5deg); box-shadow: 0 24px 60px rgba(10,239,255,.28)}
+  .fact .emoji{font-size:52px; margin-bottom:14px; display:block; line-height:1}
+  .fact h4{font-size:22px; margin-bottom:10px; line-height:1.2}
+  .fact p{font-size:16px; line-height:1.55; color:rgba(255,248,231,.9)}
+
+  /* ---------- Next up ---------- */
+  .nextup-card{
+    margin-top:24px;
+    padding:40px; border-radius:28px;
+    background: linear-gradient(135deg, #001a00, #006400 60%, #9EF01A);
+    display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;
+    box-shadow:0 30px 80px rgba(0,100,0,.45);
+    color:#001200;
+  }
+  .nextup-card h3{font-size:28px; margin-bottom:8px}
+  .nextup-card .big{font-size:40px; margin-top:4px}
+  .nextup-card p{opacity:.9; max-width:460px}
+  .nextup-card .chip.active{background:#001a00;color:#9EF01A}
+
+  footer{
+    padding:40px 28px; max-width:1280px; margin:0 auto;
+    border-top:1px solid rgba(10,239,255,.2);
+    display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:center;
+    font-size:13px; color:rgba(255,248,231,.7);
+  }
+  footer .heart{color:var(--xray)}
+
+  @media (prefers-reduced-motion: reduce){
+    .hero .scroll-cue, .class-pill .dot, .panel-top .dot{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== Topbar ========== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="back" href="../index.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      All units
+    </a>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="60" height="60" rx="18" fill="#001219" stroke="url(#eg)" stroke-width="2"/>
+        <path d="M8 38 Q16 26 24 38 T40 38 T56 38" stroke="#FF4D9F" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M8 32 Q16 20 24 32 T40 32 T56 32" stroke="#00F5A0" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M8 26 Q16 14 24 26 T40 26 T56 26" stroke="#0AEFFF" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="eg" x1="0" y1="0" x2="64" y2="64">
+            <stop offset="0" stop-color="#FFB800"/><stop offset=".5" stop-color="#FF4D9F"/><stop offset="1" stop-color="#0AEFFF"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div>
+        <div class="eyebrow">REDS Hall of Discovery</div>
+        <div class="wordmark">Investigating Waves <span class="unit">· Unit 04 · Invisible Energy</span></div>
+      </div>
+    </div>
+    <div class="class-pill"><span class="dot"></span>Mrs. Guyer's 5th Grade</div>
+  </div>
+</header>
+
+<!-- ========== Hero ========== -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 04 · The waves you CAN'T see</div>
+    <h1>Invisible<br/>Energy</h1>
+    <p class="tag">
+      Right now — no, seriously, <em>right now</em> — your body is being flooded with waves. Wifi. Radio stations.
+      Sunlight. Microwaves from the kitchen. Even X-rays from distant stars. You can't see any of them. But they're doing <strong>everything</strong>. ⚡
+    </p>
+  </div>
+  <div class="scroll-cue">SCROLL · OPEN YOUR EYES</div>
+</section>
+
+<!-- ========== Concept 1: EM Spectrum Scroller ========== -->
+<section class="concept" id="c1">
+  <div class="kicker">Concept 01 · The electromagnetic spectrum</div>
+  <h2 class="title">Visible light is a <em>tiny</em> sliver.</h2>
+  <p class="blurb">
+    All those "invisible" waves — radio, microwave, infrared, UV, X-ray, gamma — are <strong>the exact same thing</strong>
+    as the light your eyes see. They're all electromagnetic waves. The only difference? <em>Wavelength.</em>
+    Radio waves can be miles long. Gamma rays are smaller than an atom. 🤯 Scroll across to meet them all. 👇
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Live · Full EM Spectrum Explorer</span><span style="opacity:.8">drag to scan · 10⁻¹⁴ m → 10⁴ m</span></div>
+    <canvas id="spectrum" class="demo"></canvas>
+    <div class="controls">
+      <div class="control" style="flex-basis:100%">
+        <label>Where in the spectrum? <span class="val" id="spec-val">VISIBLE · 550 nm</span></label>
+        <input type="range" id="spec" min="0" max="1000" value="680"/>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Mind-blower:</strong> the whole rainbow your eyes can see fits into ONE little green bar in the middle.
+      Everything else — all the invisible stuff — is WAY more of the universe than what we can see. 🌌
+    </div>
+  </div>
+</section>
+
+<!-- ========== Lab 1: Radio Tuner ========== -->
+<section class="lab" id="lab1">
+  <div class="kicker">Lab 01 · Radio tuner</div>
+  <h2 class="title">Tune the dial. Catch the signal.</h2>
+  <p class="blurb">
+    Radio stations broadcast by wiggling invisible radio waves at a specific <strong>frequency</strong>.
+    Your radio's dial picks out just one frequency and turns it back into sound. Try tuning to find the stations!
+    When you lock on, the signal gets strong and clear. 📻
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Vintage Radio</span><span style="opacity:.8">drag the tuning knob</span></div>
+    <canvas id="radio" class="demo"></canvas>
+    <div class="controls">
+      <div class="control" style="flex-basis:100%">
+        <label>Tuning <span class="val" id="radio-val">88.0 MHz</span></label>
+        <input type="range" id="radio-tune" min="880" max="1080" value="880" class="plain-slider"/>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Try this:</strong> sweep the dial slowly. When you're between stations, you get <em>static</em> (random noise).
+      When you hit a station exactly, the wave becomes clean and you can "receive" the program. That's what a radio does — millions of times a second!
+    </div>
+  </div>
+</section>
+
+<!-- ========== Lab 2: Microwave Oven ========== -->
+<section class="lab" id="lab2">
+  <div class="kicker">Lab 02 · Microwave oven</div>
+  <h2 class="title">How microwaves pop your popcorn.</h2>
+  <p class="blurb">
+    A microwave oven is basically a tiny room that shoots <strong>radio waves with a very specific wavelength</strong> — one that makes
+    water molecules shake like crazy. All that shaking = heat. Your food cooks from the inside out. No fire, no flame, just wiggling water.
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Popcorn Microwave</span><span style="opacity:.8">press START · watch the H₂O dance</span></div>
+    <canvas id="microwave" class="demo"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>Power <span class="val" id="mw-p-val">medium</span></label>
+        <input type="range" id="mw-p" min="30" max="100" value="70" class="plain-slider"/>
+      </div>
+      <div class="control">
+        <label>&nbsp;</label>
+        <div class="btn-row">
+          <button class="chip" id="mw-start">▶ Start cooking</button>
+          <button class="chip" id="mw-reset">↺ Reset</button>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Watch:</strong> the little <em>H₂O</em> molecules inside the kernel wiggle faster as energy pours in. When water hits
+      100°C it turns to steam. Inside a tough kernel shell? 💥 <strong>POP!</strong> That's literally how popcorn works.
+    </div>
+  </div>
+</section>
+
+<!-- ========== Lab 3: X-Ray Scanner ========== -->
+<section class="lab" id="lab3">
+  <div class="kicker">Lab 03 · X-Ray scanner</div>
+  <h2 class="title">See through skin with high-energy waves.</h2>
+  <p class="blurb">
+    X-rays are waves so <em>short</em> and <em>powerful</em> that they can zip right through soft stuff like skin and muscle
+    — but they get stopped by dense stuff like <strong>bones</strong>. So doctors shine X-rays through you, and the shadow shows
+    your skeleton. Slide to crank up the X-rays and take a look. 🦴
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Medical X-Ray Imager</span><span style="opacity:.8">warning: NOT a real medical device!</span></div>
+    <canvas id="xray" class="demo"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>X-ray intensity <span class="val" id="xr-val">0%</span></label>
+        <input type="range" id="xr" min="0" max="100" value="0" class="plain-slider"/>
+      </div>
+      <div class="control">
+        <label>Specimen</label>
+        <div class="btn-row">
+          <button class="chip active" data-spec="hand">🖐️ Hand</button>
+          <button class="chip" data-spec="chest">🫁 Chest</button>
+          <button class="chip" data-spec="foot">🦶 Foot</button>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Important:</strong> real X-rays use a TINY dose — just enough to take the picture. Too many is bad for your cells!
+      That's why you only get X-rays when a doctor needs them, and they use lead aprons to block the rest. 🩻
+    </div>
+  </div>
+</section>
+
+<!-- ========== Facts ========== -->
+<section class="facts">
+  <div class="kicker">Did you know?</div>
+  <h2 class="title">Six wild invisible-energy facts.</h2>
+  <div class="facts-grid">
+    <div class="fact">
+      <span class="emoji">📡</span>
+      <h4>Wifi is just radio.</h4>
+      <p>Wifi, cell phones, Bluetooth, your car key, baby monitors — all use radio waves. Your devices just wiggle them <em>really fast</em> to send data.</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🌞</span>
+      <h4>You're glowing right now.</h4>
+      <p>Your warm body gives off <strong>infrared</strong> light — you're invisible to regular eyes, but to an infrared camera you glow like a lightbulb.</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🗼</span>
+      <h4>Radio waves can be MILES long.</h4>
+      <p>The wavelength of an AM radio station can be longer than the Empire State Building. Giant waves, tiny information — they wrap right around the Earth.</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🐝</span>
+      <h4>Bees see ultraviolet flowers.</h4>
+      <p>Flowers have secret UV patterns we can't see — landing strips pointing to the nectar! Bees see them just fine. Science thinks it's pretty!</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🌌</span>
+      <h4>The Big Bang still echoes.</h4>
+      <p>About 1% of the "static" on an old TV tuned between channels was actually <strong>microwave radiation from the Big Bang</strong> — 13.8 billion years old!</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🕶️</span>
+      <h4>Superman vision is (almost) real.</h4>
+      <p>Airport scanners, satellites, hospital MRIs — humans have built tons of machines that "see" in X-ray, infrared, radio, and more. Our eyes are just one tiny camera.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Next Up ========== -->
+<section class="nextup">
+  <div class="kicker">Up next in the series</div>
+  <div class="nextup-card">
+    <div>
+      <h3>Unit 05 · Codes, Signals & Communication</h3>
+      <div class="big">📡 Morse · binary · secret messages.</div>
+      <p>How does a wiggle become a word? Dots, dashes, zeroes, ones, and the secret language of every phone on Earth.</p>
+    </div>
+    <a class="chip active" href="../index.html">Back to all units →</a>
+  </div>
+</section>
+
+<footer>
+  <div><strong>REDS Hall of Discovery</strong> · Investigating Waves · Unit 04: Invisible Energy</div>
+  <div>Made with <span class="heart">♥</span> for Mrs. Guyer's 5th Grade Class</div>
+</footer>
+
+<script>
+/* ========= Canvas helper ========= */
+function setupCanvas(canvas){
+  const ctx = canvas.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  function resize(){
+    const r = canvas.getBoundingClientRect();
+    canvas.width  = Math.floor(r.width * DPR);
+    canvas.height = Math.floor(r.height * DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  return {ctx, DPR, resize, rect: () => canvas.getBoundingClientRect()};
+}
+
+/* ========= Helpers ========= */
+function clamp(v,a,b){return Math.max(a, Math.min(b,v));}
+function lerp(a,b,t){return a + (b-a)*t;}
+
+/* ========= EM Spectrum bands ========= */
+/* parametric t in [0..1] maps across the full EM spectrum
+   organized into 7 bands of equal visual width. */
+const BANDS = [
+  {name:'RADIO',      color:'#FFB800', icon:'📻', min:0.00, max:0.16,
+   rangeText:'wavelengths: meters → kilometers',
+   example:'AM/FM radio stations, walkie-talkies, TV broadcasts'},
+  {name:'MICROWAVE',  color:'#FF8A3D', icon:'📶', min:0.16, max:0.32,
+   rangeText:'wavelengths: centimeters',
+   example:'Wifi, cell phones, your microwave oven, radar'},
+  {name:'INFRARED',   color:'#FF5D73', icon:'🔥', min:0.32, max:0.48,
+   rangeText:'wavelengths: micrometers',
+   example:'Heat, TV remotes, night-vision goggles'},
+  {name:'VISIBLE',    color:'#9EF01A', icon:'🌈', min:0.48, max:0.54,
+   rangeText:'wavelengths: 400–700 nanometers',
+   example:'Everything your eyes can see — all of it, right here!'},
+  {name:'ULTRAVIOLET',color:'#C77DFF', icon:'☀️', min:0.54, max:0.68,
+   rangeText:'wavelengths: tens of nanometers',
+   example:'Sunburns, black-light posters, flower patterns bees see'},
+  {name:'X-RAY',      color:'#FF4D9F', icon:'🦴', min:0.68, max:0.84,
+   rangeText:'wavelengths: picometers',
+   example:'Hospital X-ray machines, airport scanners'},
+  {name:'GAMMA',      color:'#0AEFFF', icon:'☢️', min:0.84, max:1.00,
+   rangeText:'wavelengths: smaller than an atom',
+   example:'Nuclear reactions, deep-space explosions, medical treatments'},
+];
+function bandAt(t){
+  for (const b of BANDS){ if (t >= b.min && t <= b.max) return b; }
+  return BANDS[BANDS.length-1];
+}
+function approxWavelength(t){
+  // logarithmic: 1e-14 m (gamma) at t=1 → 1e4 m (radio) at t=0
+  // we want short (gamma) at high t: 10^(4 - t*18) m
+  const meters = Math.pow(10, 4 - t*18);
+  if (meters >= 1) return `${meters >= 1000 ? (meters/1000).toFixed(1)+' km' : meters.toFixed(1)+' m'}`;
+  if (meters >= 1e-3) return `${(meters*1000).toFixed(1)} mm`;
+  if (meters >= 1e-6) return `${(meters*1e6).toFixed(1)} µm`;
+  if (meters >= 1e-9) return `${(meters*1e9).toFixed(1)} nm`;
+  if (meters >= 1e-12) return `${(meters*1e12).toFixed(1)} pm`;
+  return `${meters.toExponential(1)} m`;
+}
+
+/* =========================================================
+   HERO — animated EM-spectrum sweep with floating band icons
+   ========================================================= */
+(() => {
+  const c = document.getElementById('hero-canvas');
+  const {ctx} = setupCanvas(c);
+
+  const bandIcons = BANDS.map(b => ({
+    ...b,
+    drift: Math.random()*Math.PI*2,
+    y: 0.2 + Math.random()*0.6,
+  }));
+
+  function tick(t){
+    const W = c.clientWidth, H = c.clientHeight;
+    // bg
+    const g = ctx.createRadialGradient(W*0.5, H*0.5, 40, W*0.5, H*0.5, Math.max(W,H));
+    g.addColorStop(0, '#0A2540'); g.addColorStop(.5, '#001219'); g.addColorStop(1, '#000812');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+    // "radar" scanning arc
+    const rx = W*0.2, ry = H*0.5;
+    const rad = Math.min(W,H)*0.9;
+    const sweep = (t*0.0005) % (Math.PI*2);
+    for (let i=0;i<3;i++){
+      const ang = sweep - i*0.08;
+      ctx.strokeStyle = `rgba(0,245,160,${0.16 - i*0.04})`;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(rx, ry, rad, ang - 0.25, ang); ctx.stroke();
+    }
+    // radar rings
+    for (let r=80; r<rad; r+=120){
+      ctx.strokeStyle = `rgba(0,245,160,${0.08 * (1 - r/rad)})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(rx, ry, r, 0, Math.PI*2); ctx.stroke();
+    }
+
+    // drifting band icons with colored rings
+    for (const b of bandIcons){
+      const drift = t * 0.00015 + b.drift;
+      const bx = (0.15 + b.min + (b.max-b.min)*0.5 + Math.sin(drift)*0.05) * W;
+      const by = (b.y + Math.cos(drift*1.3)*0.04) * H;
+      // glow
+      const gr = ctx.createRadialGradient(bx, by, 2, bx, by, 60);
+      gr.addColorStop(0, b.color + 'AA'); gr.addColorStop(1, b.color + '00');
+      ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(bx, by, 60, 0, Math.PI*2); ctx.fill();
+      ctx.font = '34px system-ui, Apple Color Emoji, Segoe UI Emoji';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(b.icon, bx, by);
+    }
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   CONCEPT 1 — EM Spectrum Scroller
+   Large spectrum bar + slider. Displays current band info,
+   a scale-accurate wave (logarithmic), and callouts.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('spectrum');
+  const {ctx} = setupCanvas(c);
+  const sp = document.getElementById('spec');
+  const spV = document.getElementById('spec-val');
+
+  function upd(){
+    const t = +sp.value / 1000;
+    const b = bandAt(t);
+    spV.textContent = `${b.name} · ${approxWavelength(t)}`;
+  }
+  sp.addEventListener('input', upd); upd();
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle = '#000812'; ctx.fillRect(0,0,W,H);
+
+    const t = +sp.value / 1000;
+    const b = bandAt(t);
+
+    // Spectrum bar near the bottom
+    const barH = 40;
+    const barY = H - barH - 28;
+    const barX = 30, barW = W - 60;
+    // Draw the bar — each band gets a segment
+    for (const B of BANDS){
+      const x0 = barX + B.min * barW;
+      const x1 = barX + B.max * barW;
+      const g = ctx.createLinearGradient(x0, 0, x1, 0);
+      g.addColorStop(0, B.color + 'CC');
+      g.addColorStop(1, B.color + 'FF');
+      ctx.fillStyle = g;
+      ctx.fillRect(x0, barY, x1-x0, barH);
+    }
+    // band labels
+    ctx.font = 'bold 10px ui-rounded, system-ui';
+    ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(0,0,0,.75)';
+    for (const B of BANDS){
+      const cx = barX + ((B.min + B.max)/2) * barW;
+      if ((B.max - B.min) * barW > 40) ctx.fillText(B.name, cx, barY + barH/2 + 4);
+    }
+    // bar frame
+    ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 1.5;
+    ctx.strokeRect(barX, barY, barW, barH);
+
+    // marker (indicator on bar)
+    const mx = barX + t * barW;
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(mx, barY-10); ctx.lineTo(mx, barY+barH+10); ctx.stroke();
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.moveTo(mx, barY-14); ctx.lineTo(mx-7, barY-22); ctx.lineTo(mx+7, barY-22); ctx.closePath();
+    ctx.fill();
+
+    // scale ends labels
+    ctx.font = 'bold 10px ui-rounded, system-ui';
+    ctx.fillStyle = 'rgba(255,255,255,.65)';
+    ctx.textAlign = 'left';
+    ctx.fillText('← LONG waves · low energy', barX, barY + barH + 22);
+    ctx.textAlign = 'right';
+    ctx.fillText('SHORT waves · high energy →', barX + barW, barY + barH + 22);
+
+    // --- Current band info panel (top half) ---
+    const panelY = 20;
+    // icon
+    ctx.font = '64px system-ui, Apple Color Emoji, Segoe UI Emoji';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#fff';
+    ctx.fillText(b.icon, 40, panelY + 70);
+
+    // name
+    ctx.font = 'bold 34px ui-rounded, system-ui';
+    ctx.fillStyle = b.color;
+    ctx.fillText(b.name, 120, panelY + 42);
+
+    // wavelength readout
+    ctx.font = '14px ui-rounded, system-ui';
+    ctx.fillStyle = 'rgba(255,255,255,.75)';
+    ctx.fillText(b.rangeText, 120, panelY + 66);
+
+    // example line
+    ctx.font = 'bold 14px ui-rounded, system-ui';
+    ctx.fillStyle = '#FFF8E7';
+    const exLabel = '▶ ' + b.example;
+    ctx.fillText(exLabel, 120, panelY + 92);
+
+    // live wave — draw a representative wave with color and frequency for this band
+    const waveY = panelY + 140;
+    const waveH = H - waveY - barH - 62;
+    if (waveH > 30){
+      const midY = waveY + waveH/2;
+      // "frequency" scales with how far right we are on the spectrum
+      const cyclesOnScreen = 2 + Math.pow(t, 1.2) * 80;
+      const amp = Math.min(waveH*0.4, 40);
+      // glow
+      ctx.strokeStyle = b.color + '44'; ctx.lineWidth = 14;
+      ctx.beginPath();
+      for (let x = 40; x <= W - 40; x += 2){
+        const u = (x - 40) / (W - 80);
+        const y = midY + Math.sin(u*cyclesOnScreen*Math.PI*2 - now*0.003) * amp;
+        if (x === 40) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      // core
+      ctx.strokeStyle = b.color; ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let x = 40; x <= W - 40; x += 2){
+        const u = (x - 40) / (W - 80);
+        const y = midY + Math.sin(u*cyclesOnScreen*Math.PI*2 - now*0.003) * amp;
+        if (x === 40) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 1 — Radio Tuner
+   Vintage radio dial; tuning selects a frequency. When near
+   a station, the carrier wave gets clean and station info
+   pops up. Off-station → static.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('radio');
+  const {ctx} = setupCanvas(c);
+  const tuneEl = document.getElementById('radio-tune');
+  const tuneV  = document.getElementById('radio-val');
+
+  // Stations (freq in tenths of MHz so slider 880..1080 is 88.0..108.0)
+  const STATIONS = [
+    {f: 893, name: 'REDS-FM',       tag: '🎸 Rockin\' school jams',   col:'#FF4D9F'},
+    {f: 925, name: 'CLASSIC 92.5',  tag: '🎻 Classical & orchestra',  col:'#FFB800'},
+    {f: 971, name: 'POP 97.1',      tag: '🎤 Today\'s top hits',      col:'#0AEFFF'},
+    {f:1015, name: 'JAZZ 101.5',    tag: '🎷 Smooth jazz',            col:'#00F5A0'},
+    {f:1045, name: 'NEWS 104.5',    tag: '📰 All news, all the time', col:'#C77DFF'},
+  ];
+
+  function upd(){
+    tuneV.textContent = (+tuneEl.value/10).toFixed(1) + ' MHz';
+  }
+  tuneEl.addEventListener('input', upd); upd();
+
+  function closestStation(){
+    let best = null, bestDist = Infinity;
+    for (const s of STATIONS){
+      const d = Math.abs(s.f - +tuneEl.value);
+      if (d < bestDist){ bestDist = d; best = s; }
+    }
+    return {station: best, dist: bestDist};
+  }
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    // wood-grain bg
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, '#3a1a08'); bg.addColorStop(0.5, '#2a1404'); bg.addColorStop(1, '#1a0c02');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    // wood grain lines
+    for (let y = 0; y < H; y += 8){
+      ctx.strokeStyle = `rgba(0,0,0,${0.1 + Math.sin(y*0.05)*0.06})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y + Math.sin(y*0.01)*4); ctx.stroke();
+    }
+
+    // frame border
+    ctx.strokeStyle = '#5a2a10'; ctx.lineWidth = 4;
+    ctx.strokeRect(10, 10, W-20, H-20);
+
+    // top waveform display (oscilloscope)
+    const oscX = 40, oscY = 40, oscW = W - 80, oscH = Math.min(120, H*0.35);
+    ctx.fillStyle = '#000C18'; ctx.fillRect(oscX, oscY, oscW, oscH);
+    ctx.strokeStyle = '#00F5A0'; ctx.lineWidth = 1;
+    ctx.strokeRect(oscX, oscY, oscW, oscH);
+
+    const midY = oscY + oscH/2;
+    const {station, dist} = closestStation();
+    // lock-in factor: 1 (on station) → 0 (far off)
+    const lock = Math.max(0, 1 - dist/8);
+
+    // Waveform: clean sine modulated + noise depending on lock
+    ctx.strokeStyle = '#00F5A0'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let x = oscX+4; x <= oscX + oscW - 4; x += 1.5){
+      const u = (x - oscX) / oscW;
+      // clean carrier
+      const carrier = Math.sin(u*30 - now*0.012);
+      // AM modulation (slow envelope) when locked
+      const modulation = 0.5 + 0.5 * Math.sin(u*6 - now*0.003);
+      const clean = carrier * (0.3 + 0.7*modulation);
+      // noise
+      const noise = (Math.random() - 0.5) * 2;
+      const y = midY + (lock * clean + (1-lock) * noise) * oscH * 0.42;
+      if (x === oscX+4) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // Station info card (shows when locked enough)
+    const cardY = oscY + oscH + 20;
+    const cardH = H - cardY - 75;
+    if (lock > 0.35 && station){
+      const a = Math.min(1, (lock - 0.35) / 0.5);
+      ctx.save();
+      ctx.globalAlpha = a;
+      // card
+      const cx = W*0.5, cy = cardY + cardH*0.5;
+      const cw = Math.min(440, W-80), ch = Math.min(cardH*0.92, 120);
+      ctx.fillStyle = 'rgba(0,12,24,.85)';
+      ctx.strokeStyle = station.col; ctx.lineWidth = 2;
+      roundRect(ctx, cx-cw/2, cy-ch/2, cw, ch, 14);
+      ctx.fill(); ctx.stroke();
+
+      // signal bars
+      for (let i = 0; i < 4; i++){
+        const barH = 6 + i*7;
+        const active = (+tuneEl.value/10) > 88 && (i/4) < lock;
+        ctx.fillStyle = active ? station.col : 'rgba(255,255,255,.15)';
+        ctx.fillRect(cx-cw/2 + 20 + i*10, cy + ch/2 - 10 - barH, 7, barH);
+      }
+      // LIVE dot
+      ctx.fillStyle = station.col;
+      ctx.beginPath(); ctx.arc(cx + cw/2 - 20, cy - ch/2 + 18, 6, 0, Math.PI*2); ctx.fill();
+      ctx.font = 'bold 10px ui-rounded, system-ui'; ctx.textAlign='right';
+      ctx.fillText('● LIVE', cx + cw/2 - 32, cy - ch/2 + 22);
+
+      // Station name
+      ctx.font = 'bold 28px ui-rounded, system-ui'; ctx.textAlign = 'center';
+      ctx.fillStyle = station.col;
+      ctx.fillText(station.name, cx, cy - 6);
+      // tag
+      ctx.font = '15px ui-rounded, system-ui';
+      ctx.fillStyle = '#FFF8E7';
+      ctx.fillText(station.tag, cx, cy + 22);
+
+      ctx.restore();
+    } else {
+      // static noise in the card zone
+      ctx.fillStyle = 'rgba(255,255,255,.55)';
+      ctx.font = 'bold 22px ui-rounded, system-ui'; ctx.textAlign = 'center';
+      ctx.fillText('〰 STATIC 〰', W*0.5, cardY + cardH*0.5);
+      ctx.font = '13px ui-rounded, system-ui';
+      ctx.fillStyle = 'rgba(255,255,255,.45)';
+      ctx.fillText('tune the dial to find a station…', W*0.5, cardY + cardH*0.5 + 26);
+    }
+
+    // --- Dial strip at the very bottom ---
+    const dialY = H - 50;
+    const dialH = 28;
+    // cream background
+    const dg = ctx.createLinearGradient(0, dialY, 0, dialY + dialH);
+    dg.addColorStop(0, '#FFD28A'); dg.addColorStop(1, '#D8A05E');
+    ctx.fillStyle = dg; ctx.fillRect(20, dialY, W-40, dialH);
+    ctx.strokeStyle = '#3a1a08'; ctx.lineWidth = 2;
+    ctx.strokeRect(20, dialY, W-40, dialH);
+
+    // frequency ticks/labels
+    const fMin = 880, fMax = 1080;
+    ctx.fillStyle = '#3a1a08'; ctx.font = 'bold 10px ui-rounded, system-ui'; ctx.textAlign = 'center';
+    for (let f = 88; f <= 108; f += 2){
+      const fx = 20 + ((f*10 - fMin) / (fMax - fMin)) * (W-40);
+      ctx.beginPath();
+      ctx.moveTo(fx, dialY);
+      ctx.lineTo(fx, dialY + (f % 4 === 0 ? 10 : 5));
+      ctx.strokeStyle = '#3a1a08'; ctx.stroke();
+      if (f % 4 === 0) ctx.fillText(f.toString(), fx, dialY + 22);
+    }
+    // station tick marks
+    for (const s of STATIONS){
+      const sx = 20 + ((s.f - fMin) / (fMax - fMin)) * (W-40);
+      ctx.fillStyle = s.col;
+      ctx.beginPath(); ctx.arc(sx, dialY - 6, 4, 0, Math.PI*2); ctx.fill();
+    }
+
+    // needle
+    const nx = 20 + ((+tuneEl.value - fMin) / (fMax - fMin)) * (W-40);
+    ctx.strokeStyle = '#FF4D9F'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(nx, dialY - 10); ctx.lineTo(nx, dialY + dialH + 4); ctx.stroke();
+    ctx.fillStyle = '#FF4D9F';
+    ctx.beginPath();
+    ctx.moveTo(nx, dialY - 12); ctx.lineTo(nx-5, dialY - 18); ctx.lineTo(nx+5, dialY - 18);
+    ctx.closePath(); ctx.fill();
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+  ctx.lineTo(x+w, y+h-r); ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+  ctx.lineTo(x+r, y+h); ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+  ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y);
+  ctx.closePath();
+}
+
+/* =========================================================
+   LAB 2 — Microwave Oven
+   Interior chamber; microwaves bounce around as wavy lines.
+   A kernel contains H2O molecules that wiggle more as temperature
+   climbs. At 100°C-ish the kernel POPS into popcorn with particles.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('microwave');
+  const {ctx} = setupCanvas(c);
+  const pEl = document.getElementById('mw-p');
+  const pV = document.getElementById('mw-p-val');
+  const startBtn = document.getElementById('mw-start');
+  const resetBtn = document.getElementById('mw-reset');
+
+  pEl.addEventListener('input', () => {
+    const v = +pEl.value;
+    pV.textContent = v < 50 ? 'low' : v < 80 ? 'medium' : 'HIGH';
+  });
+
+  const state = {
+    on: false,
+    temp: 22,       // °C
+    popped: false,
+    popTime: 0,
+    particles: [],
+    molecules: null,
+  };
+
+  function resetAll(){
+    state.on = false;
+    state.temp = 22;
+    state.popped = false;
+    state.particles = [];
+    state.molecules = null;
+    startBtn.textContent = '▶ Start cooking';
+    startBtn.classList.remove('active');
+  }
+  resetBtn.addEventListener('click', resetAll);
+  startBtn.addEventListener('click', () => {
+    if (state.popped) resetAll();
+    state.on = !state.on;
+    startBtn.textContent = state.on ? '⏸ Pause' : '▶ Start cooking';
+    startBtn.classList.toggle('active', state.on);
+  });
+
+  function initMolecules(cx, cy, r){
+    const list = [];
+    for (let i = 0; i < 14; i++){
+      const a = Math.random() * Math.PI * 2;
+      const d = Math.random() * r * 0.75;
+      list.push({
+        baseX: cx + Math.cos(a)*d,
+        baseY: cy + Math.sin(a)*d,
+        ph: Math.random()*Math.PI*2,
+        sp: 1 + Math.random()*1.5,
+      });
+    }
+    return list;
+  }
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    const dt = Math.min(0.05, (tick._last ? (now - tick._last)/1000 : 0.016));
+    tick._last = now;
+
+    // Chamber
+    ctx.fillStyle = '#050810'; ctx.fillRect(0, 0, W, H);
+
+    const pad = 40, chX = pad, chY = pad, chW = W - pad*2 - 190, chH = H - pad*2;
+    // chamber gradient
+    const cg = ctx.createLinearGradient(chX, chY, chX, chY+chH);
+    cg.addColorStop(0, '#1a2030'); cg.addColorStop(1, '#0d1220');
+    ctx.fillStyle = cg; ctx.fillRect(chX, chY, chW, chH);
+    // chamber glass glow when on
+    if (state.on){
+      ctx.fillStyle = 'rgba(255,184,0,.08)';
+      ctx.fillRect(chX, chY, chW, chH);
+    }
+    ctx.strokeStyle = '#3a4a6a'; ctx.lineWidth = 3;
+    ctx.strokeRect(chX, chY, chW, chH);
+
+    // turn-table platter
+    const tX = chX + chW/2, tY = chY + chH*0.72;
+    const platR = Math.min(chW*0.32, chH*0.28);
+    ctx.fillStyle = '#2a2230'; ctx.beginPath(); ctx.arc(tX, tY, platR, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = '#777'; ctx.lineWidth = 1; ctx.stroke();
+
+    // microwaves bouncing (zig-zag lines from top-corners)
+    if (state.on){
+      const power = +pEl.value/100;
+      for (let i = 0; i < 6; i++){
+        const ang = (i / 6) * Math.PI * 2 + now*0.001;
+        const sx = chX + chW*0.5 + Math.cos(ang)*4;
+        const sy = chY + chH*0.15 + Math.sin(ang)*4;
+        ctx.strokeStyle = `rgba(255,184,0,${0.35 * power})`;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        let x = sx, y = sy;
+        let dx = Math.cos(ang), dy = Math.sin(ang);
+        ctx.moveTo(x, y);
+        for (let step = 0; step < 5; step++){
+          const len = 70 + Math.random()*30;
+          // draw wavy segment
+          const ex = x + dx*len, ey = y + dy*len;
+          for (let s = 0; s <= 1; s += 0.05){
+            const wx = lerp(x, ex, s);
+            const wy = lerp(y, ey, s);
+            const wob = Math.sin(s*10 + now*0.02)*3;
+            const nx = -dy, ny = dx;
+            ctx.lineTo(wx + nx*wob, wy + ny*wob);
+          }
+          x = ex; y = ey;
+          // reflect off chamber wall if outside
+          if (x < chX+4){ dx = -dx; x = chX+4; }
+          if (x > chX+chW-4){ dx = -dx; x = chX+chW-4; }
+          if (y < chY+4){ dy = -dy; y = chY+4; }
+          if (y > chY+chH-4){ dy = -dy; y = chY+chH-4; }
+        }
+        ctx.stroke();
+      }
+    }
+
+    // Heat up
+    if (state.on && !state.popped){
+      const power = +pEl.value/100;
+      state.temp += power * 20 * dt;
+      if (state.temp > 180){
+        state.popped = true;
+        state.popTime = now;
+        // spawn popcorn bits
+        for (let k = 0; k < 36; k++){
+          const a = Math.random()*Math.PI*2;
+          const sp = 120 + Math.random()*200;
+          state.particles.push({
+            x: tX, y: tY - 10,
+            vx: Math.cos(a)*sp,
+            vy: Math.sin(a)*sp - 120,
+            rot: Math.random()*Math.PI,
+            vrot: (Math.random()-.5)*8,
+            life: 1,
+            size: 8 + Math.random()*6,
+          });
+        }
+      }
+    }
+    // cool slowly when off
+    if (!state.on && !state.popped){
+      state.temp = Math.max(22, state.temp - 10*dt);
+    }
+
+    // Draw kernel or popcorn
+    if (!state.popped){
+      // kernel (yellowish triangle-ish)
+      const kernTemp = clamp((state.temp - 22) / 160, 0, 1);
+      const kernSize = lerp(20, 26, kernTemp);
+      const kernR = kernTemp; // 0..1
+      const kernCol = `rgb(${255}, ${Math.round(215 - kernR*70)}, ${Math.round(90 - kernR*40)})`;
+
+      ctx.save();
+      ctx.translate(tX, tY - 4);
+      ctx.fillStyle = kernCol;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, kernSize, kernSize*0.85, 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.strokeStyle = '#7a4a1a'; ctx.lineWidth = 1.5; ctx.stroke();
+      // subtle shimmer lines
+      ctx.strokeStyle = 'rgba(0,0,0,.25)';
+      ctx.beginPath();
+      ctx.moveTo(-kernSize*0.4, 0); ctx.lineTo(kernSize*0.4, 0);
+      ctx.stroke();
+
+      // H2O molecules inside, wiggling
+      if (!state.molecules){
+        state.molecules = initMolecules(0, 0, kernSize*0.75);
+      }
+      const wiggleAmp = lerp(0.5, 5.5, kernTemp);
+      for (const m of state.molecules){
+        const wx = m.baseX + Math.cos(now*0.002*m.sp + m.ph) * wiggleAmp;
+        const wy = m.baseY + Math.sin(now*0.0025*m.sp + m.ph*1.3) * wiggleAmp;
+        ctx.fillStyle = '#5FB4FF';
+        ctx.beginPath(); ctx.arc(wx, wy, 3, 0, Math.PI*2); ctx.fill();
+        ctx.font = 'bold 7px ui-rounded, system-ui';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#fff';
+        ctx.fillText('H₂O', wx, wy);
+      }
+      ctx.restore();
+    }
+
+    // Popcorn particles
+    if (state.popped){
+      for (let i = state.particles.length - 1; i >= 0; i--){
+        const p = state.particles[i];
+        p.vy += 450 * dt;
+        p.x += p.vx*dt; p.y += p.vy*dt;
+        p.rot += p.vrot*dt;
+        p.life -= dt*0.35;
+        if (p.life <= 0){ state.particles.splice(i,1); continue; }
+        // bounce on chamber floor
+        if (p.y > chY+chH-12){ p.y = chY+chH-12; p.vy *= -0.4; p.vx *= 0.7; }
+        if (p.x < chX+6){ p.x = chX+6; p.vx *= -0.5; }
+        if (p.x > chX+chW-6){ p.x = chX+chW-6; p.vx *= -0.5; }
+        ctx.save();
+        ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+        ctx.fillStyle = `rgba(255,248,225,${Math.min(1,p.life*1.6)})`;
+        ctx.beginPath();
+        // popcorn lobes
+        ctx.arc(-p.size*0.4, 0, p.size*0.5, 0, Math.PI*2);
+        ctx.arc(p.size*0.4, 0, p.size*0.5, 0, Math.PI*2);
+        ctx.arc(0, -p.size*0.4, p.size*0.5, 0, Math.PI*2);
+        ctx.arc(0, p.size*0.4, p.size*0.5, 0, Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+      }
+      // "POP!" text briefly
+      if (now - state.popTime < 1400){
+        const a = 1 - (now - state.popTime)/1400;
+        ctx.font = `bold ${48 + (1-a)*20}px ui-rounded, system-ui`;
+        ctx.fillStyle = `rgba(255,255,255,${a})`;
+        ctx.textAlign = 'center';
+        ctx.fillText('💥 POP!', tX, chY + chH*0.45);
+      }
+    }
+
+    // --- Right side control panel ---
+    const panelX = chX + chW + 10, panelY = chY, panelW = 180;
+    // panel bg
+    ctx.fillStyle = '#1a2230';
+    roundRect(ctx, panelX, panelY, panelW, chH, 8); ctx.fill();
+    ctx.strokeStyle = '#3a4a6a'; ctx.lineWidth = 2; ctx.stroke();
+
+    // LED display - temperature
+    const ledX = panelX + 10, ledY = panelY + 14, ledW = panelW - 20, ledH = 60;
+    ctx.fillStyle = '#000'; ctx.fillRect(ledX, ledY, ledW, ledH);
+    ctx.strokeStyle = '#333'; ctx.strokeRect(ledX, ledY, ledW, ledH);
+    ctx.font = 'bold 34px ui-monospace, Consolas';
+    ctx.fillStyle = state.temp > 100 ? '#FF5D73' : '#FFB800';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(`${Math.round(state.temp)}°C`, ledX + ledW/2, ledY + ledH/2);
+
+    // thermometer bar
+    const thX = panelX + 30, thY = ledY + ledH + 12, thW = panelW - 60, thH = chH - (ledH + 60);
+    ctx.fillStyle = '#000'; ctx.fillRect(thX, thY, thW, thH);
+    ctx.strokeStyle = '#555'; ctx.strokeRect(thX, thY, thW, thH);
+    const tempFrac = clamp((state.temp - 22) / 180, 0, 1);
+    const fillH = thH * tempFrac;
+    const tg = ctx.createLinearGradient(thX, thY + thH, thX, thY);
+    tg.addColorStop(0, '#0AEFFF'); tg.addColorStop(.5, '#FFB800'); tg.addColorStop(1, '#FF5D73');
+    ctx.fillStyle = tg;
+    ctx.fillRect(thX, thY + thH - fillH, thW, fillH);
+    // 100°C marker
+    const mY = thY + thH - thH * ((100 - 22) / 180);
+    ctx.strokeStyle = '#FF4D9F'; ctx.setLineDash([3,3]); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(thX - 4, mY); ctx.lineTo(thX + thW + 4, mY); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = 'bold 10px ui-rounded, system-ui'; ctx.fillStyle = '#FF4D9F'; ctx.textAlign = 'right';
+    ctx.fillText('100°', thX - 6, mY + 3);
+
+    // ON indicator
+    const indY = chY + chH - 24;
+    ctx.fillStyle = state.on ? '#FF5D73' : '#333';
+    ctx.beginPath(); ctx.arc(panelX + 20, indY, 6, 0, Math.PI*2); ctx.fill();
+    if (state.on && Math.floor(now/500)%2){
+      ctx.strokeStyle = '#FF5D73'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(panelX + 20, indY, 10, 0, Math.PI*2); ctx.stroke();
+    }
+    ctx.font = 'bold 11px ui-rounded, system-ui';
+    ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.textAlign = 'left';
+    ctx.fillText(state.on ? 'COOKING' : 'STANDBY', panelX + 34, indY + 3);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 3 — X-Ray Scanner
+   Draw simplified anatomical "specimen" with two layers:
+   skin (pink) above bones. Intensity slider fades skin and
+   reveals bones. Specimen picker switches between hand/chest/foot.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('xray');
+  const {ctx} = setupCanvas(c);
+  const intEl = document.getElementById('xr');
+  const intV  = document.getElementById('xr-val');
+  const specButtons = document.querySelectorAll('[data-spec]');
+
+  let currentSpec = 'hand';
+  specButtons.forEach(b => b.addEventListener('click', () => {
+    specButtons.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    currentSpec = b.dataset.spec;
+  }));
+  intEl.addEventListener('input', () => intV.textContent = intEl.value + '%');
+
+  // --- Draw routines ---
+  function drawScanLines(W, H, intensity){
+    if (intensity <= 0.02) return;
+    const n = 8 + Math.floor(intensity * 20);
+    for (let i = 0; i < n; i++){
+      const y = (performance.now()*0.08 + i*30) % (H + 60) - 30;
+      ctx.strokeStyle = `rgba(255,77,159,${intensity*0.08})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+  }
+
+  function drawHand(cx, cy, scale, intensity){
+    // Skin layer (alpha fades as intensity increases)
+    const skinA = Math.max(0, 1 - intensity * 1.4);
+    // Bones (appears as intensity rises)
+    const boneA = Math.min(1, intensity * 1.25);
+
+    // palm
+    const palmW = 110*scale, palmH = 130*scale;
+    if (skinA > 0){
+      ctx.save(); ctx.globalAlpha = skinA;
+      // skin palm
+      ctx.fillStyle = '#F5C9A2';
+      roundRect(ctx, cx - palmW/2, cy - palmH*0.2, palmW, palmH, 22*scale);
+      ctx.fill();
+      // fingers
+      const fingers = [
+        {x: -48*scale, len: 110*scale, w: 22*scale},
+        {x: -18*scale, len: 125*scale, w: 24*scale},
+        {x:  14*scale, len: 120*scale, w: 24*scale},
+        {x:  44*scale, len: 100*scale, w: 22*scale},
+      ];
+      for (const f of fingers){
+        roundRect(ctx, cx + f.x - f.w/2, cy - palmH*0.2 - f.len, f.w, f.len + 10, 10*scale);
+        ctx.fill();
+      }
+      // thumb
+      roundRect(ctx, cx - palmW/2 - 18*scale, cy + 10*scale, 28*scale, 75*scale, 12*scale);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // Bones layer
+    if (boneA > 0){
+      ctx.save();
+      ctx.globalAlpha = boneA;
+      ctx.fillStyle = '#EDE8DA';
+      ctx.strokeStyle = '#2C2A1F';
+      ctx.lineWidth = 1.2;
+
+      // carpals / metacarpals (5 bones in palm fanning)
+      const fingers = [
+        {x: -48*scale, len: 100*scale, w: 10*scale, phalanges:[35, 30, 22].map(n => n*scale)},
+        {x: -18*scale, len: 115*scale, w: 11*scale, phalanges:[40, 35, 26].map(n => n*scale)},
+        {x:  14*scale, len: 110*scale, w: 11*scale, phalanges:[38, 32, 25].map(n => n*scale)},
+        {x:  44*scale, len: 90*scale,  w: 10*scale, phalanges:[32, 28, 22].map(n => n*scale)},
+      ];
+      // metacarpals in palm
+      for (const f of fingers){
+        const mcBottom = cy + palmH*0.45;
+        const mcTop = cy - palmH*0.2 + 6*scale;
+        roundRect(ctx, cx + f.x - f.w/2*0.6, mcTop, f.w*0.6, mcBottom - mcTop, 4*scale);
+        ctx.fill(); ctx.stroke();
+      }
+      // thumb metacarpal + phalanges
+      // thumb bone
+      ctx.save();
+      ctx.translate(cx - palmW/2 - 2*scale, cy + 10*scale);
+      ctx.rotate(-0.3);
+      roundRect(ctx, -5*scale, 0, 10*scale, 65*scale, 4*scale);
+      ctx.fill(); ctx.stroke();
+      roundRect(ctx, -5*scale, -30*scale, 10*scale, 30*scale, 4*scale);
+      ctx.fill(); ctx.stroke();
+      ctx.restore();
+
+      // finger phalanges
+      for (const f of fingers){
+        const baseY = cy - palmH*0.2 - 4*scale;
+        let y = baseY;
+        for (const ph of f.phalanges){
+          roundRect(ctx, cx + f.x - f.w/2*0.6, y - ph, f.w*0.6, ph - 3*scale, 3*scale);
+          ctx.fill(); ctx.stroke();
+          y -= ph + 1*scale;
+        }
+      }
+
+      // wrist row (carpals)
+      for (let i = 0; i < 6; i++){
+        const wx = cx - 42*scale + i*16*scale;
+        const wy = cy + palmH*0.45 + 6*scale;
+        ctx.beginPath();
+        ctx.arc(wx, wy, 6*scale, 0, Math.PI*2);
+        ctx.fill(); ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+  }
+
+  function drawChest(cx, cy, scale, intensity){
+    const skinA = Math.max(0, 1 - intensity * 1.4);
+    const boneA = Math.min(1, intensity * 1.25);
+
+    // Torso
+    const tW = 220*scale, tH = 240*scale;
+    if (skinA > 0){
+      ctx.save(); ctx.globalAlpha = skinA;
+      ctx.fillStyle = '#F5C9A2';
+      // shoulders (trapezoid-ish)
+      ctx.beginPath();
+      ctx.moveTo(cx - tW/2,        cy - tH/2 + 30*scale);
+      ctx.quadraticCurveTo(cx - tW/2 - 20*scale, cy - tH/2 + 5*scale, cx - tW/2 + 15*scale, cy - tH/2 - 10*scale);
+      ctx.quadraticCurveTo(cx, cy - tH/2 - 24*scale, cx + tW/2 - 15*scale, cy - tH/2 - 10*scale);
+      ctx.quadraticCurveTo(cx + tW/2 + 20*scale, cy - tH/2 + 5*scale, cx + tW/2, cy - tH/2 + 30*scale);
+      ctx.lineTo(cx + tW/2 - 10*scale, cy + tH/2);
+      ctx.lineTo(cx - tW/2 + 10*scale, cy + tH/2);
+      ctx.closePath();
+      ctx.fill();
+      // neck
+      roundRect(ctx, cx - 22*scale, cy - tH/2 - 40*scale, 44*scale, 40*scale, 8*scale);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    if (boneA > 0){
+      ctx.save();
+      ctx.globalAlpha = boneA;
+      ctx.fillStyle = '#EDE8DA';
+      ctx.strokeStyle = '#2C2A1F';
+      ctx.lineWidth = 1.5;
+
+      // spine
+      for (let i = 0; i < 8; i++){
+        const y = cy - tH/2 + 20*scale + i*(tH - 40*scale)/7;
+        roundRect(ctx, cx - 9*scale, y - 6*scale, 18*scale, 14*scale, 3*scale);
+        ctx.fill(); ctx.stroke();
+      }
+      // ribs (curved pairs)
+      for (let i = 0; i < 6; i++){
+        const y = cy - tH/2 + 40*scale + i*22*scale;
+        ctx.lineWidth = 6*scale;
+        ctx.strokeStyle = '#EDE8DA';
+        ctx.beginPath();
+        ctx.moveTo(cx - 12*scale, y);
+        ctx.quadraticCurveTo(cx - 100*scale, y + 8*scale, cx - 95*scale, y + 28*scale);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(cx + 12*scale, y);
+        ctx.quadraticCurveTo(cx + 100*scale, y + 8*scale, cx + 95*scale, y + 28*scale);
+        ctx.stroke();
+      }
+      // clavicles
+      ctx.lineWidth = 7*scale;
+      ctx.beginPath();
+      ctx.moveTo(cx - 20*scale, cy - tH/2 + 10*scale);
+      ctx.quadraticCurveTo(cx - 50*scale, cy - tH/2 + 2*scale, cx - 85*scale, cy - tH/2 + 12*scale);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(cx + 20*scale, cy - tH/2 + 10*scale);
+      ctx.quadraticCurveTo(cx + 50*scale, cy - tH/2 + 2*scale, cx + 85*scale, cy - tH/2 + 12*scale);
+      ctx.stroke();
+
+      // heart-shadow (soft)
+      ctx.fillStyle = 'rgba(100,120,140,.25)'; ctx.globalAlpha = boneA*0.6;
+      ctx.beginPath();
+      ctx.ellipse(cx - 18*scale, cy + 8*scale, 45*scale, 55*scale, -.2, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function drawFoot(cx, cy, scale, intensity){
+    const skinA = Math.max(0, 1 - intensity * 1.4);
+    const boneA = Math.min(1, intensity * 1.25);
+
+    if (skinA > 0){
+      ctx.save(); ctx.globalAlpha = skinA;
+      ctx.fillStyle = '#F5C9A2';
+      // foot side-view: heel blob + arch + toes
+      ctx.beginPath();
+      ctx.moveTo(cx - 130*scale, cy);
+      ctx.quadraticCurveTo(cx - 150*scale, cy + 20*scale, cx - 140*scale, cy + 40*scale);
+      ctx.lineTo(cx + 110*scale, cy + 40*scale);
+      ctx.quadraticCurveTo(cx + 140*scale, cy + 40*scale, cx + 140*scale, cy + 20*scale);
+      ctx.quadraticCurveTo(cx + 140*scale, cy - 5*scale, cx + 100*scale, cy - 15*scale);
+      ctx.quadraticCurveTo(cx, cy - 25*scale, cx - 80*scale, cy - 10*scale);
+      ctx.closePath();
+      ctx.fill();
+      // toes bump
+      for (let i=0;i<5;i++){
+        ctx.beginPath();
+        ctx.ellipse(cx + 100*scale + i*8*scale, cy + 8*scale, 8*scale, 12*scale, 0, 0, Math.PI*2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    if (boneA > 0){
+      ctx.save();
+      ctx.globalAlpha = boneA;
+      ctx.fillStyle = '#EDE8DA';
+      ctx.strokeStyle = '#2C2A1F';
+      ctx.lineWidth = 1.3;
+
+      // heel (calcaneus) big bone
+      ctx.beginPath(); ctx.ellipse(cx - 110*scale, cy + 15*scale, 28*scale, 26*scale, 0, 0, Math.PI*2);
+      ctx.fill(); ctx.stroke();
+      // talus
+      ctx.beginPath(); ctx.ellipse(cx - 70*scale, cy + 2*scale, 22*scale, 20*scale, 0, 0, Math.PI*2);
+      ctx.fill(); ctx.stroke();
+      // navicular + cuneiforms
+      for (let i = 0; i < 4; i++){
+        ctx.beginPath();
+        ctx.ellipse(cx - 30*scale + i*16*scale, cy + 10*scale, 10*scale, 12*scale, 0, 0, Math.PI*2);
+        ctx.fill(); ctx.stroke();
+      }
+      // metatarsals
+      for (let i = 0; i < 5; i++){
+        ctx.save();
+        ctx.translate(cx + 40*scale + i*12*scale, cy + 12*scale);
+        roundRect(ctx, -5*scale, -22*scale, 10*scale, 44*scale, 3*scale);
+        ctx.fill(); ctx.stroke();
+        ctx.restore();
+      }
+      // toe phalanges
+      for (let i = 0; i < 5; i++){
+        ctx.save();
+        ctx.translate(cx + 100*scale + i*8*scale, cy + 8*scale);
+        roundRect(ctx, -5*scale, -10*scale, 10*scale, 20*scale, 3*scale);
+        ctx.fill(); ctx.stroke();
+        roundRect(ctx, -5*scale, -28*scale, 10*scale, 16*scale, 3*scale);
+        ctx.fill(); ctx.stroke();
+        ctx.restore();
+      }
+      // tibia
+      ctx.save();
+      ctx.translate(cx - 70*scale, cy - 15*scale);
+      roundRect(ctx, -9*scale, -90*scale, 18*scale, 90*scale, 6*scale);
+      ctx.fill(); ctx.stroke();
+      ctx.restore();
+      ctx.restore();
+    }
+  }
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    // bg — black with a slight green glow (like a medical screen)
+    ctx.fillStyle = '#02070F'; ctx.fillRect(0, 0, W, H);
+
+    const intensity = (+intEl.value)/100;
+
+    // phosphor-screen glow overlay when xray is on
+    if (intensity > 0){
+      const rg = ctx.createRadialGradient(W*0.5, H*0.5, 40, W*0.5, H*0.5, Math.max(W,H)*0.7);
+      rg.addColorStop(0, `rgba(0,160,120,${0.15*intensity})`);
+      rg.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = rg; ctx.fillRect(0,0,W,H);
+    }
+
+    // crosshair / grid
+    ctx.strokeStyle = 'rgba(0,245,160,.08)'; ctx.lineWidth = 1;
+    for (let x = 0; x < W; x += 40){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y = 0; y < H; y += 40){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+    // corner frame markers
+    ctx.strokeStyle = '#00F5A0'; ctx.lineWidth = 2;
+    const m = 18;
+    [[20,20],[W-20,20],[20,H-20],[W-20,H-20]].forEach(([x,y], i) => {
+      const sx = i%2 ? -1 : 1, sy = i<2 ? 1 : -1;
+      ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+sx*m,y); ctx.moveTo(x,y); ctx.lineTo(x,y+sy*m);
+      ctx.stroke();
+    });
+
+    // label
+    ctx.font = 'bold 11px ui-monospace, Consolas';
+    ctx.fillStyle = '#00F5A0';
+    ctx.textAlign = 'left';
+    ctx.fillText(`◉ X-RAY · ${currentSpec.toUpperCase()} · ${intEl.value}%`, 32, 36);
+    ctx.fillStyle = 'rgba(0,245,160,.4)';
+    ctx.fillText(`T: ${new Date().toTimeString().slice(0,8)}`, 32, 52);
+
+    // Draw the specimen
+    const cx = W*0.5, cy = H*0.5;
+    const scale = Math.min(W / 600, H / 420);
+
+    if (currentSpec === 'hand')  drawHand(cx, cy, scale, intensity);
+    if (currentSpec === 'chest') drawChest(cx, cy + 20*scale, scale, intensity);
+    if (currentSpec === 'foot')  drawFoot(cx, cy, scale, intensity);
+
+    // Scan lines overlay
+    drawScanLines(W, H, intensity);
+
+    // Warning label when high intensity
+    if (intensity > 0.8){
+      const blink = Math.floor(now/500) % 2;
+      ctx.font = 'bold 14px ui-rounded, system-ui';
+      ctx.fillStyle = blink ? '#FF4D9F' : '#FFB800';
+      ctx.textAlign = 'right';
+      ctx.fillText('⚠  HIGH DOSE — USE SPARINGLY', W - 30, 38);
+    }
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

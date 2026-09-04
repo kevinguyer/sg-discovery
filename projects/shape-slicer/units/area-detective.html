@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Area Detective · Shape Slicer · REDS Hall of Discovery</title>
+<link rel="stylesheet" href="../shared/slicer.css"/>
+<style>
+  /* ═══════ UNIT 05 PALETTE — "film noir case files" ═══════ */
+  :root{
+    --bg:#0A0A0B; --bg2:#161616; --manila:#E9D8A6; --paper:#F3E9C6; --stamp:#D62828; --amber:#F5B700; --ink:#1B1B1B; --smoke:#8A8A8A; --cream:#FFF8E7; --teal:#7FD1C1;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'Courier New', ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+    --sc-accent:var(--amber); --sc-accent-2:var(--manila); --sc-ink:#1B1B1B; --sc-panel:#161616; --sc-line:rgba(233,216,166,.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body); color:var(--cream); min-height:100vh; overflow-x:hidden; -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(ellipse at 30% 10%, rgba(245,183,0,.10), transparent 50%),
+      radial-gradient(ellipse at 90% 90%, rgba(214,40,40,.10), transparent 50%),
+      linear-gradient(180deg, #0A0A0B 0%, #141414 50%, #070707 100%);
+    background-attachment:fixed}
+  /* venetian-blind light stripes */
+  body::before{content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.07;
+    background:repeating-linear-gradient(-12deg, transparent 0 34px, #F5B700 34px 46px)}
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  button{font:inherit}
+
+  .topbar{position:sticky; top:0; z-index:20; backdrop-filter:blur(14px); background:linear-gradient(180deg, rgba(10,10,11,.94), rgba(10,10,11,.8)); border-bottom:1px solid rgba(233,216,166,.16)}
+  .topbar-inner{max-width:1280px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px}
+  .brand-group{display:flex; align-items:center; gap:16px}
+  .back{display:inline-flex; align-items:center; gap:8px; padding:9px 14px; border-radius:999px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); font-family:var(--font-display); font-size:13px; transition:transform .15s, background .15s}
+  .back:hover{transform:translateX(-3px); background:rgba(255,255,255,.14)}
+  .brand{display:flex; align-items:center; gap:12px}
+  .brand .logo{width:44px; height:44px; filter:drop-shadow(0 0 12px rgba(245,183,0,.4))}
+  .brand .eyebrow{font-family:var(--font-mono); font-size:10px; letter-spacing:.22em; text-transform:uppercase; opacity:.8}
+  .brand .wordmark{font-family:var(--font-display); font-weight:800; font-size:19px; line-height:1.1}
+  .brand .wordmark .unit{color:var(--amber); font-weight:600}
+  .class-pill{display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:4px; font-family:var(--font-mono); font-size:12px; letter-spacing:.08em; background:var(--manila); color:#1B1B1B; font-weight:700; transform:rotate(-2deg)}
+
+  .hero{position:relative; min-height:74vh; display:flex; align-items:center; justify-content:center; overflow:hidden; z-index:1}
+  #hero-canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+  .hero-inner{position:relative; z-index:2; text-align:center; padding:60px 24px; max-width:900px}
+  .hero .eyebrow{font-family:var(--font-mono); letter-spacing:.3em; text-transform:uppercase; font-size:13px; color:var(--amber); margin-bottom:16px}
+  .hero h1{font-size:clamp(46px, 8vw, 110px); letter-spacing:-.02em; line-height:.95; margin-bottom:18px; color:var(--paper); text-shadow:0 0 50px rgba(245,183,0,.35)}
+  .hero h1 span{color:var(--amber)}
+  .hero .tag{font-size:clamp(17px,2vw,22px); line-height:1.55; opacity:.95; text-shadow:0 2px 12px rgba(0,0,0,.8)}
+  .scroll-cue{position:absolute; bottom:22px; left:50%; transform:translateX(-50%); z-index:2; font-family:var(--font-mono); font-size:12px; letter-spacing:.2em; opacity:.7; animation:nudge 2.4s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translate(-50%, 8px)}}
+
+  section.concept, section.lab, section.facts, section.nextup{position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:56px 28px 20px}
+  .kicker{font-family:var(--font-mono); font-size:12px; letter-spacing:.26em; text-transform:uppercase; color:var(--amber); margin-bottom:10px}
+  .kicker::before{content:'🔍 '}
+  h2.title{font-size:clamp(30px, 4vw, 50px); margin-bottom:14px; letter-spacing:-.01em}
+  h2.title em{font-style:normal; color:var(--amber)}
+  p.blurb{font-size:18px; line-height:1.65; max-width:820px; opacity:.94}
+  p.blurb strong{color:var(--manila)}
+  .rulecard{margin-top:22px; display:inline-block; padding:22px 26px; border-radius:6px; background:var(--paper); color:var(--ink); font-family:var(--font-mono); max-width:640px; transform:rotate(-1deg); box-shadow:0 20px 50px rgba(0,0,0,.6); position:relative}
+  .rulecard::before{content:'CASE RULE №1'; position:absolute; top:-12px; left:18px; padding:3px 10px; background:var(--stamp); color:#fff; font-size:11px; letter-spacing:.2em; border-radius:3px}
+  .rulecard h3{font-family:var(--font-mono); font-size:18px; margin-bottom:8px}
+  .rulecard p{font-size:14px; line-height:1.6}
+
+  .panel{margin-top:22px; border-radius:8px; overflow:hidden; background:#161616; border:1px solid rgba(233,216,166,.22); box-shadow:0 30px 70px rgba(0,0,0,.6); position:relative}
+  .panel-top{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:12px 20px; border-bottom:1px solid rgba(233,216,166,.18); background:var(--manila); color:var(--ink)}
+  .panel-top .name{display:flex; align-items:center; gap:10px; font-family:var(--font-mono); font-weight:700; font-size:15px; letter-spacing:.06em}
+  .panel-top .dot{width:12px; height:12px; border-radius:999px; background:var(--stamp); animation:blink 1.6s infinite}
+  @keyframes blink{50%{opacity:.35}}
+  .panel-top .hint{font-family:var(--font-mono); font-size:12px; opacity:.8}
+  .panel-body{padding:18px 20px 22px}
+  .lab-grid{display:grid; grid-template-columns:1fr 300px; gap:18px}
+  @media (max-width:900px){ .lab-grid{grid-template-columns:1fr} }
+  .controls{display:flex; flex-direction:column; gap:12px}
+  .control{padding:12px 14px; border-radius:6px; background:rgba(233,216,166,.06); border:1px solid rgba(233,216,166,.18)}
+  .control label{display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; margin-bottom:8px; color:var(--amber)}
+  .control p{font-size:14px; line-height:1.5; opacity:.9}
+  .btn-row{display:flex; flex-wrap:wrap; gap:8px}
+  .caption{margin-top:14px; font-size:15px; line-height:1.6; opacity:.92}
+  .caption strong{color:var(--manila)}
+  .board-wrap canvas.board{border-radius:6px; background:#0d0d0d}
+  .tool-btn, .challenge-chip, .readout{border-radius:6px}
+  .readout .value{font-family:var(--font-mono)}
+  .sum-line{font-family:var(--font-mono); font-size:16px; padding:12px 14px; border-radius:6px; background:var(--paper); color:var(--ink); margin-top:12px; min-height:46px; line-height:1.5}
+  .sum-line b{color:var(--stamp)}
+  .stamp{color:var(--stamp); font-family:var(--font-mono); font-size:22px; padding:6px 16px}
+  .stampwrap{position:absolute; right:26px; top:70px; z-index:3; pointer-events:none}
+  .rank{font-family:var(--font-mono); font-size:13px; opacity:.85}
+  .strategy{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .strategy button{padding:14px 12px; border-radius:6px; cursor:pointer; color:var(--cream); font-family:var(--font-mono); font-weight:700; font-size:14px; background:rgba(255,255,255,.06); border:2px solid rgba(233,216,166,.25); transition:transform .15s, background .15s}
+  .strategy button:hover{transform:translateY(-2px)}
+  .strategy button.active{background:var(--amber); color:var(--ink); border-color:transparent}
+  .big-btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 18px; border-radius:6px; border:none; cursor:pointer; color:var(--ink); font-family:var(--font-mono); font-weight:800; font-size:16px; background:var(--amber); box-shadow:0 12px 30px rgba(245,183,0,.3); transition:transform .15s}
+  .big-btn:hover{transform:translateY(-2px)}
+  .big-btn[disabled]{opacity:.5; cursor:not-allowed; transform:none}
+  .score-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; font-family:var(--font-mono)}
+  .score-row .pill{padding:8px 12px; border-radius:4px; background:rgba(233,216,166,.1); border:1px solid rgba(233,216,166,.25); font-size:13px}
+  .score-row .pill b{color:var(--amber)}
+
+  .facts-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:22px}
+  @media (max-width:900px){ .facts-grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:560px){ .facts-grid{grid-template-columns:1fr} }
+  .fact{padding:22px; border-radius:6px; background:#161616; border:1px solid rgba(233,216,166,.18); transition:transform .2s}
+  .fact:hover{transform:translateY(-4px)}
+  .fact .emoji{font-size:44px; line-height:1; margin-bottom:10px}
+  .fact h4{font-size:18px; margin-bottom:6px; color:var(--manila)}
+  .fact p{font-size:14px; line-height:1.55; opacity:.9}
+
+  .nextup-card{border-radius:8px; padding:34px 36px; background:var(--paper); color:var(--ink); display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between; box-shadow:0 30px 70px rgba(0,0,0,.6); position:relative}
+  .nextup-card::after{content:'CASE CLOSED'; position:absolute; right:30px; top:-16px; padding:8px 16px; border:4px solid var(--stamp); color:var(--stamp); font-family:var(--font-mono); font-weight:900; letter-spacing:.2em; transform:rotate(8deg); border-radius:6px; opacity:.85}
+  .nextup-card h3{font-size:14px; letter-spacing:.24em; text-transform:uppercase; opacity:.7; font-family:var(--font-mono)}
+  .nextup-card .big{font-family:var(--font-display); font-size:clamp(26px,3.5vw,40px); font-weight:800; margin:6px 0 8px}
+  .nextup-card p{max-width:560px; font-size:15px; line-height:1.55}
+  .chip{display:inline-flex; align-items:center; gap:8px; padding:12px 18px; border-radius:6px; font-family:var(--font-mono); font-weight:700; font-size:14px; background:rgba(0,0,0,.08); border:1px solid rgba(0,0,0,.2); color:var(--ink); transition:transform .15s}
+  .chip:hover{transform:translateY(-2px)}
+  .chip.active{background:var(--ink); color:var(--paper)}
+  .chip-row{display:flex; gap:10px; flex-wrap:wrap}
+
+  footer{position:relative; z-index:1; max-width:1280px; margin:40px auto 0; padding:30px 28px; border-top:1px solid rgba(233,216,166,.16); display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:13px; opacity:.75; font-family:var(--font-mono)}
+  footer .heart{color:var(--stamp)}
+  .sound-toggle{position:fixed; right:18px; bottom:18px; z-index:50; width:46px; height:46px; border-radius:6px; border:1px solid rgba(255,255,255,.2); background:rgba(0,0,0,.6); color:#fff; font-size:20px; cursor:pointer; backdrop-filter:blur(8px)}
+  @media (max-width:640px){ .topbar-inner{padding:12px 16px} .class-pill{display:none} section.concept, section.lab, section.facts, section.nextup{padding:40px 16px 10px} .panel-body{padding:14px} .strategy{grid-template-columns:1fr} }
+  @media (prefers-reduced-motion: reduce){ .scroll-cue, .panel-top .dot{animation:none} }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand-group">
+      <a class="back" href="../index.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 5l-7 7 7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        All units
+      </a>
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="60" height="60" rx="8" fill="#0A0A0B" stroke="#E9D8A6" stroke-width="2"/>
+          <circle cx="28" cy="28" r="12" stroke="#F5B700" stroke-width="4" fill="none"/>
+          <path d="M37 37 L50 50" stroke="#F5B700" stroke-width="5" stroke-linecap="round"/>
+          <path d="M20 28 h16 v-8 h-8 v16 h-8 z" fill="#E9D8A6" opacity=".9"/>
+        </svg>
+        <div>
+          <div class="eyebrow">REDS Hall of Discovery</div>
+          <div class="wordmark">Shape Slicer <span class="unit">· Unit 05 · Composite shapes</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="class-pill">CASE FILE · GR 5–6</div>
+  </div>
+</header>
+
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 05 · The final case</div>
+    <h1>Area <span>Detective</span></h1>
+    <p class="tag">Strange shapes. Hidden areas. Your job: slice each case into rectangles and triangles, add up the clues, and know when to <strong>subtract</strong> instead. Then stamp the file SOLVED.</p>
+  </div>
+  <div class="scroll-cue">▼ OPEN THE CASE FILES</div>
+</section>
+
+<!-- ═══════ CONCEPT 01 ═══════ -->
+<section class="concept" id="c1">
+  <div class="kicker">Concept 01 · The method</div>
+  <h2 class="title">Cut it into shapes you <em>already know</em>.</h2>
+  <p class="blurb">
+    A <strong>composite shape</strong> is a shape built out of simpler ones — an L, a T, a house, an arrow. Nobody has a formula for "house." But you have formulas for rectangles and triangles,
+    and every composite shape can be sliced into those. Find the area of each piece, add them up, and the case is closed.
+  </p>
+  <div class="rulecard">
+    <h3>The detective can only measure three things:</h3>
+    <p>▸ <strong>Rectangles</strong> (width × height)<br>▸ <strong>Squares</strong> (side × side)<br>▸ <strong>Triangles</strong> (base × height ÷ 2)<br><br>Anything else shows a <strong>?</strong> — keep cutting until every piece has a number.</p>
+  </div>
+</section>
+
+<!-- ═══════ LAB 01 — THE CASE BOARD ═══════ -->
+<section class="lab" id="lab1">
+  <div class="kicker">Lab 01 · Six cases</div>
+  <h2 class="title">The <em>Case</em> Board</h2>
+  <p class="blurb">Pick a case. Slice the shape until every piece shows a number. Add the numbers, type the total, and stamp it solved. Fewer cuts earns a higher rank.</p>
+  <div class="panel">
+    <div class="stampwrap"><span class="stamp" id="cb-stamp">SOLVED</span></div>
+    <div class="panel-top">
+      <div class="name"><span class="dot"></span>CASE BOARD</div>
+      <div class="hint" id="cb-top">pick a case file</div>
+    </div>
+    <div class="panel-body">
+      <div class="challenge-list" id="cb-list"></div>
+      <div class="lab-grid">
+        <div>
+          <div class="board-wrap">
+            <canvas class="board" id="caseb"></canvas>
+            <div class="board-tools">
+              <button class="tool-btn active" id="cb-cut">✂️ Cut</button>
+              <button class="tool-btn" id="cb-move">✋ Spread out</button>
+              <span class="spacer"></span>
+              <button class="tool-btn" id="cb-undo">↶ Undo</button>
+              <button class="tool-btn" id="cb-reset">↺ Reset</button>
+            </div>
+          </div>
+          <div class="sum-line" id="cb-sum">Cut the shape until every piece shows a number…</div>
+          <div class="answer-row">
+            <span style="font-family:var(--font-mono);font-weight:800;font-size:16px">TOTAL AREA =</span>
+            <input type="number" id="cb-answer" step="0.5" placeholder="?" aria-label="Total area" disabled>
+            <button class="big-btn" id="cb-check" disabled>Stamp it ✓</button>
+          </div>
+          <div class="feedback" id="cb-fb"></div>
+        </div>
+        <div class="controls">
+          <div class="control">
+            <label>Case notes</label>
+            <p id="cb-notes">The L-shaped lot. Two rectangles hiding in one shape.</p>
+          </div>
+          <div class="readouts" style="margin-top:0">
+            <div class="readout"><div class="label">Cuts</div><div class="value" id="cb-cuts">0</div></div>
+            <div class="readout"><div class="label">Pieces</div><div class="value" id="cb-pieces">1</div></div>
+          </div>
+          <div class="control">
+            <label>Rank</label>
+            <p class="rank" id="cb-rank">Solve with the fewest cuts for <strong>Chief Inspector</strong>. One extra cut: <strong>Detective</strong>. More: <strong>Rookie</strong> (still solved!).</p>
+          </div>
+          <div class="control">
+            <label>Solved</label>
+            <p id="cb-progress">0 of 6 cases</p>
+          </div>
+        </div>
+      </div>
+      <div class="caption" id="cb-cap"><strong>Detective tip:</strong> the cut line snaps to corners and grid points. Look for a straight line that turns the shape into rectangles all at once.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ LAB 02 — ADD OR SUBTRACT ═══════ -->
+<section class="lab" id="lab2">
+  <div class="kicker">Lab 02 · Two strategies</div>
+  <h2 class="title">Add the pieces… or <em>subtract</em> the bite?</h2>
+  <p class="blurb">
+    Some shapes look like a rectangle with a bite taken out. You can cut them into pieces and <strong>add</strong> — or draw the whole box and <strong>subtract</strong> the missing bite.
+    Both are right. One is usually faster. Switch strategies and compare.
+  </p>
+  <div class="panel">
+    <div class="panel-top">
+      <div class="name"><span class="dot"></span>STRATEGY DESK</div>
+      <div class="hint">pick a shape · switch between ADD and SUBTRACT</div>
+    </div>
+    <div class="panel-body">
+      <div class="lab-grid">
+        <div>
+          <div class="board-wrap"><canvas class="board" id="strat"></canvas></div>
+          <div class="sum-line" id="st-sum"></div>
+        </div>
+        <div class="controls">
+          <div class="control">
+            <label>Shape</label>
+            <div class="btn-row">
+              <button class="tool-btn active" data-shape="0">Corner bite</button>
+              <button class="tool-btn" data-shape="1">Top notch</button>
+              <button class="tool-btn" data-shape="2">Picture frame</button>
+            </div>
+          </div>
+          <div class="control">
+            <label>Strategy</label>
+            <div class="strategy">
+              <button id="st-add" class="active">➕ ADD pieces</button>
+              <button id="st-sub">➖ SUBTRACT bite</button>
+            </div>
+          </div>
+          <div class="control">
+            <label>Think</label>
+            <p id="st-think">Count the pieces each strategy needs. Which one would you rather do on a test?</p>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><strong>The picture frame</strong> is the clincher: adding needs four pieces, subtracting needs one big box minus one hole. Detectives choose the shorter route.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ LAB 03 — THE DETECTIVE EXAM ═══════ -->
+<section class="lab" id="lab3">
+  <div class="kicker">Lab 03 · Final exam</div>
+  <h2 class="title">The Detective <em>Exam</em></h2>
+  <p class="blurb">Five composite shapes with their measurements labeled. No scissors this time — do the slicing in your head, or on paper. Type each area.</p>
+  <div class="panel">
+    <div class="panel-top">
+      <div class="name"><span class="dot"></span>EXAM ROOM</div>
+      <div class="hint">5 questions · type the area · press Enter</div>
+    </div>
+    <div class="panel-body">
+      <div class="lab-grid">
+        <div>
+          <div class="board-wrap"><canvas class="board" id="exam"></canvas></div>
+          <div class="answer-row">
+            <span style="font-family:var(--font-mono);font-weight:800;font-size:16px">AREA =</span>
+            <input type="number" id="ex-answer" step="0.5" placeholder="?" aria-label="Area answer">
+            <button class="big-btn" id="ex-check">Check ✓</button>
+            <button class="tool-btn" id="ex-next" disabled>Next →</button>
+          </div>
+          <div class="feedback" id="ex-fb"></div>
+        </div>
+        <div class="controls">
+          <div class="score-row"><span class="pill">Question <b id="ex-q">1</b>/5</span><span class="pill">Correct <b id="ex-score">0</b></span></div>
+          <div class="control">
+            <label>Method</label>
+            <p>1. Slice it into rectangles and triangles (or box it and subtract).<br>2. Find each area.<br>3. Add (or subtract).</p>
+          </div>
+          <div class="control">
+            <label>Badge</label>
+            <p id="ex-badge" style="font-family:var(--font-mono)">Not yet earned.</p>
+          </div>
+          <button class="tool-btn" id="ex-restart">↺ New exam</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FACTS ═══════ -->
+<section class="facts">
+  <div class="kicker">Bonus</div>
+  <h2 class="title">Six wild <em>real-world</em> area facts.</h2>
+  <div class="facts-grid">
+    <div class="fact"><div class="emoji">🏠</div><h4>Floor plans are composite shapes</h4><p>Carpet sellers, painters, and tile layers measure rooms exactly this way: split the floor into rectangles, add them up, subtract the closet.</p></div>
+    <div class="fact"><div class="emoji">🗺️</div><h4>Countries are polygons</h4><p>Map software finds the area of a state or country by slicing its outline into thousands of thin triangles. Same trick, bigger scissors.</p></div>
+    <div class="fact"><div class="emoji">🍕</div><h4>Pizza math</h4><p>Which is more pizza: one 12-inch or two 8-inch? Slice them into tiny triangles and add — the single 12-inch wins (113 vs 100 square inches).</p></div>
+    <div class="fact"><div class="emoji">🎨</div><h4>Paint by the square foot</h4><p>A can of paint says how many square feet it covers. Painters measure wall area, subtract the windows and doors, and buy exactly enough.</p></div>
+    <div class="fact"><div class="emoji">🌾</div><h4>Ancient tax collectors</h4><p>In ancient Egypt and Babylon, land tax depended on field area. Scribes split odd-shaped fields into rectangles and triangles 4,000 years ago.</p></div>
+    <div class="fact"><div class="emoji">🎮</div><h4>Video games count hits</h4><p>To decide whether an arrow hit a dragon, games check if a point is inside a shape made of triangles. Area formulas run millions of times a second.</p></div>
+  </div>
+</section>
+
+<section class="nextup">
+  <div class="nextup-card">
+    <div>
+      <h3>You made it · All five units</h3>
+      <div class="big">🎉 Congratulations, Detective!</div>
+      <p>You sliced parallelograms, twinned triangles, flipped trapezoids, beat the challenge board, and closed every case. There isn't a straight-sided shape left that you can't measure.</p>
+    </div>
+    <div class="chip-row">
+      <a class="chip active" href="../index.html">← Back to all units</a>
+      <a class="chip" href="../../index.html">Hall of Discovery</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>REDS HALL OF DISCOVERY · SHAPE SLICER · UNIT 05: AREA DETECTIVE</div>
+  <div>Made with <span class="heart">♥</span> for Mrs. Guyer's classes</div>
+</footer>
+<button class="sound-toggle" id="soundToggle" aria-label="Turn sound off">🔊</button>
+
+<script src="../shared/slicer-core.js"></script>
+<script>
+const SC = window.SlicerCore;
+SC.bindSoundToggle(document.getElementById('soundToggle'));
+const REDUCE = SC.reduceMotion();
+const el = id => document.getElementById(id);
+const PAL = ['#F5B700','#E9D8A6','#7FD1C1','#D62828','#FF8FB1','#8EC5FF'];
+const pts = arr => arr.map(([x,y]) => SC.P(x,y));
+const F = SC.fmt;
+
+/* Describe a piece the way the detective allows: rectangles, squares, triangles only. */
+function describe(worldPts){
+  const cls = SC.classify(worldPts);
+  const q = SC.simplify(worldPts);
+  const A = SC.area(q);
+  if (cls === 'rectangle' || cls === 'square'){
+    const w = Math.hypot(q[1].x-q[0].x, q[1].y-q[0].y), h = Math.hypot(q[2].x-q[1].x, q[2].y-q[1].y);
+    return { ok:true, text:`${F(w)}×${F(h)}=${F(A)}`, area:A, expr:`${F(w)} × ${F(h)}` };
+  }
+  if (cls === 'triangle'){
+    // prefer a horizontal or vertical side as the base
+    let bi = -1, bl = 0;
+    for (let i=0;i<3;i++){ const a=q[i], b=q[(i+1)%3]; const L = Math.hypot(b.x-a.x,b.y-a.y); const axis = Math.abs(a.x-b.x)<1e-6 || Math.abs(a.y-b.y)<1e-6; if ((axis && (bi<0 || !q._axis)) || (bi<0) || (!q._axis && L>bl)){ if (axis || bi<0){ bi=i; bl=L; if (axis) q._axis = true; } } }
+    const h = 2*A/bl;
+    return { ok:true, text:`½·${F(bl)}·${F(h)}=${F(A)}`, area:A, expr:`½ × ${F(bl)} × ${F(h)}` };
+  }
+  return { ok:false, text:'?', area:A };
+}
+
+/* =========================================================
+   HERO — a dark room; a spotlight sweeps across and reveals
+   composite shapes hiding in the shadows. Dust drifts.
+   ========================================================= */
+(() => {
+  const c = el('hero-canvas'); let ctx, W, H;
+  const fit = () => { ({ctx, w:W, h:H} = SC.fitCanvas(c)); }; fit(); addEventListener('resize', fit);
+  const SHAPES = [pts([[0,0],[6,0],[6,2],[2,2],[2,5],[0,5]]), pts([[0,0],[6,0],[6,4],[3,6],[0,4]]), pts([[0,4],[8,4],[8,6],[5,6],[5,0],[3,0],[3,6],[0,6]]), pts([[0,2],[4,2],[4,0],[8,3],[4,6],[4,4],[0,4]]), pts([[0,0],[6,0],[6,2],[4,2],[4,4],[2,4],[2,6],[0,6]])];
+  const hidden = Array.from({length: 8}, (_, i) => ({ shape: SHAPES[i%SHAPES.length], x: (i+.5)/8 + (Math.random()-.5)*.06, y: .18 + Math.random()*.6, s: 10 + Math.random()*10, rot: (Math.random()-.5)*.5 }));
+  const dust = Array.from({length: 60}, () => ({ x: Math.random(), y: Math.random(), r: .6 + Math.random()*1.6, sp: .00002 + Math.random()*.00004, ph: Math.random()*6.28 }));
+  function tick(t){
+    ctx.fillStyle = '#070707'; ctx.fillRect(0,0,W,H);
+    const lx = (0.5 + 0.42*Math.sin(t*.00035)) * W, ly = H*.15;
+    // hidden shapes, revealed by distance to the beam centre line
+    for (const h of hidden){
+      const cx = h.x*W, cy = h.y*H;
+      const d = Math.abs(cx - lx) / (W*.16 + (cy - ly)*.25);
+      const vis = Math.max(0, 1 - d);
+      const cen = SC.centroid(h.shape);
+      ctx.save(); ctx.translate(cx, cy); ctx.rotate(h.rot);
+      ctx.beginPath(); h.shape.forEach((p,i)=>{ const x=(p.x-cen.x)*h.s, y=-(p.y-cen.y)*h.s; i?ctx.lineTo(x,y):ctx.moveTo(x,y); }); ctx.closePath();
+      ctx.fillStyle = '#E9D8A6'; ctx.globalAlpha = .04 + vis*.5; ctx.fill();
+      ctx.strokeStyle = '#F5B700'; ctx.lineWidth = 1.5; ctx.globalAlpha = .08 + vis*.8; ctx.stroke();
+      ctx.restore(); ctx.globalAlpha = 1;
+    }
+    // spotlight cone
+    const g = ctx.createRadialGradient(lx, ly, 0, lx, ly, H*1.1);
+    g.addColorStop(0,'rgba(245,183,0,.32)'); g.addColorStop(.5,'rgba(245,183,0,.10)'); g.addColorStop(1,'rgba(245,183,0,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx - W*.42, H); ctx.lineTo(lx + W*.42, H); ctx.closePath(); ctx.fill();
+    // dust
+    for (const d of dust){
+      const x = ((d.x + t*d.sp) % 1) * W, y = (d.y*H + Math.sin(t*.0006 + d.ph)*10);
+      const inBeam = Math.abs(x - lx) < (y - ly)*.42 + 10;
+      ctx.fillStyle = inBeam ? 'rgba(245,183,0,.7)' : 'rgba(255,255,255,.08)'; ctx.beginPath(); ctx.arc(x, y, d.r, 0, Math.PI*2); ctx.fill();
+    }
+    if (!REDUCE) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 1 — THE CASE BOARD
+   ========================================================= */
+(() => {
+  const canvas = el('caseb');
+  const CASES = [
+    { name:'The L-shaped Lot', notes:'An L-shaped backyard. Two rectangles hiding in one shape.', shape: pts([[0,0],[6,0],[6,2],[2,2],[2,5],[0,5]]), best:1 },
+    { name:'The T-shirt', notes:'A T-shape: a wide bar on top of a narrow stem.', shape: pts([[0,4],[8,4],[8,6],[5,6],[5,0],[3,0],[3,6],[0,6]]), best:1 },
+    { name:'The House', notes:'A house: a rectangle wearing a triangle for a roof.', shape: pts([[0,0],[6,0],[6,4],[3,6],[0,4]]), best:1 },
+    { name:'The Arrow', notes:'An arrow pointing right: a rectangle shaft and a triangle head.', shape: pts([[0,2],[4,2],[4,0],[8,3],[4,6],[4,4],[0,4]]), best:1 },
+    { name:'The Staircase', notes:'Three steps. How many rectangles do you really need?', shape: pts([[0,0],[6,0],[6,2],[4,2],[4,4],[2,4],[2,6],[0,6]]), best:2 },
+    { name:'★ The Chevron', notes:'A slanted chevron. No rectangles here at all — think triangles.', shape: pts([[0,0],[4,2],[8,0],[8,3],[4,5],[0,3]]), best:3 },
+  ];
+  let idx = 0, history = [], solvedSet = new Set(), stamped = false;
+  const board = new SC.Board(canvas, {
+    world:{minX:-1, minY:-1, maxX:9, maxY:7}, rotateStep: Math.PI/2, colors: PAL, snapDist: 0.35,
+    gridColor:'rgba(233,216,166,.08)', gridMajor:'rgba(233,216,166,.16)', pieceStroke:'rgba(0,0,0,.6)',
+    labelFont:'700 14px "Courier New", ui-monospace, monospace',
+    onChange: update, onCut: () => { SC.sfx.snip(); update(); },
+  });
+  const labelFn = pc => describe(board.worldPts(pc)).text;
+  function load(i){
+    idx = i; history = []; stamped = false;
+    const cs = CASES[i]; const bb = SC.bbox(cs.shape);
+    board.opts.world = { minX: bb.minX - 2, maxX: bb.maxX + 2, minY: bb.minY - 1.5, maxY: bb.maxY + 1.5 };
+    board.resize(); board.clear(); board.addPiece(cs.shape, { label: labelFn, color: PAL[i % PAL.length] }); setMode('cut');
+    el('cb-notes').textContent = cs.notes; el('cb-top').textContent = `case ${i+1} of ${CASES.length} · "${cs.name}"`;
+    [...el('cb-list').children].forEach((c, k) => c.classList.toggle('active', k === i));
+    el('cb-stamp').classList.remove('show'); el('cb-fb').textContent = ''; el('cb-fb').className = 'feedback'; el('cb-answer').value = ''; el('cb-answer').className = '';
+    update();
+  }
+  function update(){
+    el('cb-cuts').textContent = board.cuts; el('cb-pieces').textContent = board.pieces.length;
+    el('cb-progress').textContent = `${solvedSet.size} of ${CASES.length} cases`;
+    const infos = board.pieces.map(pc => describe(board.worldPts(pc)));
+    const allOk = infos.every(i => i.ok);
+    if (allOk){
+      const total = infos.reduce((s,i) => s + i.area, 0);
+      el('cb-sum').innerHTML = `Every piece has a number! Add them: <b>${infos.map(i => F(i.area)).join(' + ')}</b> = ?`;
+      el('cb-answer').disabled = false; el('cb-check').disabled = stamped;
+      board._expected = total;
+    } else {
+      const unknown = infos.filter(i => !i.ok).length;
+      el('cb-sum').innerHTML = `${unknown} piece${unknown===1?'':'s'} still show${unknown===1?'s':''} <b>?</b> — keep cutting until every piece is a rectangle, square, or triangle.`;
+      el('cb-answer').disabled = true; el('cb-check').disabled = true;
+    }
+  }
+  function check(){
+    const v = parseFloat(el('cb-answer').value); const fb = el('cb-fb'); const inp = el('cb-answer');
+    if (isNaN(v)){ SC.toast('Type the total first.', 'hint'); return; }
+    if (Math.abs(v - board._expected) < 1e-6){
+      stamped = true; solvedSet.add(idx); inp.className = 'good'; el('cb-check').disabled = true;
+      const cs = CASES[idx]; const rank = board.cuts <= cs.best ? 'Chief Inspector 🕵️' : board.cuts <= cs.best + 1 ? 'Detective 🔎' : 'Rookie 📋';
+      fb.className = 'feedback good'; fb.innerHTML = `✅ <strong>Case closed. Area = ${F(board._expected)}.</strong> Solved in ${board.cuts} cut${board.cuts===1?'':'s'} (fewest possible: ${cs.best}). Rank: <strong>${rank}</strong>`;
+      el('cb-stamp').classList.add('show'); el('cb-list').children[idx].classList.add('done');
+      SC.sfx.win(); SC.confetti({colors: PAL}); update();
+      if (solvedSet.size === CASES.length){ el('cb-cap').innerHTML = `<strong>🏆 All six cases closed.</strong> There's nothing left on the board. Head down to the Strategy Desk.`; setTimeout(() => SC.confetti({colors: PAL, count: 240}), 500); }
+    } else {
+      inp.className = 'bad'; fb.className = 'feedback bad'; SC.sfx.nope();
+      fb.innerHTML = `❌ Not the total. Add up the numbers on the pieces carefully: ${board.pieces.map(pc => describe(board.worldPts(pc)).text.split('=').pop()).join(' + ')}.`;
+    }
+  }
+  function setMode(m){ board.setMode(m); el('cb-cut').classList.toggle('active', m==='cut'); el('cb-move').classList.toggle('active', m==='move'); }
+  const snap = () => history.push(board.snapshot());
+  canvas.addEventListener('pointerdown', () => { if (board.mode === 'cut') snap(); });
+  el('cb-cut').onclick = () => setMode('cut'); el('cb-move').onclick = () => setMode('move');
+  el('cb-undo').onclick = () => { const s = history.pop(); if (s){ board.restore(s); board.pieces.forEach(p => p.label = labelFn); update(); } else SC.toast('Nothing to undo.', 'hint'); };
+  el('cb-reset').onclick = () => { load(idx); SC.sfx.click(); };
+  el('cb-check').onclick = check;
+  el('cb-answer').addEventListener('keydown', e => { if (e.key === 'Enter') check(); });
+  CASES.forEach((cs, i) => { const c = document.createElement('button'); c.className = 'challenge-chip'; c.textContent = `#${i+1} ${cs.name}`; c.onclick = () => { load(i); SC.sfx.click(); }; el('cb-list').appendChild(c); });
+  load(0);
+})();
+
+/* =========================================================
+   LAB 2 — ADD OR SUBTRACT? (static canvas, two views)
+   ========================================================= */
+(() => {
+  const canvas = el('strat');
+  const SHAPES = [
+    { outline: pts([[0,0],[8,0],[8,3],[5,3],[5,5],[0,5]]), box:{w:8,h:5}, bites:[{x:5,y:3,w:3,h:2}],
+      add:[{x:0,y:0,w:5,h:5},{x:5,y:0,w:3,h:3}], think:'Add: 5×5 + 3×3. Subtract: 8×5 − 3×2. Two pieces either way — pick your favorite.' },
+    { outline: pts([[0,0],[10,0],[10,4],[6,4],[6,2],[4,2],[4,4],[0,4]]), box:{w:10,h:4}, bites:[{x:4,y:2,w:2,h:2}],
+      add:[{x:0,y:0,w:4,h:4},{x:4,y:0,w:2,h:2},{x:6,y:0,w:4,h:4}], think:'Add needs three pieces. Subtract needs one box and one bite. Subtracting wins.' },
+    { outline: pts([[0,0],[8,0],[8,6],[0,6]]), hole: pts([[2,2],[6,2],[6,4],[2,4]]), box:{w:8,h:6}, bites:[{x:2,y:2,w:4,h:2}],
+      add:[{x:0,y:0,w:8,h:2},{x:0,y:4,w:8,h:2},{x:0,y:2,w:2,h:2},{x:6,y:2,w:2,h:2}], think:'A frame: adding takes FOUR pieces. Subtracting is 8×6 − 4×2. No contest.' },
+  ];
+  let si = 0, mode = 'add';
+  const view = { ctx:null, w:0, h:0, scale:1, ox:0, oy:0 };
+  const S = p => SC.P(view.ox + p.x*view.scale, view.oy - p.y*view.scale);
+  function fit(){ ({ctx:view.ctx, w:view.w, h:view.h} = SC.fitCanvas(canvas)); const sh = SHAPES[si]; view.scale = Math.min(view.w/(sh.box.w+3), view.h/(sh.box.h+3)); view.ox = view.w/2 - sh.box.w/2*view.scale; view.oy = view.h/2 + sh.box.h/2*view.scale; draw(); }
+  new ResizeObserver(fit).observe(canvas);
+  function rect(r, fill, stroke, label){
+    const ctx = view.ctx; const a = S(SC.P(r.x, r.y+r.h)); ctx.fillStyle = fill; ctx.fillRect(a.x, a.y, r.w*view.scale, r.h*view.scale);
+    ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.strokeRect(a.x, a.y, r.w*view.scale, r.h*view.scale);
+    if (label){ ctx.font = '700 14px "Courier New", monospace'; ctx.fillStyle = '#1B1B1B'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(label, a.x + r.w*view.scale/2, a.y + r.h*view.scale/2); ctx.textBaseline='alphabetic'; }
+  }
+  function draw(){
+    const ctx = view.ctx; if (!ctx) return; const sh = SHAPES[si];
+    ctx.clearRect(0,0,view.w,view.h);
+    ctx.strokeStyle = 'rgba(233,216,166,.08)'; ctx.lineWidth = 1;
+    for (let x=-2;x<=14;x++){ const p=S(SC.P(x,-2)), q=S(SC.P(x,10)); ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
+    for (let y=-2;y<=10;y++){ const p=S(SC.P(-2,y)), q=S(SC.P(14,y)); ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
+    // outline (with hole if any)
+    ctx.beginPath(); sh.outline.forEach((p,i)=>{ const s=S(p); i?ctx.lineTo(s.x,s.y):ctx.moveTo(s.x,s.y); }); ctx.closePath();
+    if (sh.hole){ sh.hole.slice().reverse().forEach((p,i)=>{ const s=S(p); i?ctx.lineTo(s.x,s.y):ctx.moveTo(s.x,s.y); }); ctx.closePath(); }
+    ctx.fillStyle = 'rgba(233,216,166,.25)'; ctx.fill('evenodd'); ctx.strokeStyle = '#E9D8A6'; ctx.lineWidth = 3; ctx.stroke();
+    let expr, total;
+    if (mode === 'add'){
+      sh.add.forEach((r, i) => rect(r, ['rgba(245,183,0,.75)','rgba(127,209,193,.75)','rgba(255,143,177,.75)','rgba(142,197,255,.75)'][i%4], '#1B1B1B', `${r.w}×${r.h}=${r.w*r.h}`));
+      total = sh.add.reduce((s,r)=>s+r.w*r.h,0); expr = sh.add.map(r => `${r.w}×${r.h}`).join(' + ') + ` = ${sh.add.map(r=>r.w*r.h).join(' + ')} = <b>${total}</b>`;
+    } else {
+      const a = S(SC.P(0, sh.box.h)); ctx.save(); ctx.setLineDash([8,6]); ctx.strokeStyle = '#F5B700'; ctx.lineWidth = 3; ctx.strokeRect(a.x, a.y, sh.box.w*view.scale, sh.box.h*view.scale); ctx.restore();
+      ctx.font = '700 15px "Courier New", monospace'; ctx.fillStyle = '#F5B700'; ctx.textAlign='left'; ctx.fillText(`whole box ${sh.box.w}×${sh.box.h} = ${sh.box.w*sh.box.h}`, a.x, a.y - 10);
+      sh.bites.forEach(b => { rect(b, 'rgba(214,40,40,.55)', '#D62828', `− ${b.w}×${b.h}=${b.w*b.h}`); });
+      const bite = sh.bites.reduce((s,b)=>s+b.w*b.h,0); total = sh.box.w*sh.box.h - bite;
+      expr = `${sh.box.w}×${sh.box.h} − ${sh.bites.map(b=>`${b.w}×${b.h}`).join(' − ')} = ${sh.box.w*sh.box.h} − ${bite} = <b>${total}</b>`;
+    }
+    el('st-sum').innerHTML = (mode==='add' ? '➕ ADD: ' : '➖ SUBTRACT: ') + expr;
+    el('st-think').textContent = sh.think;
+  }
+  el('st-add').onclick = () => { mode = 'add'; el('st-add').classList.add('active'); el('st-sub').classList.remove('active'); draw(); SC.sfx.click(); };
+  el('st-sub').onclick = () => { mode = 'sub'; el('st-sub').classList.add('active'); el('st-add').classList.remove('active'); draw(); SC.sfx.click(); };
+  document.querySelectorAll('[data-shape]').forEach(b => b.onclick = () => { si = +b.dataset.shape; document.querySelectorAll('[data-shape]').forEach(x => x.classList.toggle('active', x === b)); fit(); SC.sfx.click(); });
+  fit();
+})();
+
+/* =========================================================
+   LAB 3 — THE DETECTIVE EXAM (labeled shapes, typed answers)
+   ========================================================= */
+(() => {
+  const canvas = el('exam');
+  const R = (a, b) => a + Math.floor(Math.random()*(b-a+1));
+  const GEN = [
+    () => { const W=R(6,9), H=R(5,7), a=R(2,4), b=R(2,3); // L: outer W×H minus top-right (W-a)×(H-b)
+      return { poly: pts([[0,0],[W,0],[W,b],[a,b],[a,H],[0,H]]), dims:[[[0,0],[W,0],`${W}`,-.5],[[0,0],[0,H],`${H}`,.5],[[0,H],[a,H],`${a}`,.5],[[W,0],[W,b],`${b}`,-.5]],
+        ans: W*H - (W-a)*(H-b), how:`Add: ${a}×${H} + ${W-a}×${b} = ${a*H} + ${(W-a)*b}. Or subtract: ${W}×${H} − ${W-a}×${H-b} = ${W*H} − ${(W-a)*(H-b)}.` }; },
+    () => { const w=R(4,8), h=R(3,5), t=R(2,4); // house
+      return { poly: pts([[0,0],[w,0],[w,h],[w/2,h+t],[0,h]]), dims:[[[0,0],[w,0],`${w}`,-.5],[[w,0],[w,h],`${h}`,-.5],[[w,h],[w,h+t],`${t}`,-1.2]],
+        ans: w*h + w*t/2, how:`Rectangle ${w}×${h} = ${w*h}, roof triangle ½×${w}×${t} = ${F(w*t/2)}. Add them.` }; },
+    () => { const W=R(7,10), H=R(3,5), n=R(2,3), m=R(1,2); const s=Math.floor((W-n)/2); // notched rect
+      return { poly: pts([[0,0],[W,0],[W,H],[s+n,H],[s+n,H-m],[s,H-m],[s,H],[0,H]]), dims:[[[0,0],[W,0],`${W}`,-.5],[[W,0],[W,H],`${H}`,-.5],[[s,H],[s+n,H],`${n}`,.5],[[s+n,H-m],[s+n,H],`${m}`,-.5]],
+        ans: W*H - n*m, how:`Whole box ${W}×${H} = ${W*H}, minus the notch ${n}×${m} = ${n*m}.` }; },
+    () => { const w=R(6,9), t=R(1,2), s=R(2,3), d=R(3,5); const off=Math.floor((w-s)/2); // T
+      return { poly: pts([[0,d],[off,d],[off,0],[off+s,0],[off+s,d],[w,d],[w,d+t],[0,d+t]]), dims:[[[0,d+t],[w,d+t],`${w}`,.5],[[w,d],[w,d+t],`${t}`,-.5],[[off,0],[off+s,0],`${s}`,-.5],[[off+s,0],[off+s,d],`${d}`,-.5]],
+        ans: w*t + s*d, how:`Top bar ${w}×${t} = ${w*t}, stem ${s}×${d} = ${s*d}. Add them.` }; },
+    () => { const a=R(1,3), b=R(1,2); // staircase 3 steps
+      return { poly: pts([[0,0],[3*a,0],[3*a,b],[2*a,b],[2*a,2*b],[a,2*b],[a,3*b],[0,3*b]]), dims:[[[0,0],[3*a,0],`${3*a}`,-.5],[[0,0],[0,3*b],`${3*b}`,.5],[[2*a,b],[3*a,b],`${a}`,.5],[[3*a,0],[3*a,b],`${b}`,-.5]],
+        ans: 6*a*b, how:`Three strips: ${3*a}×${b} + ${2*a}×${b} + ${a}×${b} = ${3*a*b} + ${2*a*b} + ${a*b}. (Every step is ${a} wide and ${b} tall.)` }; },
+  ];
+  let qi = 0, score = 0, q = null, done = false;
+  const view = { ctx:null, w:0, h:0, scale:1, ox:0, oy:0 };
+  const S = p => SC.P(view.ox + p.x*view.scale, view.oy - p.y*view.scale);
+  function fit(){ ({ctx:view.ctx, w:view.w, h:view.h} = SC.fitCanvas(canvas)); if (!q) return; const bb = SC.bbox(q.poly); view.scale = Math.min(view.w/(bb.w+4), view.h/(bb.h+3.5)); view.ox = view.w/2 - (bb.minX+bb.w/2)*view.scale; view.oy = view.h/2 + (bb.minY+bb.h/2)*view.scale; draw(); }
+  new ResizeObserver(fit).observe(canvas);
+  function dim(a, b, text, off){
+    const ctx = view.ctx; const dx=b.x-a.x, dy=b.y-a.y, L=Math.hypot(dx,dy)||1; const nx=-dy/L*off, ny=dx/L*off;
+    const p1=S(SC.P(a.x+nx,a.y+ny)), p2=S(SC.P(b.x+nx,b.y+ny));
+    ctx.strokeStyle='#F5B700'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
+    for (const [p,w] of [[p1,a],[p2,b]]){ const s0=S(w); ctx.strokeStyle='rgba(245,183,0,.5)'; ctx.setLineDash([2,3]); ctx.beginPath(); ctx.moveTo(s0.x,s0.y); ctx.lineTo(p.x,p.y); ctx.stroke(); ctx.setLineDash([]); }
+    const m=S(SC.P((a.x+b.x)/2+nx*1.8,(a.y+b.y)/2+ny*1.8)); ctx.font='800 15px "Courier New", monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    const tw=ctx.measureText(text).width+12; ctx.fillStyle='#F3E9C6'; SC.roundRect(ctx,m.x-tw/2,m.y-11,tw,22,4); ctx.fill(); ctx.fillStyle='#1B1B1B'; ctx.fillText(text,m.x,m.y+1); ctx.textBaseline='alphabetic';
+  }
+  function draw(){
+    const ctx = view.ctx; if (!ctx || !q) return; ctx.clearRect(0,0,view.w,view.h);
+    ctx.strokeStyle='rgba(233,216,166,.07)'; ctx.lineWidth=1;
+    for (let x=-3;x<=16;x++){ const p=S(SC.P(x,-3)), r=S(SC.P(x,14)); ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(r.x,r.y); ctx.stroke(); }
+    for (let y=-3;y<=14;y++){ const p=S(SC.P(-3,y)), r=S(SC.P(16,y)); ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(r.x,r.y); ctx.stroke(); }
+    ctx.beginPath(); q.poly.forEach((p,i)=>{ const s=S(p); i?ctx.lineTo(s.x,s.y):ctx.moveTo(s.x,s.y); }); ctx.closePath();
+    ctx.fillStyle = done ? 'rgba(127,209,193,.45)' : 'rgba(233,216,166,.35)'; ctx.fill(); ctx.strokeStyle='#E9D8A6'; ctx.lineWidth=3; ctx.stroke();
+    q.dims.forEach(([a,b,t,off]) => dim(SC.P(a[0],a[1]), SC.P(b[0],b[1]), t, off));
+    if (done){ const c = S(SC.centroid(q.poly)); ctx.font='800 24px "Courier New", monospace'; ctx.fillStyle='#1B1B1B'; ctx.textAlign='center'; ctx.fillText(`${F(q.ans)}`, c.x, c.y+8); }
+  }
+  function check(){
+    if (done) return; const v = parseFloat(el('ex-answer').value); const fb = el('ex-fb'); const inp = el('ex-answer');
+    if (isNaN(v)){ SC.toast('Type a number first.', 'hint'); return; }
+    if (Math.abs(v - q.ans) < 1e-6){ done = true; score++; inp.className='good'; fb.className='feedback good'; fb.innerHTML = `✅ <strong>${F(q.ans)}.</strong> ${q.how}`; el('ex-score').textContent = score; el('ex-next').disabled = false; SC.sfx.win(); }
+    else { inp.className='bad'; fb.className='feedback bad'; fb.innerHTML = `❌ Not yet. Hint: ${q.how.split('.')[0]}.`; SC.sfx.nope(); }
+    draw();
+  }
+  function next(){
+    if (qi >= 5){
+      const fb = el('ex-fb'); fb.className='feedback good';
+      const badge = score === 5 ? '🏅 Chief Inspector — perfect exam!' : score >= 4 ? '🔎 Detective First Class' : score >= 3 ? '📋 Detective' : '🧢 Rookie — try a new exam';
+      fb.innerHTML = `<strong>Exam over: ${score} of 5.</strong> ${badge}`; el('ex-badge').textContent = badge; el('ex-next').disabled = true;
+      if (score >= 4) SC.confetti({colors: PAL}); return;
+    }
+    q = GEN[qi](); qi++; done = false; el('ex-q').textContent = qi; el('ex-answer').value=''; el('ex-answer').className=''; el('ex-fb').textContent=''; el('ex-fb').className='feedback'; el('ex-next').disabled = true; fit(); el('ex-answer').focus({preventScroll:true});
+  }
+  el('ex-check').onclick = check; el('ex-next').onclick = next;
+  el('ex-answer').addEventListener('keydown', e => { if (e.key==='Enter'){ if (done && !el('ex-next').disabled) next(); else check(); } });
+  el('ex-restart').onclick = () => { qi = 0; score = 0; el('ex-score').textContent = 0; el('ex-badge').textContent = 'Not yet earned.'; next(); };
+  next();
+})();
+</script>
+</body>
+</html>

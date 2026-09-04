@@ -1,0 +1,1302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Water Waves · Investigating Waves · REDS Hall of Discovery</title>
+<style>
+  :root{
+    --navy:#03243F;
+    --deep:#0077B6;
+    --mid:#00B4D8;
+    --light:#90E0EF;
+    --foam:#CAF0F8;
+    --sand:#F6D7A7;
+    --sun:#FFD93D;
+    --coral:#FF6B6B;
+    --magenta:#FF6B9D;
+    --cream:#FFF8E7;
+    --ink:#02182B;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{
+    font-family:var(--font-body); color:var(--cream); background:var(--navy);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  img,svg{display:block;max-width:100%}
+
+  /* ---------- Page wrapper & backdrop ---------- */
+  body{
+    background:
+      radial-gradient(ellipse at 50% -20%, rgba(255,217,61,.15), transparent 50%),
+      radial-gradient(ellipse at 100% 80%, rgba(255,107,157,.18), transparent 55%),
+      linear-gradient(180deg, #03243F 0%, #02182B 100%);
+    background-attachment: fixed;
+  }
+
+  /* ---------- Topbar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:20; backdrop-filter: blur(14px);
+    background:linear-gradient(180deg, rgba(3,36,63,.85), rgba(3,36,63,.55));
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .topbar-inner{
+    max-width:1280px; margin:0 auto; padding:14px 28px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+  }
+  .back{
+    display:inline-flex; align-items:center; gap:8px; padding:8px 14px;
+    border-radius:999px; background:rgba(255,255,255,.08); font-family:var(--font-display); font-size:13px;
+    transition:background .15s;
+  }
+  .back:hover{background:rgba(255,255,255,.16)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand .logo{width:44px;height:44px}
+  .brand .eyebrow{font-family:var(--font-display);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--light);opacity:.9}
+  .brand .wordmark{font-family:var(--font-display);font-size:18px}
+  .brand .unit{font-family:var(--font-display);font-size:13px;color:var(--sun)}
+  .class-pill{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 14px; border-radius:999px;
+    background:linear-gradient(135deg, rgba(255,107,157,.25), rgba(78,205,196,.25));
+    border:1px solid rgba(255,255,255,.18);
+    font-family:var(--font-display); font-size:12px;
+  }
+  .class-pill .dot{width:7px;height:7px;border-radius:999px;background:var(--sun);box-shadow:0 0 10px var(--sun)}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    min-height:72vh;
+    display:flex; align-items:center;
+  }
+  #hero-canvas{position:absolute; inset:0; width:100%; height:100%; z-index:0;}
+  .hero-inner{
+    position:relative; z-index:2;
+    max-width:1280px; margin:0 auto; padding:40px 36px; width:100%;
+    text-align:center;
+  }
+  .hero .eyebrow{
+    font-family:var(--font-display); color:var(--foam);
+    letter-spacing:.4em; font-size:12px; text-transform:uppercase; margin-bottom:18px;
+  }
+  .hero h1{
+    font-size: clamp(68px, 13vw, 200px);
+    line-height:.85; letter-spacing:-.03em;
+    background: linear-gradient(180deg, #CAF0F8 0%, #90E0EF 40%, #00B4D8 70%, #0077B6 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter: drop-shadow(0 12px 40px rgba(0,180,216,.45));
+    margin-bottom: 22px;
+  }
+  .hero .tag{
+    max-width:760px; margin:0 auto;
+    font-size: clamp(18px, 2vw, 24px); color:var(--cream); opacity:.95;
+  }
+  .hero .scroll-cue{
+    position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+    font-family:var(--font-display); font-size:12px; letter-spacing:.3em;
+    color:var(--foam); opacity:.85; animation: nudge 2.4s ease-in-out infinite;
+  }
+  @keyframes nudge{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,6px)}}
+
+  /* ---------- Section scaffolding ---------- */
+  section.concept, section.lab, section.facts, section.nextup{
+    max-width:1280px; margin: 0 auto; padding: 28px 28px;
+  }
+  .section-head{
+    display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+  .section-head .left{flex:1 1 420px; min-width:280px}
+  .kicker{
+    font-family:var(--font-display); font-size:12px; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--sun); margin-bottom:4px;
+  }
+  .title{font-size:clamp(26px,3.2vw,40px); margin-bottom:6px; line-height:1;}
+  .blurb{max-width:720px; font-size:15px; line-height:1.5; color:rgba(255,248,231,.88)}
+
+  .panel{
+    margin-top:8px; border-radius:20px; overflow:hidden;
+    border:1px solid rgba(255,255,255,.1);
+    background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+    box-shadow: 0 20px 50px rgba(0,0,0,.45);
+    display:flex; flex-direction:column;
+  }
+  .panel-top{
+    padding:10px 18px; display:flex; justify-content:space-between; align-items:center;
+    background: linear-gradient(135deg, rgba(0,180,216,.18), rgba(255,107,157,.12));
+    border-bottom:1px solid rgba(255,255,255,.08);
+    font-family:var(--font-display); font-size:13px; letter-spacing:.08em;
+  }
+  .panel-top .dot{width:9px;height:9px;border-radius:999px;background:var(--coral);box-shadow:0 0 12px var(--coral);margin-right:8px;display:inline-block;vertical-align:middle}
+
+  canvas.demo{display:block; width:100%; background:#021228; height: clamp(220px, 48vh, 460px);}
+  canvas.demo.short{height: clamp(200px, 40vh, 360px);}
+  .caption{
+    padding:10px 18px; font-size:13px; line-height:1.45; color:rgba(255,248,231,.82);
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+
+  /* ---------- Controls ---------- */
+  .controls{
+    display:flex; flex-wrap:wrap; gap:18px 22px; padding:12px 18px;
+    border-top:1px solid rgba(255,255,255,.08);
+    background: rgba(2,18,40,.6);
+    align-items:center;
+  }
+  .control{
+    flex:1 1 180px; min-width:160px;
+  }
+  .control label{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--font-display); font-size:12px; letter-spacing:.05em; margin-bottom:4px;
+  }
+  .control .val{color:var(--sun); font-family:var(--font-mono); font-size:13px; background:rgba(255,217,61,.12); padding:2px 8px; border-radius:6px;}
+  .control input[type=range]{
+    width:100%; -webkit-appearance:none; appearance:none;
+    height:6px; border-radius:999px;
+    background: linear-gradient(90deg, var(--mid), var(--magenta));
+    outline:none;
+  }
+  .control input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none;
+    width:22px;height:22px;border-radius:50%;
+    background:var(--sun); border:3px solid #fff;
+    box-shadow:0 4px 12px rgba(0,0,0,.4);
+    cursor:pointer;
+  }
+  .control input[type=range]::-moz-range-thumb{
+    width:22px;height:22px;border-radius:50%;
+    background:var(--sun); border:3px solid #fff;
+    box-shadow:0 4px 12px rgba(0,0,0,.4);
+    cursor:pointer; border:none;
+  }
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 16px; border-radius:999px;
+    font-family:var(--font-display); font-size:13px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15);
+    transition:all .15s;
+  }
+  .chip:hover{background:rgba(255,255,255,.16); transform:translateY(-2px)}
+  .chip.active{background:linear-gradient(135deg,var(--coral),var(--magenta)); border-color:transparent}
+
+  /* ---------- Two-column splits ---------- */
+  .split{display:grid; grid-template-columns: 1.2fr 1fr; gap:36px; align-items:start}
+  @media (max-width: 900px){ .split{grid-template-columns:1fr} }
+
+  /* ---------- Facts section ---------- */
+  .facts-grid{
+    display:grid; grid-template-columns: repeat(3, 1fr);
+    gap:22px; margin-top:32px;
+  }
+  @media (max-width: 900px){ .facts-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px){ .facts-grid{ grid-template-columns: 1fr; } }
+  .fact{
+    padding:30px 28px; border-radius:24px;
+    background: linear-gradient(135deg, rgba(0,180,216,.15), rgba(255,107,157,.10));
+    border:1px solid rgba(255,255,255,.1);
+    transition: transform .25s, box-shadow .25s;
+    cursor:default;
+  }
+  .fact:hover{transform: translateY(-6px) rotate(-.5deg); box-shadow: 0 24px 60px rgba(0,180,216,.25)}
+  .fact .emoji{font-size:52px; margin-bottom:14px; display:block; line-height:1}
+  .fact h4{font-size:22px; margin-bottom:10px; line-height:1.2}
+  .fact p{font-size:16px; line-height:1.55; color:rgba(255,248,231,.9)}
+
+  /* ---------- Next up ---------- */
+  .nextup-card{
+    margin-top:24px;
+    padding:40px; border-radius:28px;
+    background: linear-gradient(135deg, #1a0033, #5B2A86 50%, #FF6B9D);
+    display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;
+    box-shadow:0 30px 80px rgba(124,44,198,.4);
+  }
+  .nextup-card h3{font-size:28px; margin-bottom:8px}
+  .nextup-card .big{font-size:40px; margin-top:4px}
+  .nextup-card p{opacity:.9; max-width:460px}
+
+  /* ---------- Footer ---------- */
+  footer{
+    padding:40px 28px; max-width:1280px; margin:0 auto;
+    border-top:1px solid rgba(255,255,255,.08);
+    display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:center;
+    font-size:13px; color:rgba(255,248,231,.7);
+  }
+  footer .heart{color:var(--coral)}
+
+  @media (prefers-reduced-motion: reduce){
+    .hero .scroll-cue{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== Topbar ========== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="back" href="../index.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      All units
+    </a>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="60" height="60" rx="18" fill="#03243F" stroke="url(#wg)" stroke-width="2"/>
+        <path d="M8 38 Q16 26 24 38 T40 38 T56 38" stroke="#FF6B9D" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M8 32 Q16 20 24 32 T40 32 T56 32" stroke="#FFD93D" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M8 26 Q16 14 24 26 T40 26 T56 26" stroke="#4ECDC4" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="wg" x1="0" y1="0" x2="64" y2="64">
+            <stop offset="0" stop-color="#FF6B9D"/><stop offset=".5" stop-color="#FFD93D"/><stop offset="1" stop-color="#00B4D8"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div>
+        <div class="eyebrow">REDS Hall of Discovery</div>
+        <div class="wordmark">Investigating Waves <span class="unit">· Unit 01 · Water</span></div>
+      </div>
+    </div>
+    <div class="class-pill"><span class="dot"></span>Mrs. Guyer's 5th Grade</div>
+  </div>
+</header>
+
+<!-- ========== Hero ========== -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 01 · Splash, ripple, surf</div>
+    <h1>Water Waves</h1>
+    <p class="tag">
+      Drop a pebble. Watch the ripples race outward. Now here's the wild part:
+      <strong>the water barely went anywhere</strong> — but the <em>wave</em> traveled clear across the pond.
+      Let's figure out how that works. 🌊
+    </p>
+  </div>
+  <div class="scroll-cue">SCROLL · DIVE IN</div>
+</section>
+
+<!-- ========== Concept 1: What is a wave? (interactive pond) ========== -->
+<section class="concept" id="c1">
+  <div class="kicker">Concept 01 · What is a wave?</div>
+  <h2 class="title">A wave carries <em>energy</em>,<br/>not water.</h2>
+  <p class="blurb">
+    If you drop a rock in a pond, ripples spread out in a perfect circle. But a rubber duck floating nearby?
+    It only <strong>bobs up and down</strong>. It doesn't ride away with the wave.
+    That's because the wave is moving <em>energy</em> through the water, not the water itself. Try it 👇
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Live · Interactive Pond</span><span style="opacity:.8">click anywhere in the pond</span></div>
+    <canvas id="pond" class="demo" height="440"></canvas>
+    <div class="caption"><strong>Try this:</strong> click a few spots. Watch the rubber duck 🦆 bob up and down — but it doesn't get carried away with the wave.</div>
+  </div>
+</section>
+
+<!-- ========== Concept 2: Anatomy of a wave ========== -->
+<section class="concept" id="c2">
+  <div class="kicker">Concept 02 · Anatomy of a wave</div>
+  <h2 class="title">Every wave has the same parts.</h2>
+  <p class="blurb">
+    The top of a wave is the <strong>crest</strong>. The bottom is the <strong>trough</strong>.
+    The height from middle-to-crest is the <strong>amplitude</strong> (how tall!).
+    The distance from crest to crest is the <strong>wavelength</strong> (how wide).
+    How many waves pass by each second is the <strong>frequency</strong> (how fast).
+    Play with the sliders and watch.
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Live · Wave Builder</span><span style="opacity:.8">drag the sliders</span></div>
+    <canvas id="anatomy" class="demo" height="360"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>Amplitude <span class="val" id="amp-val">60</span></label>
+        <input type="range" id="amp" min="10" max="120" value="60"/>
+      </div>
+      <div class="control">
+        <label>Wavelength <span class="val" id="len-val">220</span></label>
+        <input type="range" id="len" min="80" max="480" value="220"/>
+      </div>
+      <div class="control">
+        <label>Frequency <span class="val" id="freq-val">1.0× </span></label>
+        <input type="range" id="freq" min="0" max="30" value="10"/>
+      </div>
+    </div>
+    <div class="caption">A tiny surfer 🏄 rides the wave. Watch how the <strong>amplitude</strong> makes his ride taller, the <strong>wavelength</strong> stretches the waves apart, and the <strong>frequency</strong> controls how fast they zoom by.</div>
+  </div>
+</section>
+
+<!-- ========== LAB 1: Ripple Tank Interference ========== -->
+<section class="lab" id="lab1">
+  <div class="kicker">Lab 01 · Ripple tank</div>
+  <h2 class="title">When two waves meet…<br/>something wild happens.</h2>
+  <p class="blurb">
+    Scientists use <strong>ripple tanks</strong> — shallow tanks of water — to study waves. When two
+    wave sources wiggle at the same time, their ripples <em>overlap</em>. Sometimes they team up and
+    make <strong>giant waves</strong> (bright). Sometimes they cancel out and make <strong>glassy calm</strong> (dark).
+    That's called <em>interference</em>. Drag the two droppers around and see for yourself. 💧💧
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Two-Source Ripple Tank</span><span style="opacity:.8">drag the dots · scroll to adjust wavelength</span></div>
+    <canvas id="tank" class="demo" height="480"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>Wavelength <span class="val" id="tank-len-val">34</span></label>
+        <input type="range" id="tank-len" min="16" max="90" value="34"/>
+      </div>
+      <div class="control">
+        <label>Wave speed <span class="val" id="tank-speed-val">1.0×</span></label>
+        <input type="range" id="tank-speed" min="1" max="40" value="14"/>
+      </div>
+      <div class="control">
+        <label>Sources</label>
+        <div class="btn-row">
+          <button class="chip active" data-src="2" id="src-2">Two 💧💧</button>
+          <button class="chip" data-src="1" id="src-1">One 💧</button>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Try this:</strong> drag the two droppers close together, then far apart. With one source, you get nice concentric circles.
+      With two, you see bright <em>rays</em> of big waves and dark <em>rays</em> of calm — like a stripey starfish. That's how light and sound interfere, too!
+    </div>
+  </div>
+</section>
+
+<!-- ========== LAB 2: Surf's Up ========== -->
+<section class="lab" id="lab2">
+  <div class="kicker">Lab 02 · Surf's up</div>
+  <h2 class="title">Why do waves break at the beach?</h2>
+  <p class="blurb">
+    Out in deep water, waves are gentle rolling hills. But when a wave reaches <strong>shallow water</strong>, the bottom
+    drags on the ocean floor. The top of the wave keeps going fast — until it <em>tips over</em> and crashes.
+    🌊💥 Control the wave size and the sea floor, then make 'em break.
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Beach Cross-Section</span><span style="opacity:.8">side view · like cutting the ocean with a knife</span></div>
+    <canvas id="beach" class="demo" height="440"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>Wave height <span class="val" id="beach-amp-val">40</span></label>
+        <input type="range" id="beach-amp" min="10" max="80" value="40"/>
+      </div>
+      <div class="control">
+        <label>Wave speed <span class="val" id="beach-speed-val">1.0×</span></label>
+        <input type="range" id="beach-speed" min="1" max="30" value="12"/>
+      </div>
+      <div class="control">
+        <label>Beach slope <span class="val" id="beach-slope-val">gentle</span></label>
+        <input type="range" id="beach-slope" min="10" max="80" value="35"/>
+      </div>
+      <div class="control">
+        <label>&nbsp;</label>
+        <div class="btn-row">
+          <button class="chip" id="tsunami">🌊 Send a TSUNAMI</button>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Try this:</strong> make the slope steeper. See how the waves pile up higher and break harder?
+      A tsunami is what happens when a whole <em>lot</em> of energy reaches shallow water at once.
+    </div>
+  </div>
+</section>
+
+<!-- ========== Fun Facts ========== -->
+<section class="facts">
+  <div class="kicker">Did you know?</div>
+  <h2 class="title">Six wild wave facts.</h2>
+
+  <div class="facts-grid">
+    <div class="fact">
+      <span class="emoji">🚀</span>
+      <h4>Tsunamis are faster than a jet.</h4>
+      <p>In the deep ocean, a tsunami can travel <strong>500 mph</strong> — as fast as a 747. They only get huge once they reach shallow water.</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🗻</span>
+      <h4>The tallest wave EVER.</h4>
+      <p>In 1958, a wave in Lituya Bay, Alaska reached <strong>1,720 feet</strong> — taller than the Empire State Building!</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🦆</span>
+      <h4>Rubber ducks are scientists.</h4>
+      <p>In 1992, a shipping container of 28,000 rubber ducks spilled into the ocean. Scientists tracked where they washed up to map ocean currents!</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🌙</span>
+      <h4>Tides are also waves.</h4>
+      <p>The moon's gravity pulls the ocean into a <strong>giant wave</strong> that sweeps around Earth twice a day. You call it "the tide."</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🎵</span>
+      <h4>Water waves + sound waves = same idea.</h4>
+      <p>Sound and light <em>also</em> travel in waves — just through the air and empty space instead of water. The math works the same way.</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🏟️</span>
+      <h4>"The Wave" at a stadium is a REAL wave.</h4>
+      <p>People stand up and sit down in a pattern, and the <em>motion</em> travels around the stadium — even though nobody moves seats. That's exactly how water waves work!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Next Up ========== -->
+<section class="nextup">
+  <div class="kicker">Up next in the series</div>
+  <div class="nextup-card">
+    <div>
+      <h3>Unit 02 · Light Waves</h3>
+      <div class="big">🌈 Prisms, rainbows, and lasers.</div>
+      <p>If water waves blew your mind, just wait. Light is a wave too — and it's sneakier than you think.</p>
+    </div>
+    <a class="chip active" href="../index.html">Back to all units →</a>
+  </div>
+</section>
+
+<footer>
+  <div><strong>REDS Hall of Discovery</strong> · Investigating Waves · Unit 01: Water</div>
+  <div>Made with <span class="heart">♥</span> for Mrs. Guyer's 5th Grade Class</div>
+</footer>
+
+<script>
+/* =========================================================
+   Utility: make a canvas DPR-aware and autoresponsive.
+   ========================================================= */
+function setupCanvas(canvas){
+  const ctx = canvas.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  function resize(){
+    const r = canvas.getBoundingClientRect();
+    canvas.width = Math.floor(r.width * DPR);
+    canvas.height = Math.floor(r.height * DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  return {ctx, DPR, resize, rect: () => canvas.getBoundingClientRect()};
+}
+
+/* =========================================================
+   HERO CANVAS — animated layered ocean + distant boats
+   ========================================================= */
+(() => {
+  const c = document.getElementById('hero-canvas');
+  const {ctx} = setupCanvas(c);
+
+  const layers = [
+    {amp:18, len:.012, sp:.00035, y:.58, col:'rgba(144,224,239,.55)'},
+    {amp:28, len:.009, sp:.00025, y:.68, col:'rgba(0,180,216,.65)'},
+    {amp:42, len:.007, sp:.00018, y:.80, col:'rgba(0,119,182,.85)'},
+    {amp:60, len:.005, sp:.00014, y:.95, col:'rgba(3,36,63,.95)'},
+  ];
+  const sparkles = Array.from({length:60}, () => ({
+    x: Math.random(), y: Math.random()*.55+.05, r: .5+Math.random()*1.4,
+    ph: Math.random()*Math.PI*2, sp: .001+Math.random()*.002
+  }));
+
+  function tick(t){
+    const W = c.clientWidth, H = c.clientHeight;
+    // sky gradient
+    const g = ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#03243F'); g.addColorStop(.4,'#134B72'); g.addColorStop(1,'#0077B6');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+    // sun glow
+    const sunX = W*.7, sunY = H*.28;
+    const rad = ctx.createRadialGradient(sunX,sunY,10,sunX,sunY,280);
+    rad.addColorStop(0,'rgba(255,217,61,.7)');
+    rad.addColorStop(.4,'rgba(255,107,157,.25)');
+    rad.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = rad; ctx.fillRect(0,0,W,H);
+
+    // sparkles
+    for (const s of sparkles){
+      const a = .3+.7*(.5+.5*Math.sin(t*s.sp+s.ph));
+      ctx.fillStyle = `rgba(202,240,248,${a})`;
+      ctx.beginPath(); ctx.arc(s.x*W, s.y*H, s.r, 0, Math.PI*2); ctx.fill();
+    }
+
+    // waves
+    for (const L of layers){
+      ctx.beginPath();
+      ctx.moveTo(0,H);
+      const baseY = H*L.y;
+      for (let x=0;x<=W;x+=4){
+        const y = baseY
+          + Math.sin(x*L.len + t*L.sp) * L.amp
+          + Math.sin(x*L.len*2.2 + t*L.sp*1.6) * L.amp*.35;
+        ctx.lineTo(x,y);
+      }
+      ctx.lineTo(W,H); ctx.closePath();
+      ctx.fillStyle = L.col; ctx.fill();
+    }
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   CONCEPT 1 — "Pond" click-to-drop ripples with a bobbing duck
+   Top-down view.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('pond');
+  const {ctx, rect} = setupCanvas(c);
+
+  const ripples = []; // {x, y, t0, strength}
+  const duck = {x: 0, y: 0};
+  let duckInit = false;
+
+  function addRipple(x,y, strength=1){
+    ripples.push({x, y, t0: performance.now(), strength});
+    if (ripples.length > 30) ripples.shift();
+  }
+
+  c.addEventListener('click', e => {
+    const r = rect();
+    addRipple(e.clientX - r.left, e.clientY - r.top, 1);
+  });
+  c.addEventListener('touchstart', e => {
+    const r = rect(); const t = e.touches[0];
+    addRipple(t.clientX - r.left, t.clientY - r.top, 1);
+  }, {passive:true});
+
+  // seed ripples so it's alive on load
+  setTimeout(() => {
+    const W = c.clientWidth, H = c.clientHeight;
+    addRipple(W*.3, H*.5);
+    setTimeout(() => addRipple(W*.7, H*.4), 600);
+  }, 400);
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+
+    // water gradient top-down
+    const g = ctx.createRadialGradient(W*.5,H*.5,20,W*.5,H*.5, Math.max(W,H)*.7);
+    g.addColorStop(0,'#0098C7'); g.addColorStop(.6,'#035A86'); g.addColorStop(1,'#021A2F');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+    // place duck once
+    if (!duckInit){ duck.x = W*.5; duck.y = H*.65; duckInit = true; }
+
+    // draw ripples
+    let duckBob = 0;
+    for (let i=ripples.length-1; i>=0; i--){
+      const r = ripples[i];
+      const age = (now - r.t0)/1000; // seconds
+      if (age > 4.2){ ripples.splice(i,1); continue; }
+      const speed = 110; // px / s
+      // draw several nested rings with decreasing alpha as age increases
+      for (let k=0;k<3;k++){
+        const rad = age*speed - k*22;
+        if (rad < 0) continue;
+        const alpha = Math.max(0, 1 - age/4.2) * (1 - k*.3) * .8;
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, rad, 0, Math.PI*2);
+        ctx.strokeStyle = `rgba(202,240,248,${alpha})`;
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+      }
+      // duck bob contribution: ripple passes through duck?
+      const dx = duck.x - r.x, dy = duck.y - r.y;
+      const dist = Math.hypot(dx,dy);
+      const ringR = age*speed;
+      const delta = Math.abs(ringR - dist);
+      if (delta < 30 && age < 4){
+        const amp = 10 * (1 - age/4.2);
+        duckBob += Math.cos(delta/30 * Math.PI) * amp;
+      }
+    }
+
+    // draw duck
+    const dy = duck.y + duckBob;
+    // shadow
+    ctx.beginPath(); ctx.ellipse(duck.x, dy+18, 22, 5, 0, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(0,0,0,.3)'; ctx.fill();
+    // body
+    ctx.font = '42px system-ui, Apple Color Emoji, Segoe UI Emoji';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('🦆', duck.x, dy);
+
+    // hint text
+    ctx.font = '14px ui-rounded, system-ui';
+    ctx.fillStyle = 'rgba(202,240,248,.55)';
+    ctx.textAlign='center';
+    ctx.fillText('click anywhere to drop a pebble', W/2, H-18);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   CONCEPT 2 — Wave Anatomy (side view) with labels + surfer
+   ========================================================= */
+(() => {
+  const c = document.getElementById('anatomy');
+  const {ctx} = setupCanvas(c);
+
+  const ampEl = document.getElementById('amp');
+  const lenEl = document.getElementById('len');
+  const freqEl = document.getElementById('freq');
+  const ampV = document.getElementById('amp-val');
+  const lenV = document.getElementById('len-val');
+  const freqV = document.getElementById('freq-val');
+
+  function freqMul(){ return 0.2 + (freqEl.value/30)*3.5; }
+
+  function updateLabels(){
+    ampV.textContent = ampEl.value;
+    lenV.textContent = lenEl.value;
+    freqV.textContent = freqMul().toFixed(1)+'×';
+  }
+  [ampEl,lenEl,freqEl].forEach(el => el.addEventListener('input', updateLabels));
+  updateLabels();
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    // sky
+    const g = ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#134B72'); g.addColorStop(1,'#021A2F');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+    const A = +ampEl.value;
+    const L = +lenEl.value;
+    const midY = H*.58;
+    const phase = now * .001 * freqMul();
+
+    // gridlines
+    ctx.strokeStyle = 'rgba(202,240,248,.08)';
+    ctx.lineWidth = 1;
+    for (let y=0; y<H; y+=40){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+    // midline
+    ctx.setLineDash([4,6]);
+    ctx.strokeStyle = 'rgba(202,240,248,.35)';
+    ctx.beginPath(); ctx.moveTo(0,midY); ctx.lineTo(W,midY); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // water fill
+    ctx.beginPath();
+    ctx.moveTo(0, H);
+    for (let x=0; x<=W; x+=2){
+      const y = midY + Math.sin((x/L)*Math.PI*2 - phase*2*Math.PI) * A;
+      ctx.lineTo(x,y);
+    }
+    ctx.lineTo(W,H); ctx.closePath();
+    const wg = ctx.createLinearGradient(0,midY-A,0,H);
+    wg.addColorStop(0,'#00B4D8'); wg.addColorStop(.5,'#0077B6'); wg.addColorStop(1,'#03243F');
+    ctx.fillStyle = wg; ctx.fill();
+
+    // wave line
+    ctx.beginPath();
+    for (let x=0; x<=W; x+=2){
+      const y = midY + Math.sin((x/L)*Math.PI*2 - phase*2*Math.PI) * A;
+      if (x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle = '#CAF0F8'; ctx.lineWidth = 3; ctx.stroke();
+
+    // surfer
+    // find a crest near x = W*.3
+    let surfX = W*.3;
+    const surfY = midY + Math.sin((surfX/L)*Math.PI*2 - phase*2*Math.PI) * A;
+    ctx.font = '38px system-ui, Apple Color Emoji, Segoe UI Emoji';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('🏄', surfX, surfY - 18);
+
+    // ---- Labels ----
+    // find nearest crest to label wavelength
+    // crests are at phase + k * 2π → x where (x/L)*2π - phase*2π = 2π*k → x = (k + phase)*L
+    const kStart = Math.ceil((0)/L - phase);
+    const xC1 = (kStart + phase) * L;
+    const xC2 = xC1 + L;
+    const labelY = midY - A - 28;
+
+    // wavelength bracket
+    ctx.strokeStyle = '#FFD93D'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(xC1, labelY); ctx.lineTo(xC2, labelY);
+    ctx.moveTo(xC1, labelY-6); ctx.lineTo(xC1, labelY+6);
+    ctx.moveTo(xC2, labelY-6); ctx.lineTo(xC2, labelY+6);
+    ctx.stroke();
+    ctx.font = 'bold 14px ui-rounded, system-ui';
+    ctx.fillStyle = '#FFD93D';
+    ctx.textAlign='center';
+    ctx.fillText('← WAVELENGTH →', (xC1+xC2)/2, labelY - 10);
+
+    // amplitude arrow
+    const ampX = xC1 + L*.25;
+    const ampTop = midY - A, ampMid = midY;
+    ctx.strokeStyle = '#FF6B9D'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(ampX, ampMid); ctx.lineTo(ampX, ampTop);
+    ctx.moveTo(ampX-6, ampTop+6); ctx.lineTo(ampX, ampTop); ctx.lineTo(ampX+6, ampTop+6);
+    ctx.stroke();
+    ctx.fillStyle = '#FF6B9D'; ctx.textAlign='left';
+    ctx.fillText('AMPLITUDE', ampX+10, (ampMid+ampTop)/2);
+
+    // crest + trough labels
+    ctx.fillStyle='#CAF0F8'; ctx.textAlign='center'; ctx.font='bold 12px ui-rounded,system-ui';
+    ctx.fillText('CREST', xC1, midY - A - 8);
+    const xT = xC1 + L*.5;
+    ctx.fillText('TROUGH', xT, midY + A + 18);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 1 — Ripple Tank with interference.
+   Compute scalar field per-pixel: sum_s cos(k*r - ω*t) / √r
+   Render via ImageData. Two draggable sources.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('tank');
+  const {ctx, rect} = setupCanvas(c);
+
+  const lenEl = document.getElementById('tank-len');
+  const speedEl = document.getElementById('tank-speed');
+  const lenVal = document.getElementById('tank-len-val');
+  const spVal = document.getElementById('tank-speed-val');
+  const src1Btn = document.getElementById('src-1');
+  const src2Btn = document.getElementById('src-2');
+
+  const sources = [
+    {x: .35, y: .5, active: true},
+    {x: .65, y: .5, active: true},
+  ];
+  let two = true;
+
+  src1Btn.addEventListener('click', () => { two=false; sources[1].active=false;
+    src1Btn.classList.add('active'); src2Btn.classList.remove('active'); });
+  src2Btn.addEventListener('click', () => { two=true; sources[1].active=true;
+    src2Btn.classList.add('active'); src1Btn.classList.remove('active'); });
+
+  lenEl.addEventListener('input', () => lenVal.textContent = lenEl.value);
+  speedEl.addEventListener('input', () => spVal.textContent = (speedEl.value/14).toFixed(1)+'×');
+
+  // Drag logic
+  let dragging = -1;
+  function ptInSrc(mx,my,W,H){
+    for (let i=sources.length-1; i>=0; i--){
+      const s = sources[i]; if (!s.active) continue;
+      const dx = mx - s.x*W, dy = my - s.y*H;
+      if (dx*dx + dy*dy < 22*22) return i;
+    }
+    return -1;
+  }
+  c.addEventListener('mousedown', e => {
+    const r = rect(); const mx = e.clientX-r.left, my = e.clientY-r.top;
+    dragging = ptInSrc(mx,my, c.clientWidth, c.clientHeight);
+  });
+  window.addEventListener('mousemove', e => {
+    if (dragging<0) return;
+    const r = rect(); const mx = e.clientX-r.left, my = e.clientY-r.top;
+    sources[dragging].x = Math.min(.98, Math.max(.02, mx/c.clientWidth));
+    sources[dragging].y = Math.min(.96, Math.max(.04, my/c.clientHeight));
+  });
+  window.addEventListener('mouseup', () => dragging = -1);
+  // touch
+  c.addEventListener('touchstart', e => {
+    const r = rect(); const t = e.touches[0];
+    dragging = ptInSrc(t.clientX-r.left, t.clientY-r.top, c.clientWidth, c.clientHeight);
+  }, {passive:true});
+  c.addEventListener('touchmove', e => {
+    if (dragging<0) return; e.preventDefault();
+    const r = rect(); const t = e.touches[0];
+    sources[dragging].x = Math.min(.98, Math.max(.02, (t.clientX-r.left)/c.clientWidth));
+    sources[dragging].y = Math.min(.96, Math.max(.04, (t.clientY-r.top)/c.clientHeight));
+  }, {passive:false});
+  window.addEventListener('touchend', () => dragging = -1);
+
+  // Render at reduced resolution for speed, then scale up.
+  let img = null, bw=0, bh=0;
+  function ensureBuffer(){
+    const W = c.clientWidth, H = c.clientHeight;
+    const scale = .4;
+    bw = Math.floor(W*scale); bh = Math.floor(H*scale);
+    if (!img || img.width !== bw || img.height !== bh){
+      img = ctx.createImageData(bw, bh);
+    }
+  }
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    ensureBuffer();
+    const t = now*.001 * (+speedEl.value / 14);
+    const lambda = +lenEl.value;   // pixels (in displayed coords)
+    const k = 2*Math.PI / lambda;
+    const omega = 2*Math.PI * 1.4; // cycles/sec base
+    const data = img.data;
+
+    const activeSources = sources.filter(s => s.active)
+      .map(s => ({x: s.x*W, y: s.y*H}));
+
+    for (let j=0; j<bh; j++){
+      const py = (j/bh)*H;
+      for (let i=0; i<bw; i++){
+        const px = (i/bw)*W;
+        let sum = 0;
+        for (const s of activeSources){
+          const dx = px - s.x, dy = py - s.y;
+          const r = Math.hypot(dx, dy) + 6;
+          sum += Math.cos(k*r - omega*t) / Math.sqrt(r*0.12);
+        }
+        // sum range roughly [-3..3]; map to color
+        const v = Math.max(-1, Math.min(1, sum*.35));
+        // palette: negative = deep navy, zero = mid blue, positive = bright cyan/white
+        let R,G,B;
+        if (v >= 0){
+          R = 0 + v*202;
+          G = 119 + v*121;
+          B = 182 + v*66;
+        } else {
+          R = 3 + (1+v)*-3;
+          G = 36 + (1+v)*-36;
+          B = 63 + (1+v)*-50;
+        }
+        // brighten crests
+        const bright = Math.pow(Math.max(0,v), 2) * 80;
+        R = Math.min(255, R+bright); G = Math.min(255, G+bright); B = Math.min(255, B+bright);
+        const idx = (j*bw + i) * 4;
+        data[idx]=R; data[idx+1]=G; data[idx+2]=B; data[idx+3]=255;
+      }
+    }
+
+    // scale buffer to canvas
+    // draw via putImageData into a tiny offscreen then drawImage
+    // (putImageData ignores scale; use an intermediate canvas)
+    if (!tick._off){ tick._off = document.createElement('canvas'); }
+    const off = tick._off;
+    if (off.width !== bw || off.height !== bh){ off.width=bw; off.height=bh; }
+    off.getContext('2d').putImageData(img, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(off, 0, 0, W, H);
+
+    // draw sources
+    activeSources.forEach((s,i) => {
+      // outer halo
+      const grd = ctx.createRadialGradient(s.x, s.y, 2, s.x, s.y, 28);
+      grd.addColorStop(0, 'rgba(255,217,61,.95)');
+      grd.addColorStop(1, 'rgba(255,217,61,0)');
+      ctx.fillStyle = grd; ctx.beginPath(); ctx.arc(s.x, s.y, 28, 0, Math.PI*2); ctx.fill();
+      // dot
+      ctx.beginPath(); ctx.arc(s.x, s.y, 10, 0, Math.PI*2);
+      ctx.fillStyle = '#fff'; ctx.fill();
+      ctx.beginPath(); ctx.arc(s.x, s.y, 6, 0, Math.PI*2);
+      ctx.fillStyle = '#FF6B9D'; ctx.fill();
+    });
+
+    // hint text
+    ctx.font = '14px ui-rounded, system-ui';
+    ctx.fillStyle = 'rgba(202,240,248,.65)';
+    ctx.textAlign='center';
+    ctx.fillText('drag the pink dots', W/2, H-14);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 2 — Beach cross-section (side view), reimagined.
+   Each wave is a discrete object that:
+     1. spawns in deep water on the left,
+     2. travels right, slowing as depth decreases,
+     3. grows taller (shoaling) and leans forward,
+     4. curls over and BREAKS into foam that rushes up the beach.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('beach');
+  const {ctx} = setupCanvas(c);
+
+  const ampEl = document.getElementById('beach-amp');
+  const spEl = document.getElementById('beach-speed');
+  const slopeEl = document.getElementById('beach-slope');
+  const ampV = document.getElementById('beach-amp-val');
+  const spV = document.getElementById('beach-speed-val');
+  const slopeV = document.getElementById('beach-slope-val');
+  const tsuBtn = document.getElementById('tsunami');
+
+  ampEl.addEventListener('input', () => ampV.textContent = ampEl.value);
+  spEl.addEventListener('input', () => spV.textContent = (spEl.value/12).toFixed(1)+'×');
+  slopeEl.addEventListener('input', () => {
+    const v = +slopeEl.value;
+    slopeV.textContent = v<25 ? 'gentle' : v<55 ? 'medium' : 'steep';
+  });
+
+  // ---- Scene config helpers ----
+  // waterline and floor are computed per-frame from current canvas size.
+  function sceneDims(){
+    const W = c.clientWidth, H = c.clientHeight;
+    const waterline = H*0.48;
+    const shoreFrac = 0.78;         // where the sand emerges above water
+    const shoreX = W*shoreFrac;
+    const slopeK = +slopeEl.value/100;   // 0.1 .. 0.8
+    // floor(x): y-coord of the sea floor
+    function floorY(x){
+      const frac = (x - W*0.05) / (shoreX - W*0.05);
+      if (frac <= 0) return waterline + H*0.42;
+      if (frac >= 1) return waterline - (x - shoreX) * slopeK * 1.2; // sand rises above water
+      // smooth curve up
+      const eased = Math.pow(frac, 1/(slopeK*2.2 + 0.35));
+      return waterline + H*0.42*(1-eased);
+    }
+    function depthAt(x){ return Math.max(1, floorY(x) - waterline); }
+    return {W, H, waterline, shoreX, floorY, depthAt};
+  }
+
+  // ---- Waves ----
+  const waves = [];   // {x, amp, phase, speed, broken, breakProg}
+  const foam  = [];   // {x,y,vx,vy,life,r}
+  const swash = [];   // {x, life, reach}   (foam sheets rushing up the beach)
+
+  let lastSpawn = 0;
+  const SPAWN_INTERVAL = 1.6;   // seconds between normal waves
+  let tsunamiNext = false;
+  tsuBtn.addEventListener('click', () => { tsunamiNext = true; });
+
+  function spawnWave(now, tsunami=false){
+    const base = +ampEl.value;
+    waves.push({
+      x: -20,
+      amp: tsunami ? base*2.6 + 60 : base * (0.85 + Math.random()*0.3),
+      phase: Math.random()*Math.PI*2,
+      broken: false,
+      breakProg: 0,
+      tsunami,
+      bornAt: now,
+    });
+  }
+
+  // Seed with a couple waves so the scene is alive immediately
+  spawnWave(0); waves[0].x = 260;
+  spawnWave(0); waves[1].x = 500;
+
+  // ---- Wave path drawing: a hump with adjustable forward lean & curl ----
+  // cx, waterY, amp, lean (0..1.3), halfW
+  function drawWaveShape(ctx, cx, waterY, amp, lean, halfW){
+    const crestX = cx + lean * halfW * 0.35;
+    const crestY = waterY - amp;
+    const backX  = cx - halfW;
+    const frontBase = cx + halfW * Math.max(0.35, 1 - lean*0.55);
+
+    ctx.beginPath();
+    ctx.moveTo(backX, waterY);
+    // Back (windward) face — always smooth swell
+    ctx.bezierCurveTo(cx - halfW*0.55, waterY - amp*0.15,
+                      cx - halfW*0.25, waterY - amp*0.85,
+                      crestX, crestY);
+
+    if (lean < 0.95){
+      // Front face — steeper as lean grows
+      ctx.bezierCurveTo(crestX + halfW*0.2, waterY - amp*(1-lean)*0.75,
+                        frontBase - halfW*0.1, waterY - amp*(1-lean)*0.25,
+                        frontBase, waterY);
+    } else {
+      // CURLING: crest overhangs forward then hollow underneath
+      const curlTipX = crestX + halfW*0.35;
+      const curlTipY = crestY - amp*0.08;
+      const hollowX  = crestX + halfW*0.12;
+      const hollowY  = waterY - amp*0.45;
+      ctx.quadraticCurveTo(curlTipX, curlTipY, hollowX, hollowY);
+      ctx.quadraticCurveTo(crestX + halfW*0.25, waterY - amp*0.15,
+                           frontBase, waterY);
+    }
+    ctx.closePath();
+  }
+
+  function tick(now){
+    const {W, H, waterline, shoreX, floorY, depthAt} = sceneDims();
+    const dt = Math.min(0.05, (tick._last ? (now - tick._last)/1000 : 0.016));
+    tick._last = now;
+    const speedMul = +spEl.value/12;
+
+    // ---- Sky (sunset) ----
+    const sky = ctx.createLinearGradient(0,0,0,waterline);
+    sky.addColorStop(0,'#1E3A6B');
+    sky.addColorStop(0.45,'#F6A97C');
+    sky.addColorStop(0.85,'#FF7FA4');
+    sky.addColorStop(1,'#FFD19A');
+    ctx.fillStyle = sky; ctx.fillRect(0,0,W,waterline);
+
+    // sun
+    const sx = W*0.72, sy = waterline - 50;
+    const sg = ctx.createRadialGradient(sx, sy, 4, sx, sy, 110);
+    sg.addColorStop(0,'#FFE9A0'); sg.addColorStop(.55,'rgba(255,185,110,.5)'); sg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = sg; ctx.fillRect(0,0,W,waterline+40);
+    ctx.beginPath(); ctx.arc(sx, sy, 26, 0, Math.PI*2);
+    ctx.fillStyle = '#FFE9A0'; ctx.fill();
+
+    // ---- Deep water base ----
+    ctx.fillStyle = '#0A3E6C';
+    ctx.fillRect(0, waterline, W, H - waterline);
+
+    // ---- Sea floor (sand slope) ----
+    ctx.beginPath();
+    ctx.moveTo(0, H);
+    for (let x=0; x<=W; x+=6) ctx.lineTo(x, floorY(x));
+    ctx.lineTo(W, H); ctx.closePath();
+    const sandG = ctx.createLinearGradient(0, waterline, 0, H);
+    sandG.addColorStop(0,'#D4A373');
+    sandG.addColorStop(1,'#8B5A2B');
+    ctx.fillStyle = sandG; ctx.fill();
+
+    // sand surface highlight
+    ctx.beginPath();
+    for (let x=0; x<=W; x+=6){
+      const fy = floorY(x);
+      if (x === 0) ctx.moveTo(x, fy); else ctx.lineTo(x, fy);
+    }
+    ctx.strokeStyle = 'rgba(255,220,180,.55)'; ctx.lineWidth = 2; ctx.stroke();
+
+    // ---- Flat water surface line (between waves) ----
+    ctx.strokeStyle = 'rgba(202,240,248,.35)';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    const wavinessY = waterline + Math.sin(now*.003)*1.5;
+    ctx.moveTo(0, wavinessY);
+    for (let x=0; x<=shoreX; x+=10){
+      const y = waterline + Math.sin(x*.04 + now*.003)*1.8;
+      ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // ---- Spawn waves on an interval ----
+    if (!tick._nextSpawn) tick._nextSpawn = now/1000 + 0.4;
+    if (now/1000 >= tick._nextSpawn){
+      if (tsunamiNext){ spawnWave(now, true); tsunamiNext = false; }
+      else spawnWave(now, false);
+      tick._nextSpawn = now/1000 + SPAWN_INTERVAL / speedMul;
+    }
+
+    // ---- Update + draw waves (back to front = left to right) ----
+    waves.sort((a,b) => a.x - b.x);
+
+    for (let i=0; i<waves.length; i++){
+      const wv = waves[i];
+      const d  = depthAt(wv.x);
+
+      // Shoaling: amplitude grows as depth shrinks (Green's law-ish)
+      const shoal = Math.min(2.4, Math.pow(Math.max(0.15, 120 / d), 0.5));
+      const baseDisplayAmp = wv.amp * shoal * 0.55;
+
+      // Lean: wave height / local depth. > ~1 starts curling.
+      const steep = baseDisplayAmp / Math.max(14, d);
+      const liveLean = Math.min(1.25, steep * 1.1);
+
+      // Speed: proportional to sqrt(depth) in shallow water. Broken waves keep moving.
+      const baseSpeed = 110 * speedMul;
+      const depthSpeedFactor = Math.min(1, Math.max(0.25, Math.sqrt(d / 120)));
+      const brokenSpeedMul = wv.broken ? (wv.tsunami ? 0.85 : 0.7) : 1.0;
+      const speed = baseSpeed * depthSpeedFactor * brokenSpeedMul;
+      wv.x += speed * dt;
+
+      // Width shrinks a bit as wave shoals (bunching up).
+      const halfW = 80 - Math.min(30, shoal*10);
+
+      // --- Decide rendering shape ---
+      // Unbroken: normal hump, leaning more as it shoals.
+      // Broken: collapsing whitewater surge -- keeps a hump shape but shorter &
+      //         progressively spread out, painted mostly white. Continues until
+      //         it reaches the shoreline.
+      let drawAmp, drawLean;
+      if (!wv.broken){
+        drawAmp  = baseDisplayAmp;
+        drawLean = liveLean;
+      } else {
+        // Collapse over time: tsunamis stay big longer; normal waves flatten fast.
+        const decay = wv.tsunami ? 0.45 : 1.1;   // per second
+        const shrink = Math.max(0.15, 1 - wv.breakProg * decay);
+        drawAmp  = baseDisplayAmp * shrink * 0.9;
+        drawLean = Math.min(1.15, 0.85 + wv.breakProg*0.3);   // stays curled forward
+      }
+
+      // Draw the wave hump
+      ctx.save();
+      if (!wv.broken){
+        const bodyG = ctx.createLinearGradient(wv.x-halfW, waterline-drawAmp, wv.x-halfW, waterline);
+        bodyG.addColorStop(0, wv.tsunami ? '#1E6BA8' : '#1FA5C9');
+        bodyG.addColorStop(0.6, wv.tsunami ? '#0F3A66' : '#0F6B95');
+        bodyG.addColorStop(1, '#083855');
+        ctx.fillStyle = bodyG;
+      } else {
+        // Whitewater: mostly white with a hint of blue at the base
+        const wG = ctx.createLinearGradient(wv.x-halfW, waterline-drawAmp, wv.x-halfW, waterline);
+        wG.addColorStop(0, 'rgba(255,255,255,.95)');
+        wG.addColorStop(0.6, 'rgba(220,240,250,.85)');
+        wG.addColorStop(1, 'rgba(100,170,210,.75)');
+        ctx.fillStyle = wG;
+      }
+      drawWaveShape(ctx, wv.x, waterline, drawAmp, drawLean, halfW);
+      ctx.fill();
+
+      // white crest highlight on unbroken waves
+      if (!wv.broken){
+        ctx.strokeStyle = `rgba(235,250,255,${Math.min(.95, .4 + drawLean*.6)})`;
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        const crestX = wv.x + drawLean*halfW*0.35;
+        const crestY = waterline - drawAmp;
+        ctx.moveTo(wv.x - halfW*0.7, waterline - drawAmp*0.45);
+        ctx.quadraticCurveTo(wv.x - halfW*0.2, crestY - 2, crestX, crestY - 1);
+        if (drawLean > 0.9){
+          ctx.quadraticCurveTo(crestX + halfW*0.25, crestY + 2, crestX + halfW*0.1, waterline - drawAmp*0.45);
+        }
+        ctx.stroke();
+      } else {
+        // Continual foam sputter from the crest of a broken wave as it surges in
+        if (Math.random() < (wv.tsunami ? 0.9 : 0.55)){
+          const bx = wv.x + halfW*0.1;
+          const by = waterline - drawAmp;
+          foam.push({
+            x: bx + (Math.random()-.5)*halfW*0.8,
+            y: by + (Math.random()-.5)*6,
+            vx: 40 + Math.random()*90,
+            vy: -30 - Math.random()*90,
+            life: 0.8 + Math.random()*0.4,
+            r: 2 + Math.random()*3,
+          });
+        }
+      }
+      ctx.restore();
+
+      // ---- Trigger the initial break event ----
+      if (!wv.broken && liveLean > 0.98){
+        wv.broken = true;
+        wv.breakProg = 0;
+        const crestX = wv.x + liveLean*halfW*0.35;
+        const crestY = waterline - baseDisplayAmp;
+        const burst = wv.tsunami ? 60 : 22;
+        for (let k=0; k<burst; k++){
+          const ang = (-Math.PI/2) + (Math.random()-0.5)*1.6;
+          const v = (wv.tsunami ? 140 : 80) + Math.random()*140;
+          foam.push({
+            x: crestX, y: crestY,
+            vx: Math.cos(ang)*v + (wv.tsunami ? 120 : 60),
+            vy: Math.sin(ang)*v,
+            life: 1, r: 3 + Math.random()*5,
+          });
+        }
+        swash.push({
+          x: crestX, life: 1,
+          reach: (wv.tsunami ? 260 : 120) + wv.amp*1.5,
+          startedAt: now
+        });
+      }
+
+      // Progress broken state
+      if (wv.broken) wv.breakProg += dt;
+
+      // Kill only when the wave has actually run up the beach (or flattened out)
+      if (wv.x > shoreX + 50){
+        // launch a final swash if tsunami reaches all the way
+        if (wv.tsunami){
+          swash.push({x: shoreX, life:1, reach: 320, startedAt: now});
+        }
+        waves.splice(i,1); i--; continue;
+      }
+      if (wv.broken && drawAmp < 4){
+        waves.splice(i,1); i--; continue;
+      }
+      // Tiny unbroken wave that never broke: retire quietly past shore
+      if (!wv.broken && wv.x > shoreX + 10){ waves.splice(i,1); i--; continue; }
+    }
+
+    // ---- Foam particles ----
+    ctx.save();
+    for (let i = foam.length-1; i >= 0; i--){
+      const f = foam[i];
+      f.vy += 380*dt;            // gravity
+      f.x  += f.vx * dt;
+      f.y  += f.vy * dt;
+      f.life -= dt*0.9;
+      if (f.life <= 0 || f.y > floorY(f.x) + 4){ foam.splice(i,1); continue; }
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r * f.life, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(255,255,255,${Math.min(1, f.life*1.3)})`;
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // ---- Swash: wet foam sheet rushing up the beach ----
+    for (let i = swash.length-1; i >= 0; i--){
+      const s = swash[i];
+      const elapsed = (now - s.startedAt)/1000;
+      s.life = Math.max(0, 1 - elapsed/2.2);
+      if (s.life <= 0){ swash.splice(i,1); continue; }
+      const progress = Math.min(1, elapsed/0.9);   // ease out
+      const p = 1 - Math.pow(1-progress, 2);
+      const reachX = s.x + s.reach * p;
+      // draw as a thin wash along the sand line
+      ctx.beginPath();
+      ctx.moveTo(s.x, floorY(s.x));
+      for (let x = s.x; x <= reachX; x += 6){
+        const fy = floorY(x);
+        const foamY = fy - 3 - Math.sin((x - s.x)*0.12 + now*.01)*1.5;
+        ctx.lineTo(x, foamY);
+      }
+      ctx.lineTo(reachX, floorY(reachX));
+      ctx.closePath();
+      ctx.fillStyle = `rgba(255,255,255,${s.life*0.85})`;
+      ctx.fill();
+    }
+
+    // ---- Ground labels (learning scaffolding) ----
+    ctx.save();
+    ctx.fillStyle = 'rgba(255,248,231,.85)';
+    ctx.font = 'bold 11px ui-rounded, system-ui';
+    ctx.textAlign = 'center';
+    ctx.letterSpacing = '2px';
+    const labelY = H - 10;
+    ctx.fillText('DEEP WATER',  W*0.13, labelY);
+    ctx.fillText('SHALLOW → SHOALING',  W*0.48, labelY);
+    ctx.fillText('BEACH', Math.min(W-40, shoreX + 30), labelY);
+
+    // zone separators on the floor
+    ctx.setLineDash([4,6]);
+    ctx.strokeStyle = 'rgba(255,255,255,.15)';
+    ctx.lineWidth = 1;
+    [0.28, 0.60].forEach(fr => {
+      const x = W*fr;
+      ctx.beginPath(); ctx.moveTo(x, waterline); ctx.lineTo(x, floorY(x)); ctx.stroke();
+    });
+    ctx.setLineDash([]);
+    ctx.restore();
+
+    // ---- "BREAKING!" callout when a wave is mid-break ----
+    const breaking = waves.find(w => w.broken && w.breakProg < 0.25);
+    if (breaking){
+      const bx = breaking.x, by = waterline - breaking.amp*1.2 - 24;
+      ctx.save();
+      ctx.font = 'bold 14px ui-rounded, system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#FFD93D';
+      ctx.fillText('💥 BREAKING!', bx, by);
+      ctx.restore();
+    }
+
+    // ---- Beach umbrella for charm ----
+    ctx.font = '28px system-ui, Apple Color Emoji, Segoe UI Emoji';
+    ctx.textAlign='center';
+    ctx.fillText('⛱️', W*0.93, floorY(W*0.93) + 2);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

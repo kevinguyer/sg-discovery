@@ -1,0 +1,1212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Light Waves · Investigating Waves · REDS Hall of Discovery</title>
+<style>
+  :root{
+    --bg:      #05020F;
+    --deep:    #1A0B3D;
+    --cream:   #FFF8E7;
+    --pale:    #E5D4FF;
+    --sun:     #FFE066;
+    --red:     #FF3B77;
+    --orange:  #FF8A3D;
+    --yellow:  #FFD93D;
+    --green:   #3DFF77;
+    --cyan:    #3DE4FF;
+    --blue:    #5E7BFF;
+    --violet:  #B14BFF;
+    --magenta: #FF3399;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{
+    font-family:var(--font-body); color:var(--cream); background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(177,75,255,.25), transparent 55%),
+      radial-gradient(ellipse at 100% 90%, rgba(255,59,119,.22), transparent 55%),
+      radial-gradient(ellipse at 0% 60%, rgba(61,228,255,.15), transparent 55%),
+      linear-gradient(180deg, #0A0321 0%, #05020F 100%);
+    background-attachment:fixed;
+  }
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  img,svg{display:block;max-width:100%}
+
+  /* ---------- Topbar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:20; backdrop-filter: blur(14px);
+    background:linear-gradient(180deg, rgba(12,4,34,.85), rgba(12,4,34,.55));
+    border-bottom:1px solid rgba(177,75,255,.25);
+  }
+  .topbar-inner{
+    max-width:1280px; margin:0 auto; padding:14px 28px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+  }
+  .back{
+    display:inline-flex; align-items:center; gap:8px; padding:8px 14px;
+    border-radius:999px; background:rgba(255,255,255,.08); font-family:var(--font-display); font-size:13px;
+    transition:background .15s;
+  }
+  .back:hover{background:rgba(177,75,255,.25)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand .logo{width:44px;height:44px; filter: drop-shadow(0 0 8px rgba(177,75,255,.6));}
+  .brand .eyebrow{font-family:var(--font-display);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--pale);opacity:.9}
+  .brand .wordmark{font-family:var(--font-display);font-size:18px}
+  .brand .unit{font-family:var(--font-display);font-size:13px;color:var(--violet)}
+  .class-pill{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 14px; border-radius:999px;
+    background:linear-gradient(135deg, rgba(255,59,119,.25), rgba(177,75,255,.25));
+    border:1px solid rgba(255,255,255,.18);
+    font-family:var(--font-display); font-size:12px;
+  }
+  .class-pill .dot{width:7px;height:7px;border-radius:999px;background:var(--yellow);box-shadow:0 0 10px var(--yellow)}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    min-height:72vh;
+    display:flex; align-items:center;
+  }
+  #hero-canvas{position:absolute; inset:0; width:100%; height:100%; z-index:0;}
+  .hero-inner{
+    position:relative; z-index:2;
+    max-width:1280px; margin:0 auto; padding:40px 36px; width:100%;
+    text-align:center;
+  }
+  .hero .eyebrow{
+    font-family:var(--font-display); color:var(--pale);
+    letter-spacing:.4em; font-size:12px; text-transform:uppercase; margin-bottom:18px;
+  }
+  .hero h1{
+    font-size: clamp(68px, 13vw, 200px);
+    line-height:.85; letter-spacing:-.03em;
+    background: linear-gradient(95deg, #FF3B77 0%, #FF8A3D 18%, #FFD93D 34%, #3DFF77 52%, #3DE4FF 68%, #5E7BFF 84%, #B14BFF 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter: drop-shadow(0 12px 50px rgba(177,75,255,.55));
+    margin-bottom: 22px;
+  }
+  .hero .tag{
+    max-width:760px; margin:0 auto;
+    font-size: clamp(18px, 2vw, 24px); color:var(--cream); opacity:.95;
+  }
+  .hero .scroll-cue{
+    position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+    font-family:var(--font-display); font-size:12px; letter-spacing:.3em;
+    color:var(--pale); opacity:.85; animation: nudge 2.4s ease-in-out infinite;
+  }
+  @keyframes nudge{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,6px)}}
+
+  /* ---------- Section scaffolding ---------- */
+  section.concept, section.lab, section.facts, section.nextup{
+    max-width:1280px; margin: 0 auto; padding: 28px 28px;
+  }
+  .section-head{
+    display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+  .kicker{
+    font-family:var(--font-display); font-size:12px; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--yellow); margin-bottom:4px;
+  }
+  .title{font-size:clamp(26px,3.2vw,40px); margin-bottom:6px; line-height:1;}
+  .blurb{max-width:740px; font-size:15px; line-height:1.5; color:rgba(255,248,231,.88)}
+
+  .panel{
+    margin-top:8px; border-radius:20px; overflow:hidden;
+    border:1px solid rgba(177,75,255,.22);
+    background: linear-gradient(180deg, rgba(177,75,255,.05), rgba(255,59,119,.02));
+    box-shadow: 0 20px 50px rgba(0,0,0,.6), 0 0 40px rgba(177,75,255,.1);
+    display:flex; flex-direction:column;
+  }
+  .panel-top{
+    padding:10px 18px; display:flex; justify-content:space-between; align-items:center;
+    background: linear-gradient(135deg, rgba(177,75,255,.25), rgba(61,228,255,.15));
+    border-bottom:1px solid rgba(177,75,255,.2);
+    font-family:var(--font-display); font-size:13px; letter-spacing:.08em;
+  }
+  .panel-top .dot{width:9px;height:9px;border-radius:999px;background:var(--magenta);box-shadow:0 0 12px var(--magenta);margin-right:8px;display:inline-block;vertical-align:middle}
+
+  canvas.demo{display:block; width:100%; background:#05020F; height: clamp(220px, 48vh, 460px);}
+  .caption{
+    padding:10px 18px; font-size:13px; line-height:1.45; color:rgba(255,248,231,.82);
+    border-top:1px solid rgba(177,75,255,.15);
+  }
+
+  /* ---------- Controls ---------- */
+  .controls{
+    display:flex; flex-wrap:wrap; gap:18px 22px; padding:12px 18px;
+    border-top:1px solid rgba(177,75,255,.15);
+    background: rgba(10,3,33,.6);
+    align-items:center;
+  }
+  .control{ flex:1 1 180px; min-width:160px; }
+  .control label{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--font-display); font-size:12px; letter-spacing:.05em; margin-bottom:4px;
+  }
+  .control .val{color:var(--yellow); font-family:var(--font-mono); font-size:13px; background:rgba(255,224,102,.12); padding:2px 8px; border-radius:6px;}
+  .control input[type=range]{
+    width:100%; -webkit-appearance:none; appearance:none;
+    height:6px; border-radius:999px; outline:none;
+    background: linear-gradient(90deg, var(--violet), var(--magenta));
+  }
+  .control input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none;
+    width:22px;height:22px;border-radius:50%;
+    background:var(--yellow); border:3px solid #fff;
+    box-shadow:0 4px 12px rgba(0,0,0,.5), 0 0 12px rgba(255,224,102,.8);
+    cursor:pointer;
+  }
+  .control input[type=range]::-moz-range-thumb{
+    width:22px;height:22px;border-radius:50%;
+    background:var(--yellow); border:3px solid #fff;
+    cursor:pointer;
+  }
+  /* custom colored slider tracks */
+  .slider-red{ background: linear-gradient(90deg, #220000, #FF3B77) !important; }
+  .slider-green{ background: linear-gradient(90deg, #002211, #3DFF77) !important; }
+  .slider-blue{ background: linear-gradient(90deg, #001133, #5E7BFF) !important; }
+  .slider-spectrum{
+    background: linear-gradient(90deg, #B14BFF 0%, #5E7BFF 16%, #3DE4FF 32%, #3DFF77 50%, #FFD93D 66%, #FF8A3D 82%, #FF3B77 100%) !important;
+  }
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 16px; border-radius:999px;
+    font-family:var(--font-display); font-size:13px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(177,75,255,.3);
+    transition:all .15s;
+  }
+  .chip:hover{background:rgba(177,75,255,.2); transform:translateY(-2px)}
+  .chip.active{background:linear-gradient(135deg,var(--magenta),var(--violet)); border-color:transparent}
+
+  /* ---------- Facts ---------- */
+  .facts-grid{
+    display:grid; grid-template-columns: repeat(3, 1fr);
+    gap:22px; margin-top:32px;
+  }
+  @media (max-width: 900px){ .facts-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px){ .facts-grid{ grid-template-columns: 1fr; } }
+  .fact{
+    padding:30px 28px; border-radius:24px;
+    background: linear-gradient(135deg, rgba(177,75,255,.20), rgba(61,228,255,.10));
+    border:1px solid rgba(177,75,255,.25);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .fact:hover{transform: translateY(-6px) rotate(-.5deg); box-shadow: 0 24px 60px rgba(177,75,255,.35)}
+  .fact .emoji{font-size:52px; margin-bottom:14px; display:block; line-height:1}
+  .fact h4{font-size:22px; margin-bottom:10px; line-height:1.2}
+  .fact p{font-size:16px; line-height:1.55; color:rgba(255,248,231,.9)}
+
+  /* ---------- Next up ---------- */
+  .nextup-card{
+    margin-top:24px;
+    padding:40px; border-radius:28px;
+    background: linear-gradient(135deg, #3D0066, #FF006E 55%, #FFBE0B);
+    display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;
+    box-shadow:0 30px 80px rgba(255,0,110,.45);
+  }
+  .nextup-card h3{font-size:28px; margin-bottom:8px}
+  .nextup-card .big{font-size:40px; margin-top:4px}
+  .nextup-card p{opacity:.95; max-width:460px}
+
+  footer{
+    padding:40px 28px; max-width:1280px; margin:0 auto;
+    border-top:1px solid rgba(177,75,255,.2);
+    display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:center;
+    font-size:13px; color:rgba(255,248,231,.7);
+  }
+  footer .heart{color:var(--magenta)}
+
+  @media (prefers-reduced-motion: reduce){
+    .hero .scroll-cue{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== Topbar ========== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="back" href="../index.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      All units
+    </a>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="60" height="60" rx="18" fill="#0A0321" stroke="url(#lg)" stroke-width="2"/>
+        <path d="M8 38 Q16 26 24 38 T40 38 T56 38" stroke="#FF3B77" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M8 32 Q16 20 24 32 T40 32 T56 32" stroke="#FFD93D" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M8 26 Q16 14 24 26 T40 26 T56 26" stroke="#B14BFF" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="lg" x1="0" y1="0" x2="64" y2="64">
+            <stop offset="0" stop-color="#FF3B77"/><stop offset=".5" stop-color="#FFD93D"/><stop offset="1" stop-color="#B14BFF"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div>
+        <div class="eyebrow">REDS Hall of Discovery</div>
+        <div class="wordmark">Investigating Waves <span class="unit">· Unit 02 · Light</span></div>
+      </div>
+    </div>
+    <div class="class-pill"><span class="dot"></span>Mrs. Guyer's 5th Grade</div>
+  </div>
+</header>
+
+<!-- ========== Hero ========== -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 02 · Prisms, rainbows, & lasers</div>
+    <h1>Light Waves</h1>
+    <p class="tag">
+      Light is a wave too — but it's so fast (186,000 miles every <em>second</em>) and so tiny
+      (shorter than a virus!) that your eyes only see one thing: <strong>color</strong>.
+      Let's slow it down, split it apart, and bounce it off mirrors. 🌈
+    </p>
+  </div>
+  <div class="scroll-cue">SCROLL · LET THERE BE LIGHT</div>
+</section>
+
+<!-- ========== Concept 1: Wavelength Spectrum Slider ========== -->
+<section class="concept" id="c1">
+  <div class="kicker">Concept 01 · The visible spectrum</div>
+  <h2 class="title">Color is just <em>wavelength</em>.</h2>
+  <p class="blurb">
+    Every color you see is a light wave with a different <strong>wavelength</strong> — the distance from one crest to the next.
+    Long waves look <span style="color:#FF3B77">red</span>. Short waves look <span style="color:#B14BFF">violet</span>.
+    Your eyes are just <em>wavelength detectors</em>. Drag the slider and watch. 👇
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Live · Visible Light Spectrum</span><span style="opacity:.8">every color your eyes can see</span></div>
+    <canvas id="spectrum" class="demo"></canvas>
+    <div class="controls">
+      <div class="control" style="flex-basis:100%">
+        <label>Wavelength <span class="val" id="spec-val">550 nm · green</span></label>
+        <input type="range" id="spec" min="380" max="740" value="550" class="slider-spectrum"/>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Weird fact:</strong> light with a wavelength longer than 740nm is <em>infrared</em> — heat you can feel but can't see.
+      Shorter than 380nm is <em>ultraviolet</em> — what gives you sunburn. More on those in Unit 04! ⚡
+    </div>
+  </div>
+</section>
+
+<!-- ========== Lab 1: Prism Splitter ========== -->
+<section class="lab" id="lab1">
+  <div class="kicker">Lab 01 · The rainbow maker</div>
+  <h2 class="title">White light is <em>every</em> color stacked up.</h2>
+  <p class="blurb">
+    Sunlight looks white — but shine it through a triangle of glass (a <strong>prism</strong>) and POW:
+    a rainbow pops out the other side. Each color bends by a different amount, so they fan out.
+    Rotate the prism and aim the rainbow where you want it. 🔺
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Rotatable Prism</span><span style="opacity:.8">drag the slider · watch the rainbow sweep</span></div>
+    <canvas id="prism" class="demo"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>Prism angle <span class="val" id="prism-rot-val">0°</span></label>
+        <input type="range" id="prism-rot" min="-60" max="60" value="0"/>
+      </div>
+      <div class="control">
+        <label>Beam height <span class="val" id="prism-y-val">middle</span></label>
+        <input type="range" id="prism-y" min="30" max="70" value="50"/>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Try this:</strong> rotate the prism so the rainbow spreads <em>widest</em>. The colors split because violet light
+      bends a tiny bit <em>more</em> than red light when it passes through glass — each color's wave has a different size!
+    </div>
+  </div>
+</section>
+
+<!-- ========== Lab 2: RGB Color Mixer ========== -->
+<section class="lab" id="lab2">
+  <div class="kicker">Lab 02 · Color mixer</div>
+  <h2 class="title">Light mixes <em>backward</em> from paint.</h2>
+  <p class="blurb">
+    Mix red and green <em>paint</em> and you get… brown. But mix red and green <em>light</em> and you get <strong>yellow</strong>!
+    Screens like your phone and TV use just 3 colors of light — Red, Green, and Blue — to make <em>every</em> color. Try it.
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Additive Color Mixer (RGB)</span><span style="opacity:.8">light adds up</span></div>
+    <canvas id="rgb" class="demo"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>🔴 Red <span class="val" id="rgb-r-val">255</span></label>
+        <input type="range" id="rgb-r" min="0" max="255" value="255" class="slider-red"/>
+      </div>
+      <div class="control">
+        <label>🟢 Green <span class="val" id="rgb-g-val">255</span></label>
+        <input type="range" id="rgb-g" min="0" max="255" value="255" class="slider-green"/>
+      </div>
+      <div class="control">
+        <label>🔵 Blue <span class="val" id="rgb-b-val">255</span></label>
+        <input type="range" id="rgb-b" min="0" max="255" value="255" class="slider-blue"/>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Try this:</strong> set all three to 255 — that's <em>white</em> light. Set them all to 0 — that's total darkness.
+      Mix only Red + Blue → magenta. Green + Blue → cyan. Your screen is doing this <em>right now</em>, millions of times per second!
+    </div>
+  </div>
+</section>
+
+<!-- ========== Lab 3: Laser Mirror Maze ========== -->
+<section class="lab" id="lab3">
+  <div class="kicker">Lab 03 · Laser maze</div>
+  <h2 class="title">Angle in = angle out. Every time.</h2>
+  <p class="blurb">
+    When light hits a mirror, it bounces off at the <em>same</em> angle it came in. That's the one rule — and
+    it's how every telescope, periscope, and disco ball works. Drag the mirrors to steer the laser into the target. 🎯
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Reflection Puzzle</span><span style="opacity:.8">drag mirrors · click endpoints to rotate</span></div>
+    <canvas id="maze" class="demo"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>Laser aim <span class="val" id="laser-aim-val">30°</span></label>
+        <input type="range" id="laser-aim" min="0" max="90" value="30"/>
+      </div>
+      <div class="control">
+        <label>&nbsp;</label>
+        <div class="btn-row">
+          <button class="chip" id="maze-reset">↺ Reset mirrors</button>
+          <button class="chip" id="maze-challenge">🎯 New challenge</button>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Try this:</strong> grab the <span style="color:var(--yellow)">yellow dot</span> at either end of a mirror to <em>rotate</em> it,
+      or grab the middle to <em>slide</em> it. Get the laser to hit the target — the target turns green and confetti pops! 🎉
+    </div>
+  </div>
+</section>
+
+<!-- ========== Facts ========== -->
+<section class="facts">
+  <div class="kicker">Did you know?</div>
+  <h2 class="title">Six wild light facts.</h2>
+  <div class="facts-grid">
+    <div class="fact">
+      <span class="emoji">🚀</span>
+      <h4>Light is the speed limit of the universe.</h4>
+      <p>Nothing can go faster than light — <strong>186,282 miles per second</strong>. Light from the Sun takes 8 minutes to reach us.</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🌈</span>
+      <h4>Rainbows are always circles.</h4>
+      <p>You only see half because the ground gets in the way! From an airplane, a rainbow is a full, perfect ring.</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🦐</span>
+      <h4>Mantis shrimp see SIXTEEN colors.</h4>
+      <p>You see 3 (red, green, blue). Mantis shrimp have 16 color receptors. They see ultraviolet <em>and</em> polarized light!</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🌌</span>
+      <h4>When you look at a star, you're time-traveling.</h4>
+      <p>Stars are so far away that their light takes <em>years</em> to reach you. You're seeing what the star looked like long ago.</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">☀️</span>
+      <h4>Why the sky is blue.</h4>
+      <p>Sunlight bumps into air molecules, and they scatter <em>blue</em> light more than other colors. You see blue from every direction!</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🪲</span>
+      <h4>Fireflies make light with no heat.</h4>
+      <p>Most lights (like bulbs) waste energy as heat. Fireflies are <em>100% efficient</em> — scientists are still trying to copy their trick to build better lightbulbs!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Next Up ========== -->
+<section class="nextup">
+  <div class="kicker">Up next in the series</div>
+  <div class="nextup-card">
+    <div>
+      <h3>Unit 03 · Sound Waves</h3>
+      <div class="big">🔊 Pitch, volume, and echoes.</div>
+      <p>Light and sound are cousins — both are waves! But sound squishes and stretches the air instead of wiggling up and down.</p>
+    </div>
+    <a class="chip active" href="../index.html">Back to all units →</a>
+  </div>
+</section>
+
+<footer>
+  <div><strong>REDS Hall of Discovery</strong> · Investigating Waves · Unit 02: Light</div>
+  <div>Made with <span class="heart">♥</span> for Mrs. Guyer's 5th Grade Class</div>
+</footer>
+
+<script>
+/* ========= Canvas helper (DPR-aware) ========= */
+function setupCanvas(canvas){
+  const ctx = canvas.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  function resize(){
+    const r = canvas.getBoundingClientRect();
+    canvas.width  = Math.floor(r.width * DPR);
+    canvas.height = Math.floor(r.height * DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  return {ctx, DPR, resize, rect: () => canvas.getBoundingClientRect()};
+}
+
+/* ========= Wavelength → RGB (visible spectrum ~380-780nm) ========= */
+function wavelengthToRGB(wl){
+  let R=0,G=0,B=0;
+  if (wl >= 380 && wl < 440){ R = -(wl-440)/60; B = 1; }
+  else if (wl < 490){ G = (wl-440)/50; B = 1; }
+  else if (wl < 510){ G = 1; B = -(wl-510)/20; }
+  else if (wl < 580){ R = (wl-510)/70; G = 1; }
+  else if (wl < 645){ R = 1; G = -(wl-645)/65; }
+  else if (wl <= 780){ R = 1; }
+  let f = 1;
+  if (wl < 420) f = 0.3 + 0.7*(wl-380)/40;
+  else if (wl > 700) f = 0.3 + 0.7*(780-wl)/80;
+  return [Math.round(Math.max(0,R)*f*255), Math.round(Math.max(0,G)*f*255), Math.round(Math.max(0,B)*f*255)];
+}
+function wlName(wl){
+  if (wl < 430) return 'violet';
+  if (wl < 485) return 'blue';
+  if (wl < 510) return 'cyan';
+  if (wl < 565) return 'green';
+  if (wl < 590) return 'yellow';
+  if (wl < 625) return 'orange';
+  return 'red';
+}
+
+/* =========================================================
+   HERO CANVAS — drifting prism + drifting rainbow particles
+   ========================================================= */
+(() => {
+  const c = document.getElementById('hero-canvas');
+  const {ctx} = setupCanvas(c);
+
+  // floating light particles (different wavelengths)
+  const parts = Array.from({length: 80}, () => ({
+    x: Math.random(),
+    y: Math.random(),
+    wl: 380 + Math.random()*400,
+    r: 1 + Math.random()*2.5,
+    sp: 0.00005 + Math.random()*0.00012,
+    ph: Math.random()*Math.PI*2,
+  }));
+
+  function tick(t){
+    const W = c.clientWidth, H = c.clientHeight;
+    // bg gradient
+    const g = ctx.createLinearGradient(0,0,W,H);
+    g.addColorStop(0,'#0A0321'); g.addColorStop(.5,'#1B0A44'); g.addColorStop(1,'#2A1060');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+    // big prism silhouette center
+    const cx = W*0.32, cy = H*0.56, s = Math.min(W,H)*0.22;
+    const verts = [
+      {x:cx, y:cy-s}, {x:cx-s*0.866, y:cy+s*0.5}, {x:cx+s*0.866, y:cy+s*0.5}
+    ];
+
+    // white beam coming in from far left at slight angle
+    const inX0 = -20, inY0 = cy - 10;
+    // entry point approx: left edge of prism
+    const ex = (verts[0].x + verts[1].x)/2, ey = (verts[0].y + verts[1].y)/2;
+    // input beam
+    ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.moveTo(inX0, inY0); ctx.lineTo(ex, ey); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,.15)'; ctx.lineWidth = 18;
+    ctx.beginPath(); ctx.moveTo(inX0, inY0); ctx.lineTo(ex, ey); ctx.stroke();
+
+    // rainbow fan coming out of the exit face
+    const fx = (verts[0].x + verts[2].x)/2, fy = (verts[0].y + verts[2].y)/2;
+    const cols = [380,440,490,530,580,620,700];
+    cols.forEach((wl, i) => {
+      const [R,G,B] = wavelengthToRGB(wl);
+      const spread = (i - 3) * 0.13;  // fan angle
+      const ang = 0.18 + spread;
+      const len = W*0.8;
+      const toX = fx + Math.cos(ang) * len;
+      const toY = fy + Math.sin(ang) * len;
+      ctx.strokeStyle = `rgba(${R},${G},${B},.22)`; ctx.lineWidth = 22;
+      ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(toX, toY); ctx.stroke();
+      ctx.strokeStyle = `rgba(${R},${G},${B},.95)`; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(toX, toY); ctx.stroke();
+    });
+
+    // prism (translucent glass)
+    ctx.beginPath();
+    ctx.moveTo(verts[0].x, verts[0].y);
+    ctx.lineTo(verts[1].x, verts[1].y);
+    ctx.lineTo(verts[2].x, verts[2].y);
+    ctx.closePath();
+    const pg = ctx.createLinearGradient(verts[1].x, verts[0].y, verts[2].x, verts[2].y);
+    pg.addColorStop(0,'rgba(220,230,255,.28)');
+    pg.addColorStop(1,'rgba(200,210,255,.12)');
+    ctx.fillStyle = pg; ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineWidth = 2; ctx.stroke();
+
+    // floating particles
+    for (const p of parts){
+      const [R,G,B] = wavelengthToRGB(p.wl);
+      const x = ((p.x + t*p.sp) % 1) * W;
+      const y = ((p.y + Math.sin(t*.0003 + p.ph)*0.03 + 1) % 1) * H;
+      ctx.beginPath(); ctx.arc(x, y, p.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(${R},${G},${B},.75)`; ctx.fill();
+    }
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   CONCEPT 1 — Spectrum slider with colored live sine wave
+   ========================================================= */
+(() => {
+  const c = document.getElementById('spectrum');
+  const {ctx} = setupCanvas(c);
+  const sp = document.getElementById('spec');
+  const spV = document.getElementById('spec-val');
+
+  function upd(){
+    const wl = +sp.value;
+    spV.textContent = wl + ' nm · ' + wlName(wl);
+  }
+  sp.addEventListener('input', upd); upd();
+
+  function tick(t){
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle = '#05020F'; ctx.fillRect(0,0,W,H);
+
+    // spectrum bar at bottom
+    const barY = H - 40, barH = 22;
+    for (let x=0; x<W; x++){
+      const wl = 380 + (x/W)*(740-380);
+      const [R,G,B] = wavelengthToRGB(wl);
+      ctx.fillStyle = `rgb(${R},${G},${B})`;
+      ctx.fillRect(x, barY, 1, barH);
+    }
+    // marker on spectrum bar
+    const markerX = ((+sp.value - 380) / (740-380)) * W;
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(markerX, barY-6); ctx.lineTo(markerX, barY+barH+6); ctx.stroke();
+    ctx.beginPath(); ctx.arc(markerX, barY-10, 6, 0, Math.PI*2);
+    ctx.fillStyle='#fff'; ctx.fill();
+
+    // labels for spectrum
+    ctx.font = 'bold 11px ui-rounded, system-ui';
+    ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.textAlign='left';
+    ctx.fillText('← shorter · higher energy', 12, barY - 14);
+    ctx.textAlign='right';
+    ctx.fillText('longer · lower energy →', W - 12, barY - 14);
+
+    // draw the wave
+    const wl = +sp.value;
+    const [R,G,B] = wavelengthToRGB(wl);
+    const midY = H * 0.38;
+    // wavelength in pixels (stretched so visible: scale factor)
+    const wlPx = wl * 0.8;  // 380 → 304 px
+    const amp = 46;
+    const phase = t * 0.003;
+
+    // glow
+    ctx.strokeStyle = `rgba(${R},${G},${B},.3)`; ctx.lineWidth = 14;
+    ctx.beginPath();
+    for (let x=0; x<=W; x+=2){
+      const y = midY + Math.sin((x/wlPx)*Math.PI*2 - phase*(600/wl)*3) * amp;
+      if (x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    // core
+    ctx.strokeStyle = `rgb(${R},${G},${B})`; ctx.lineWidth = 4;
+    ctx.beginPath();
+    for (let x=0; x<=W; x+=2){
+      const y = midY + Math.sin((x/wlPx)*Math.PI*2 - phase*(600/wl)*3) * amp;
+      if (x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    // label one wavelength
+    // find two adjacent crests
+    const crestX1 = ((phase*(600/wl)*3) * wlPx / (Math.PI*2)) % wlPx;
+    const x1 = crestX1 + wlPx*0.5;  // rough crest
+    // Actually easier: crest at argument = π/2. argument = (x/wlPx)*2π - phaseVal.
+    // Let's just pick two crests spaced wlPx apart visually.
+    const px1 = W*0.2, px2 = px1 + wlPx;
+    if (px2 < W - 20){
+      const labelY = midY - amp - 18;
+      ctx.strokeStyle = '#FFE066'; ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(px1, labelY); ctx.lineTo(px2, labelY);
+      ctx.moveTo(px1, labelY-5); ctx.lineTo(px1, labelY+5);
+      ctx.moveTo(px2, labelY-5); ctx.lineTo(px2, labelY+5);
+      ctx.stroke();
+      ctx.fillStyle = '#FFE066'; ctx.font='bold 12px ui-rounded,system-ui'; ctx.textAlign='center';
+      ctx.fillText('← WAVELENGTH →', (px1+px2)/2, labelY - 6);
+    }
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 1 — Prism splitter
+   Rotatable prism; white beam from left; computes Snell
+   refraction per-wavelength; draws rainbow fan.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('prism');
+  const {ctx} = setupCanvas(c);
+  const rotEl = document.getElementById('prism-rot');
+  const rotV = document.getElementById('prism-rot-val');
+  const yEl = document.getElementById('prism-y');
+  const yV = document.getElementById('prism-y-val');
+
+  function updLabels(){
+    rotV.textContent = rotEl.value + '°';
+    const y = +yEl.value;
+    yV.textContent = y < 40 ? 'high' : y > 60 ? 'low' : 'middle';
+  }
+  rotEl.addEventListener('input', updLabels);
+  yEl.addEventListener('input', updLabels); updLabels();
+
+  // ray-segment intersection
+  function rsi(ox, oy, dx, dy, p1, p2){
+    const x1 = p1.x, y1 = p1.y, x2 = p2.x, y2 = p2.y;
+    const denom = dx*(y2-y1) - dy*(x2-x1);
+    if (Math.abs(denom) < 1e-6) return null;
+    const t = ((x1-ox)*(y2-y1) - (y1-oy)*(x2-x1)) / denom;
+    const u = ((x1-ox)*dy - (y1-oy)*dx) / denom;
+    if (t < 0.001 || u < 0 || u > 1) return null;
+    return {t, x: ox + t*dx, y: oy + t*dy, p1, p2};
+  }
+
+  function tick(t){
+    const W = c.clientWidth, H = c.clientHeight;
+    // bg
+    const bg = ctx.createLinearGradient(0,0,W,H);
+    bg.addColorStop(0,'#0A0321'); bg.addColorStop(1,'#1B0A44');
+    ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+
+    // prism
+    const cx = W*0.42, cy = H*0.55;
+    const size = Math.min(H*0.35, W*0.16);
+    const rot = (+rotEl.value) * Math.PI/180;
+    const verts = [0,1,2].map(i => {
+      const a = rot + (-Math.PI/2) + i*(2*Math.PI/3);
+      return {x: cx + Math.cos(a)*size, y: cy + Math.sin(a)*size};
+    });
+    // compute edges with midpoint and outward-pointing normal (away from centroid)
+    const edges = [0,1,2].map(i => {
+      const p1 = verts[i], p2 = verts[(i+1)%3];
+      const ex = p2.x-p1.x, ey = p2.y-p1.y;
+      const el = Math.hypot(ex,ey);
+      let nx = -ey/el, ny = ex/el;
+      const mx = (p1.x+p2.x)/2, my = (p1.y+p2.y)/2;
+      if (nx*(cx-mx) + ny*(cy-my) > 0){ nx = -nx; ny = -ny; }
+      return {p1, p2, nx, ny, mx, my};
+    });
+
+    // beam origin
+    const beamY = H * (+yEl.value)/100;
+    const originX = 10;
+    const dx0 = 1, dy0 = 0;
+
+    // Find entry point: nearest intersection with any edge
+    let entry = null;
+    for (const e of edges){
+      const h = rsi(originX, beamY, dx0, dy0, e.p1, e.p2);
+      if (h && (!entry || h.t < entry.t)){ entry = {...h, edge: e}; }
+    }
+
+    // 7 wavelengths
+    const wls = [400, 440, 490, 540, 580, 620, 680];
+
+    if (entry){
+      // draw white beam
+      ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.moveTo(originX, beamY); ctx.lineTo(entry.x, entry.y); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,255,255,.18)'; ctx.lineWidth = 16;
+      ctx.beginPath(); ctx.moveTo(originX, beamY); ctx.lineTo(entry.x, entry.y); ctx.stroke();
+
+      // For each wavelength, compute refraction into the prism
+      for (const wl of wls){
+        const [R,G,B] = wavelengthToRGB(wl);
+        // Index of refraction: higher n for shorter wavelength (dispersion)
+        const n = 1.48 + 0.06 * (700 - wl)/300;   // ~1.48 red, ~1.54 violet
+
+        // Refract entering: eta = n1/n2 = 1/n
+        const nx = entry.edge.nx, ny = entry.edge.ny;
+        const I = {x: dx0, y: dy0};
+        const cosI = -(I.x*nx + I.y*ny);
+        const eta1 = 1/n;
+        const sinT2 = eta1*eta1 * (1 - cosI*cosI);
+        if (sinT2 > 1) continue; // shouldn't happen entering
+        const cosT = Math.sqrt(1 - sinT2);
+        const tx = eta1*I.x + (eta1*cosI - cosT)*nx;
+        const ty = eta1*I.y + (eta1*cosI - cosT)*ny;
+        const tl = Math.hypot(tx,ty);
+        const dix = tx/tl, diy = ty/tl;
+
+        // Travel inside prism: find exit edge
+        let exit = null;
+        for (const e of edges){
+          if (e === entry.edge) continue;
+          const h = rsi(entry.x + dix*0.1, entry.y + diy*0.1, dix, diy, e.p1, e.p2);
+          if (h && (!exit || h.t < exit.t)){ exit = {...h, edge: e}; }
+        }
+        if (!exit) continue;
+
+        // draw inside-prism segment
+        ctx.strokeStyle = `rgba(${R},${G},${B},.7)`; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(entry.x, entry.y); ctx.lineTo(exit.x, exit.y); ctx.stroke();
+
+        // Refract exiting: eta = n
+        const nx2 = exit.edge.nx, ny2 = exit.edge.ny;
+        const I2 = {x: dix, y: diy};
+        const cosI2 = -(I2.x*nx2 + I2.y*ny2);
+        const eta2 = n;
+        const sinT2b = eta2*eta2 * (1 - cosI2*cosI2);
+        if (sinT2b > 1) continue; // total internal reflection
+        const cosT2 = Math.sqrt(1 - sinT2b);
+        const tx2 = eta2*I2.x + (eta2*cosI2 - cosT2)*nx2;
+        const ty2 = eta2*I2.y + (eta2*cosI2 - cosT2)*ny2;
+        const tl2 = Math.hypot(tx2, ty2);
+        const dxo = tx2/tl2, dyo = ty2/tl2;
+
+        // draw output ray to canvas edge
+        // find intersection with right edge (x = W*0.95) or bounds
+        const targetX = W*0.95;
+        let ttOut = (targetX - exit.x) / dxo;
+        if (ttOut <= 0 || !isFinite(ttOut)) ttOut = 400;
+        // clamp so we don't go off top/bottom
+        let endX = exit.x + dxo*ttOut, endY = exit.y + dyo*ttOut;
+        if (endY < 0){ ttOut = -exit.y / dyo; endX = exit.x + dxo*ttOut; endY = 0; }
+        if (endY > H){ ttOut = (H - exit.y) / dyo; endX = exit.x + dxo*ttOut; endY = H; }
+
+        ctx.strokeStyle = `rgba(${R},${G},${B},.25)`; ctx.lineWidth = 10;
+        ctx.beginPath(); ctx.moveTo(exit.x, exit.y); ctx.lineTo(endX, endY); ctx.stroke();
+        ctx.strokeStyle = `rgba(${R},${G},${B},.95)`; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(exit.x, exit.y); ctx.lineTo(endX, endY); ctx.stroke();
+      }
+    }
+
+    // draw prism glass (slightly translucent, on top of inside-prism segments so they look refracted-inside)
+    ctx.beginPath();
+    ctx.moveTo(verts[0].x, verts[0].y);
+    for (let i=1; i<3; i++) ctx.lineTo(verts[i].x, verts[i].y);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(200,220,255,.08)'; ctx.fill();
+    ctx.strokeStyle = 'rgba(230,230,255,.7)'; ctx.lineWidth = 2.2; ctx.stroke();
+
+    // "screen" on right
+    ctx.fillStyle = 'rgba(255,255,255,.06)';
+    ctx.fillRect(W*0.95, H*0.05, 6, H*0.9);
+    ctx.fillStyle = 'rgba(255,255,255,.3)';
+    ctx.font = 'bold 10px ui-rounded, system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('SCREEN', W*0.95 + 3, H*0.04);
+
+    // flashlight
+    ctx.font = '28px system-ui, Apple Color Emoji, Segoe UI Emoji';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('🔦', 22, beamY);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 2 — RGB additive color mixer
+   Three overlapping colored disks with additive blending.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('rgb');
+  const {ctx} = setupCanvas(c);
+  const rEl = document.getElementById('rgb-r');
+  const gEl = document.getElementById('rgb-g');
+  const bEl = document.getElementById('rgb-b');
+  const rV = document.getElementById('rgb-r-val');
+  const gV = document.getElementById('rgb-g-val');
+  const bV = document.getElementById('rgb-b-val');
+
+  function upd(){ rV.textContent = rEl.value; gV.textContent = gEl.value; bV.textContent = bEl.value; }
+  [rEl,gEl,bEl].forEach(el => el.addEventListener('input', upd)); upd();
+
+  function colorName(R,G,B){
+    if (R<20 && G<20 && B<20) return 'black';
+    if (R>240 && G>240 && B>240) return 'white';
+    if (R>200 && G>200 && B<80) return 'yellow';
+    if (R<80 && G>200 && B>200) return 'cyan';
+    if (R>200 && G<80 && B>200) return 'magenta';
+    if (R>200 && G<80 && B<80) return 'red';
+    if (R<80 && G>200 && B<80) return 'green';
+    if (R<80 && G<80 && B>200) return 'blue';
+    if (R>150 && G>100 && B<80) return 'orange';
+    if (R>180 && G>180 && B>180) return 'pale';
+    return 'mix';
+  }
+
+  function tick(t){
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle = '#05020F'; ctx.fillRect(0,0,W,H);
+
+    const R = +rEl.value, G = +gEl.value, B = +bEl.value;
+    // circle positions (left half of canvas)
+    const cx = W*0.30, cy = H*0.52;
+    const rad = Math.min(W*0.13, H*0.32);
+    const positions = [
+      {x: cx,               y: cy - rad*0.48, col: [R,0,0]},
+      {x: cx - rad*0.55,    y: cy + rad*0.35, col: [0,G,0]},
+      {x: cx + rad*0.55,    y: cy + rad*0.35, col: [0,0,B]},
+    ];
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter'; // additive
+    for (const p of positions){
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad);
+      g.addColorStop(0, `rgba(${p.col[0]},${p.col[1]},${p.col[2]},1)`);
+      g.addColorStop(0.7, `rgba(${p.col[0]},${p.col[1]},${p.col[2]},0.85)`);
+      g.addColorStop(1, `rgba(${p.col[0]},${p.col[1]},${p.col[2]},0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(p.x, p.y, rad, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.restore();
+
+    // labels near each circle
+    ctx.font='bold 13px ui-rounded, system-ui'; ctx.textAlign='center';
+    ctx.fillStyle = `rgb(${Math.max(R,80)},0,0)`;
+    ctx.fillText('RED', positions[0].x, positions[0].y - rad - 8);
+    ctx.fillStyle = `rgb(0,${Math.max(G,80)},0)`;
+    ctx.fillText('GREEN', positions[1].x - 10, positions[1].y + rad + 18);
+    ctx.fillStyle = `rgb(0,0,${Math.max(B,140)})`;
+    ctx.fillText('BLUE', positions[2].x + 10, positions[2].y + rad + 18);
+
+    // RESULT swatch on right
+    const sx = W*0.78, sy = H*0.5, sr = Math.min(W*0.1, 70);
+    // glow
+    const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, sr*1.6);
+    sg.addColorStop(0, `rgba(${R},${G},${B},.7)`);
+    sg.addColorStop(1, `rgba(${R},${G},${B},0)`);
+    ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(sx, sy, sr*1.6, 0, Math.PI*2); ctx.fill();
+    // disc
+    ctx.beginPath(); ctx.arc(sx, sy, sr, 0, Math.PI*2);
+    ctx.fillStyle = `rgb(${R},${G},${B})`; ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 2; ctx.stroke();
+
+    ctx.fillStyle = 'rgba(255,255,255,.9)';
+    ctx.font = 'bold 15px ui-rounded, system-ui';
+    ctx.fillText('YOUR COLOR', sx, sy - sr - 18);
+    ctx.font='13px ui-rounded, system-ui';
+    ctx.fillStyle = 'rgba(255,255,255,.7)';
+    ctx.fillText(`rgb(${R}, ${G}, ${B})`, sx, sy + sr + 20);
+    ctx.fillStyle = 'rgba(255,224,102,.95)'; ctx.font = 'bold 13px ui-rounded, system-ui';
+    ctx.fillText('= ' + colorName(R,G,B), sx, sy + sr + 42);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 3 — Laser mirror maze
+   Raycast a laser from an emitter, reflect off draggable mirrors,
+   and try to hit the target.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('maze');
+  const {ctx, rect} = setupCanvas(c);
+  const aimEl = document.getElementById('laser-aim');
+  const aimV  = document.getElementById('laser-aim-val');
+  const resetBtn = document.getElementById('maze-reset');
+  const challengeBtn = document.getElementById('maze-challenge');
+
+  const CHALLENGES = [
+    { target:{xFrac:.85, yFrac:.22}, mirrors:[
+      {axFrac:.22,ayFrac:.52,bxFrac:.32,byFrac:.40},
+      {axFrac:.50,ayFrac:.72,bxFrac:.60,byFrac:.60},
+      {axFrac:.70,ayFrac:.45,bxFrac:.80,byFrac:.55},
+    ]},
+    { target:{xFrac:.90, yFrac:.78}, mirrors:[
+      {axFrac:.28,ayFrac:.38,bxFrac:.38,byFrac:.30},
+      {axFrac:.52,ayFrac:.30,bxFrac:.62,byFrac:.42},
+      {axFrac:.74,ayFrac:.62,bxFrac:.84,byFrac:.52},
+    ]},
+    { target:{xFrac:.18, yFrac:.82}, mirrors:[
+      {axFrac:.40,ayFrac:.30,bxFrac:.52,byFrac:.40},
+      {axFrac:.65,ayFrac:.55,bxFrac:.78,byFrac:.48},
+      {axFrac:.32,ayFrac:.62,bxFrac:.42,byFrac:.72},
+    ]},
+  ];
+  let currentChallenge = 0;
+
+  const state = {
+    mirrors: [],
+    target: {x:0, y:0, r:22, hit:false},
+    dragging: null,
+  };
+
+  function loadChallenge(idx){
+    const ch = CHALLENGES[idx];
+    const W = c.clientWidth, H = c.clientHeight;
+    state.target.x = ch.target.xFrac * W;
+    state.target.y = ch.target.yFrac * H;
+    state.mirrors = ch.mirrors.map(m => ({
+      ax: m.axFrac*W, ay: m.ayFrac*H, bx: m.bxFrac*W, by: m.byFrac*H
+    }));
+    confetti.length = 0; celebrateUntil = 0;
+  }
+  // initial load after canvas is sized
+  setTimeout(() => loadChallenge(0), 30);
+
+  resetBtn.addEventListener('click', () => loadChallenge(currentChallenge));
+  challengeBtn.addEventListener('click', () => {
+    currentChallenge = (currentChallenge + 1) % CHALLENGES.length;
+    loadChallenge(currentChallenge);
+  });
+
+  aimEl.addEventListener('input', () => aimV.textContent = aimEl.value + '°');
+
+  // --- Interaction ---
+  function findHandle(mx, my){
+    for (let i=0; i<state.mirrors.length; i++){
+      const m = state.mirrors[i];
+      if (Math.hypot(mx-m.ax,my-m.ay) < 14) return {idx:i, type:'a'};
+      if (Math.hypot(mx-m.bx,my-m.by) < 14) return {idx:i, type:'b'};
+      const midX=(m.ax+m.bx)/2, midY=(m.ay+m.by)/2;
+      if (Math.hypot(mx-midX,my-midY) < 16) return {idx:i, type:'mid'};
+    }
+    return null;
+  }
+  c.addEventListener('mousedown', e => {
+    const r = rect(); state.dragging = findHandle(e.clientX-r.left, e.clientY-r.top);
+  });
+  window.addEventListener('mousemove', e => {
+    if (!state.dragging) return;
+    const r = rect(); const mx = e.clientX-r.left, my = e.clientY-r.top;
+    const m = state.mirrors[state.dragging.idx];
+    if (state.dragging.type === 'a'){ m.ax = mx; m.ay = my; }
+    else if (state.dragging.type === 'b'){ m.bx = mx; m.by = my; }
+    else {
+      const midX=(m.ax+m.bx)/2, midY=(m.ay+m.by)/2;
+      const dx = mx-midX, dy = my-midY;
+      m.ax += dx; m.ay += dy; m.bx += dx; m.by += dy;
+    }
+  });
+  window.addEventListener('mouseup', () => state.dragging = null);
+  // touch
+  c.addEventListener('touchstart', e => {
+    const r = rect(); const t0 = e.touches[0];
+    state.dragging = findHandle(t0.clientX-r.left, t0.clientY-r.top);
+  }, {passive:true});
+  c.addEventListener('touchmove', e => {
+    if (!state.dragging) return; e.preventDefault();
+    const r = rect(); const t0 = e.touches[0];
+    const mx = t0.clientX-r.left, my = t0.clientY-r.top;
+    const m = state.mirrors[state.dragging.idx];
+    if (state.dragging.type === 'a'){ m.ax = mx; m.ay = my; }
+    else if (state.dragging.type === 'b'){ m.bx = mx; m.by = my; }
+    else {
+      const midX=(m.ax+m.bx)/2, midY=(m.ay+m.by)/2;
+      const dx = mx-midX, dy = my-midY;
+      m.ax += dx; m.ay += dy; m.bx += dx; m.by += dy;
+    }
+  }, {passive:false});
+  window.addEventListener('touchend', () => state.dragging = null);
+
+  // --- Raycast ---
+  function rsi(ox, oy, dx, dy, p1, p2){
+    const x1 = p1.x, y1 = p1.y, x2 = p2.x, y2 = p2.y;
+    const denom = dx*(y2-y1) - dy*(x2-x1);
+    if (Math.abs(denom) < 1e-6) return null;
+    const t = ((x1-ox)*(y2-y1) - (y1-oy)*(x2-x1)) / denom;
+    const u = ((x1-ox)*dy - (y1-oy)*dx) / denom;
+    if (t < 0.001 || u < 0 || u > 1) return null;
+    return {t, u, x: ox + t*dx, y: oy + t*dy};
+  }
+
+  const confetti = [];
+  let celebrateUntil = 0;
+
+  function raycast(W, H){
+    const aim = (+aimEl.value) * Math.PI/180;
+    let px = 50, py = 50;
+    let dx = Math.cos(aim), dy = Math.sin(aim);
+    const path = [{x:px, y:py}];
+    state.target.hit = false;
+    for (let bounce = 0; bounce < 20; bounce++){
+      // find nearest mirror hit
+      let best = null;
+      for (let i=0; i<state.mirrors.length; i++){
+        const m = state.mirrors[i];
+        const h = rsi(px,py,dx,dy,{x:m.ax,y:m.ay},{x:m.bx,y:m.by});
+        if (h && (!best || h.t < best.t)){ best = {...h, mirror: m}; }
+      }
+      // target as circle
+      const tg = state.target;
+      const fx = px - tg.x, fy = py - tg.y;
+      const aa = 1, bb = 2*(fx*dx + fy*dy), cc = fx*fx + fy*fy - tg.r*tg.r;
+      const disc = bb*bb - 4*aa*cc;
+      let tgtT = Infinity;
+      if (disc >= 0){
+        const sq = Math.sqrt(disc);
+        const t1 = (-bb - sq)/2, t2 = (-bb + sq)/2;
+        if (t1 > 0.01) tgtT = t1;
+        else if (t2 > 0.01) tgtT = t2;
+      }
+      // canvas bounds
+      let boundT = Infinity, boundPt = null;
+      if (dx>0){ const t=(W-px)/dx; if (t>0 && t<boundT){boundT=t; boundPt={x:W,y:py+dy*t};} }
+      if (dx<0){ const t=-px/dx; if (t>0 && t<boundT){boundT=t; boundPt={x:0,y:py+dy*t};} }
+      if (dy>0){ const t=(H-py)/dy; if (t>0 && t<boundT){boundT=t; boundPt={x:px+dx*t,y:H};} }
+      if (dy<0){ const t=-py/dy; if (t>0 && t<boundT){boundT=t; boundPt={x:px+dx*t,y:0};} }
+
+      const mirT = best ? best.t : Infinity;
+      const minT = Math.min(tgtT, mirT, boundT);
+
+      if (minT === tgtT){
+        path.push({x: px+dx*tgtT, y: py+dy*tgtT, hit:true});
+        if (!state.target.hit) {
+          // fresh hit: spawn confetti
+          if (performance.now() > celebrateUntil - 500){
+            celebrateUntil = performance.now() + 2200;
+            for (let k=0;k<60;k++){
+              confetti.push({
+                x: tg.x, y: tg.y,
+                vx: (Math.random()-.5)*300,
+                vy: -100 - Math.random()*300,
+                life: 1, col: ['#FF3B77','#FFD93D','#3DFF77','#3DE4FF','#B14BFF'][k%5],
+              });
+            }
+          }
+        }
+        state.target.hit = true;
+        return path;
+      }
+      if (minT === mirT){
+        path.push({x: best.x, y: best.y});
+        // reflect direction
+        const m = best.mirror;
+        const mx = m.bx-m.ax, my = m.by-m.ay;
+        const ml = Math.hypot(mx,my);
+        const nx = -my/ml, ny = mx/ml;
+        const dot = dx*nx + dy*ny;
+        dx = dx - 2*dot*nx; dy = dy - 2*dot*ny;
+        px = best.x + dx*0.1; py = best.y + dy*0.1;
+      } else {
+        path.push({x: boundPt.x, y: boundPt.y});
+        return path;
+      }
+    }
+    return path;
+  }
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    // bg
+    ctx.fillStyle = '#05020F'; ctx.fillRect(0,0,W,H);
+    // grid
+    ctx.strokeStyle = 'rgba(177,75,255,.08)'; ctx.lineWidth = 1;
+    for (let x=0;x<W;x+=40){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y=0;y<H;y+=40){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+    // target
+    const tg = state.target;
+    const tCol = state.target.hit ? '#3DFF77' : '#FFD93D';
+    // pulse
+    const pulse = 4 + Math.sin(now*.006)*3;
+    ctx.beginPath(); ctx.arc(tg.x, tg.y, tg.r + pulse, 0, Math.PI*2);
+    ctx.fillStyle = tCol + '22'; ctx.fill();
+    ctx.beginPath(); ctx.arc(tg.x, tg.y, tg.r, 0, Math.PI*2);
+    ctx.strokeStyle = tCol; ctx.lineWidth = 3; ctx.stroke();
+    ctx.font = '22px system-ui, Apple Color Emoji, Segoe UI Emoji';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('🎯', tg.x, tg.y);
+
+    // mirrors
+    for (const m of state.mirrors){
+      // glow
+      ctx.strokeStyle = 'rgba(180,210,255,.25)'; ctx.lineWidth = 14;
+      ctx.beginPath(); ctx.moveTo(m.ax,m.ay); ctx.lineTo(m.bx,m.by); ctx.stroke();
+      // core
+      ctx.strokeStyle = '#E5E5FF'; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.moveTo(m.ax,m.ay); ctx.lineTo(m.bx,m.by); ctx.stroke();
+      // endpoints
+      for (const p of [{x:m.ax,y:m.ay},{x:m.bx,y:m.by}]){
+        ctx.beginPath(); ctx.arc(p.x,p.y,8,0,Math.PI*2);
+        ctx.fillStyle='#FFD93D'; ctx.fill();
+        ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
+      }
+    }
+
+    // raycast + draw laser
+    const path = raycast(W,H);
+    const laserCol = state.target.hit ? '#3DFF77' : '#FF3355';
+    // outer glow
+    ctx.strokeStyle = laserCol + '55'; ctx.lineWidth = 10;
+    ctx.beginPath();
+    path.forEach((p,i) => i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+    ctx.stroke();
+    // core
+    ctx.strokeStyle = laserCol; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    path.forEach((p,i) => i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+    ctx.stroke();
+
+    // emitter
+    ctx.beginPath(); ctx.arc(50,50,14,0,Math.PI*2);
+    ctx.fillStyle = '#1A0B3D'; ctx.fill();
+    ctx.strokeStyle = '#FF3355'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.font='16px system-ui, Apple Color Emoji, Segoe UI Emoji';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('🔦', 50, 50);
+
+    // confetti
+    const dt = 1/60;
+    for (let i=confetti.length-1;i>=0;i--){
+      const f = confetti[i];
+      f.vy += 500*dt;
+      f.x += f.vx*dt; f.y += f.vy*dt; f.life -= dt*0.5;
+      if (f.life <= 0 || f.y > H){ confetti.splice(i,1); continue; }
+      ctx.fillStyle = f.col;
+      ctx.globalAlpha = Math.max(0, f.life);
+      ctx.fillRect(f.x-3, f.y-3, 6, 6);
+      ctx.globalAlpha = 1;
+    }
+    if (now < celebrateUntil){
+      ctx.font = 'bold 22px ui-rounded, system-ui'; ctx.fillStyle = '#3DFF77'; ctx.textAlign='center';
+      ctx.fillText('🎉 BULLSEYE! 🎉', W/2, 34);
+    }
+
+    // hint
+    ctx.font = '13px ui-rounded, system-ui';
+    ctx.fillStyle = 'rgba(255,255,255,.55)';
+    ctx.textAlign='left';
+    ctx.fillText('drag yellow dots to rotate · drag middle to slide', 16, H - 12);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

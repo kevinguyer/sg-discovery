@@ -1,0 +1,15 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Node (only if a tooling folder ever appears; the site itself has no build)
+node_modules/
+
+# Local Claude Code state (the launch config is committed on purpose)
+.claude/*
+!.claude/launch.json

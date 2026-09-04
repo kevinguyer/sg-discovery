@@ -1,0 +1,127 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Shape Slicer — shared component styles.
+   Each unit page sets its own colors via these variables:
+     --sc-accent   main highlight color (buttons, active chips)
+     --sc-accent-2 secondary highlight
+     --sc-ink      dark text color used ON the accent
+     --sc-panel    panel background
+     --sc-line     hairline color
+   Everything else (page palette, hero, typography) lives in the unit.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Toast (created by SlicerCore.toast) */
+.sc-toast{
+  position:fixed; left:50%; top:18px; transform:translate(-50%,-160%);
+  z-index:400; padding:12px 22px; border-radius:999px;
+  background:var(--sc-panel, #1E2547); color:#fff;
+  border:1px solid var(--sc-line, rgba(255,255,255,.18));
+  box-shadow:0 12px 40px rgba(0,0,0,.5);
+  font-family:var(--font-display, ui-rounded, system-ui, sans-serif);
+  font-size:15px; font-weight:700; letter-spacing:.01em;
+  transition:transform .32s cubic-bezier(.4,.2,.2,1);
+  pointer-events:none; max-width:min(92vw, 560px); text-align:center;
+}
+.sc-toast.show{transform:translate(-50%,0)}
+.sc-toast[data-kind="good"]{border-color:#4ADE80; box-shadow:0 12px 40px rgba(74,222,128,.25)}
+.sc-toast[data-kind="bad"]{border-color:#FB7185}
+.sc-toast[data-kind="hint"]{border-color:var(--sc-accent, #FFD23F)}
+
+/* Board layout: stage + tool bar */
+.board-wrap{position:relative}
+.board-wrap canvas.board{
+  display:block; width:100%; height:clamp(300px, 52vh, 520px);
+  border-radius:16px; background:rgba(0,0,0,.25);
+  border:1px solid var(--sc-line, rgba(255,255,255,.12));
+  touch-action:none; user-select:none; -webkit-user-select:none;
+}
+.board-tools{
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+  margin-top:12px;
+}
+.board-tools .spacer{flex:1}
+.tool-btn{
+  display:inline-flex; align-items:center; gap:7px;
+  padding:9px 15px; border-radius:999px; cursor:pointer;
+  font-family:var(--font-display, ui-rounded, system-ui, sans-serif);
+  font-size:14px; font-weight:700; line-height:1;
+  color:#fff; background:rgba(255,255,255,.08);
+  border:1px solid var(--sc-line, rgba(255,255,255,.16));
+  transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+}
+.tool-btn:hover{transform:translateY(-2px); background:rgba(255,255,255,.14)}
+.tool-btn:active{transform:translateY(0)}
+.tool-btn.active{
+  background:var(--sc-accent, #FFD23F); color:var(--sc-ink, #1a1a1a); border-color:transparent;
+  box-shadow:0 0 22px color-mix(in srgb, var(--sc-accent, #FFD23F) 55%, transparent);
+}
+.tool-btn.secondary.active{background:var(--sc-accent-2, #C6FF4D)}
+.tool-btn[disabled]{opacity:.4; cursor:not-allowed; transform:none}
+.tool-btn .kbd{
+  font-family:var(--font-mono, ui-monospace, monospace); font-size:11px; opacity:.7;
+  padding:2px 6px; border-radius:6px; background:rgba(0,0,0,.25);
+}
+.tool-btn.active .kbd{background:rgba(0,0,0,.12)}
+
+/* Readout tiles under a board */
+.readouts{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
+.readout{
+  flex:1 1 150px; padding:12px 16px; border-radius:14px;
+  background:rgba(255,255,255,.05); border:1px solid var(--sc-line, rgba(255,255,255,.12));
+}
+.readout .label{
+  font-family:var(--font-display, ui-rounded, system-ui, sans-serif);
+  font-size:11px; letter-spacing:.16em; text-transform:uppercase; opacity:.7;
+}
+.readout .value{
+  font-family:var(--font-display, ui-rounded, system-ui, sans-serif);
+  font-size:26px; font-weight:800; line-height:1.15; margin-top:4px;
+}
+.readout .value small{font-size:14px; opacity:.75; font-weight:600; margin-left:4px}
+.readout.hot{border-color:var(--sc-accent, #FFD23F); box-shadow:inset 0 0 0 1px var(--sc-accent, #FFD23F)}
+.readout .formula{font-family:var(--font-mono, ui-monospace, monospace); font-size:12px; opacity:.75; margin-top:4px}
+
+/* Answer boxes */
+.answer-row{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:14px}
+.answer-row input[type="number"], .answer-row input[type="text"]{
+  font:inherit; font-family:var(--font-display, ui-rounded, system-ui, sans-serif); font-weight:700; font-size:20px;
+  width:140px; padding:10px 14px; border-radius:12px; color:#fff;
+  background:rgba(0,0,0,.3); border:2px solid var(--sc-line, rgba(255,255,255,.2));
+  outline:none;
+}
+.answer-row input:focus{border-color:var(--sc-accent, #FFD23F)}
+.answer-row input.good{border-color:#4ADE80; background:rgba(74,222,128,.12)}
+.answer-row input.bad{border-color:#FB7185; animation:sc-shake .4s}
+@keyframes sc-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+.feedback{
+  margin-top:12px; padding:12px 16px; border-radius:12px; font-size:15px; line-height:1.5;
+  background:rgba(255,255,255,.05); border-left:4px solid var(--sc-accent, #FFD23F); min-height:44px;
+}
+.feedback.good{border-left-color:#4ADE80; background:rgba(74,222,128,.10)}
+.feedback.bad{border-left-color:#FB7185; background:rgba(251,113,133,.10)}
+.feedback:empty{display:none}
+
+/* Challenge list */
+.challenge-list{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px}
+.challenge-chip{
+  display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:999px; cursor:pointer;
+  font-family:var(--font-display, ui-rounded, system-ui, sans-serif); font-size:13px; font-weight:700;
+  color:#fff; background:rgba(255,255,255,.07); border:1px solid var(--sc-line, rgba(255,255,255,.14));
+  transition:transform .15s ease, background .15s ease;
+}
+.challenge-chip:hover{transform:translateY(-2px); background:rgba(255,255,255,.13)}
+.challenge-chip.active{background:var(--sc-accent, #FFD23F); color:var(--sc-ink, #1a1a1a); border-color:transparent}
+.challenge-chip.done::after{content:'✓'; font-weight:900; color:#4ADE80}
+.challenge-chip.active.done::after{color:var(--sc-ink, #1a1a1a)}
+
+.stamp{
+  display:inline-block; padding:6px 14px; border:3px solid currentColor; border-radius:8px;
+  font-family:var(--font-display, ui-rounded, system-ui, sans-serif); font-weight:900; letter-spacing:.18em;
+  text-transform:uppercase; transform:rotate(-6deg); opacity:0; transition:opacity .3s, transform .3s;
+}
+.stamp.show{opacity:1; transform:rotate(-6deg) scale(1)}
+
+@media (prefers-reduced-motion: reduce){
+  .tool-btn, .challenge-chip, .sc-toast{transition:none}
+  .answer-row input.bad{animation:none}
+}

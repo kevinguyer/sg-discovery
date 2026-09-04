@@ -1,0 +1,1495 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sound Waves · Investigating Waves · REDS Hall of Discovery</title>
+<style>
+  :root{
+    --bg:      #1A0033;
+    --deep:    #3D0066;
+    --cream:   #FFF8E7;
+    --pale:    #FFD6E8;
+    --amber:   #FFBE0B;
+    --sun:     #FFD93D;
+    --hot:     #FF006E;
+    --magenta: #F72585;
+    --violet:  #7209B7;
+    --indigo:  #3A0CA3;
+    --coral:   #FF6B6B;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{
+    font-family:var(--font-body); color:var(--cream); background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(255,0,110,.30), transparent 55%),
+      radial-gradient(ellipse at 100% 80%, rgba(255,190,11,.18), transparent 50%),
+      radial-gradient(ellipse at 0% 70%, rgba(114,9,183,.25), transparent 55%),
+      linear-gradient(180deg, #1A0033 0%, #0C0020 100%);
+    background-attachment:fixed;
+  }
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  img,svg{display:block;max-width:100%}
+
+  /* ---------- Topbar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:20; backdrop-filter: blur(14px);
+    background:linear-gradient(180deg, rgba(26,0,51,.85), rgba(26,0,51,.55));
+    border-bottom:1px solid rgba(247,37,133,.25);
+  }
+  .topbar-inner{
+    max-width:1280px; margin:0 auto; padding:14px 28px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+  }
+  .back{
+    display:inline-flex; align-items:center; gap:8px; padding:8px 14px;
+    border-radius:999px; background:rgba(255,255,255,.08); font-family:var(--font-display); font-size:13px;
+    transition:background .15s;
+  }
+  .back:hover{background:rgba(247,37,133,.25)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand .logo{width:44px;height:44px; filter: drop-shadow(0 0 8px rgba(255,0,110,.6));}
+  .brand .eyebrow{font-family:var(--font-display);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--pale);opacity:.9}
+  .brand .wordmark{font-family:var(--font-display);font-size:18px}
+  .brand .unit{font-family:var(--font-display);font-size:13px;color:var(--amber)}
+  .class-pill{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 14px; border-radius:999px;
+    background:linear-gradient(135deg, rgba(255,0,110,.25), rgba(255,190,11,.25));
+    border:1px solid rgba(255,255,255,.18);
+    font-family:var(--font-display); font-size:12px;
+  }
+  .class-pill .dot{width:7px;height:7px;border-radius:999px;background:var(--amber);box-shadow:0 0 10px var(--amber)}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    min-height:72vh;
+    display:flex; align-items:center;
+  }
+  #hero-canvas{position:absolute; inset:0; width:100%; height:100%; z-index:0;}
+  .hero-inner{
+    position:relative; z-index:2;
+    max-width:1280px; margin:0 auto; padding:40px 36px; width:100%;
+    text-align:center;
+  }
+  .hero .eyebrow{
+    font-family:var(--font-display); color:var(--pale);
+    letter-spacing:.4em; font-size:12px; text-transform:uppercase; margin-bottom:18px;
+  }
+  .hero h1{
+    font-size: clamp(68px, 13vw, 200px);
+    line-height:.85; letter-spacing:-.03em;
+    background: linear-gradient(95deg, #FF006E 0%, #F72585 25%, #FFBE0B 55%, #FFD6E8 80%, #7209B7 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter: drop-shadow(0 12px 50px rgba(255,0,110,.55));
+    margin-bottom: 22px;
+  }
+  .hero .tag{
+    max-width:760px; margin:0 auto;
+    font-size: clamp(18px, 2vw, 24px); color:var(--cream); opacity:.95;
+  }
+  .hero .scroll-cue{
+    position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+    font-family:var(--font-display); font-size:12px; letter-spacing:.3em;
+    color:var(--pale); opacity:.85; animation: nudge 2.4s ease-in-out infinite;
+  }
+  @keyframes nudge{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,6px)}}
+
+  /* ---------- Section scaffolding ---------- */
+  section.concept, section.lab, section.facts, section.nextup{
+    max-width:1280px; margin: 0 auto; padding: 28px 28px;
+  }
+  .kicker{
+    font-family:var(--font-display); font-size:12px; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--amber); margin-bottom:4px;
+  }
+  .title{font-size:clamp(26px,3.2vw,40px); margin-bottom:6px; line-height:1;}
+  .blurb{max-width:740px; font-size:15px; line-height:1.5; color:rgba(255,248,231,.88)}
+
+  .panel{
+    margin-top:8px; border-radius:20px; overflow:hidden;
+    border:1px solid rgba(247,37,133,.25);
+    background: linear-gradient(180deg, rgba(247,37,133,.06), rgba(255,190,11,.02));
+    box-shadow: 0 20px 50px rgba(0,0,0,.6), 0 0 40px rgba(247,37,133,.08);
+    display:flex; flex-direction:column;
+  }
+  .panel-top{
+    padding:10px 18px; display:flex; justify-content:space-between; align-items:center;
+    background: linear-gradient(135deg, rgba(247,37,133,.25), rgba(255,190,11,.15));
+    border-bottom:1px solid rgba(247,37,133,.2);
+    font-family:var(--font-display); font-size:13px; letter-spacing:.08em;
+  }
+  .panel-top .dot{width:9px;height:9px;border-radius:999px;background:var(--hot);box-shadow:0 0 12px var(--hot);margin-right:8px;display:inline-block;vertical-align:middle}
+
+  canvas.demo{display:block; width:100%; background:#0C0020; height: clamp(220px, 48vh, 460px);}
+  .caption{
+    padding:10px 18px; font-size:13px; line-height:1.45; color:rgba(255,248,231,.82);
+    border-top:1px solid rgba(247,37,133,.15);
+  }
+
+  /* ---------- Controls ---------- */
+  .controls{
+    display:flex; flex-wrap:wrap; gap:18px 22px; padding:12px 18px;
+    border-top:1px solid rgba(247,37,133,.15);
+    background: rgba(12,0,32,.6);
+    align-items:center;
+  }
+  .control{ flex:1 1 180px; min-width:160px; }
+  .control label{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--font-display); font-size:12px; letter-spacing:.05em; margin-bottom:4px;
+  }
+  .control .val{color:var(--amber); font-family:var(--font-mono); font-size:13px; background:rgba(255,190,11,.12); padding:2px 8px; border-radius:6px;}
+  .control input[type=range]{
+    width:100%; -webkit-appearance:none; appearance:none;
+    height:6px; border-radius:999px; outline:none;
+    background: linear-gradient(90deg, var(--violet), var(--hot), var(--amber));
+  }
+  .control input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none;
+    width:22px;height:22px;border-radius:50%;
+    background:var(--amber); border:3px solid #fff;
+    box-shadow:0 4px 12px rgba(0,0,0,.5), 0 0 12px rgba(255,190,11,.8);
+    cursor:pointer;
+  }
+  .control input[type=range]::-moz-range-thumb{
+    width:22px;height:22px;border-radius:50%;
+    background:var(--amber); border:3px solid #fff; cursor:pointer;
+  }
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 16px; border-radius:999px;
+    font-family:var(--font-display); font-size:13px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(247,37,133,.3);
+    transition:all .15s;
+  }
+  .chip:hover{background:rgba(247,37,133,.2); transform:translateY(-2px)}
+  .chip.active{background:linear-gradient(135deg,var(--hot),var(--amber)); border-color:transparent; color:#1A0033}
+
+  /* ---------- Facts ---------- */
+  .facts-grid{
+    display:grid; grid-template-columns: repeat(3, 1fr);
+    gap:22px; margin-top:32px;
+  }
+  @media (max-width: 900px){ .facts-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px){ .facts-grid{ grid-template-columns: 1fr; } }
+  .fact{
+    padding:30px 28px; border-radius:24px;
+    background: linear-gradient(135deg, rgba(247,37,133,.20), rgba(255,190,11,.10));
+    border:1px solid rgba(247,37,133,.25);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .fact:hover{transform: translateY(-6px) rotate(-.5deg); box-shadow: 0 24px 60px rgba(247,37,133,.35)}
+  .fact .emoji{font-size:52px; margin-bottom:14px; display:block; line-height:1}
+  .fact h4{font-size:22px; margin-bottom:10px; line-height:1.2}
+  .fact p{font-size:16px; line-height:1.55; color:rgba(255,248,231,.9)}
+
+  /* ---------- Next up ---------- */
+  .nextup-card{
+    margin-top:24px;
+    padding:40px; border-radius:28px;
+    background: linear-gradient(135deg, #001219, #005F73 50%, #94D2BD);
+    display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;
+    box-shadow:0 30px 80px rgba(0,95,115,.45);
+  }
+  .nextup-card h3{font-size:28px; margin-bottom:8px}
+  .nextup-card .big{font-size:40px; margin-top:4px}
+  .nextup-card p{opacity:.95; max-width:460px}
+
+  footer{
+    padding:40px 28px; max-width:1280px; margin:0 auto;
+    border-top:1px solid rgba(247,37,133,.2);
+    display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:center;
+    font-size:13px; color:rgba(255,248,231,.7);
+  }
+  footer .heart{color:var(--hot)}
+
+  @media (prefers-reduced-motion: reduce){
+    .hero .scroll-cue{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== Topbar ========== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="back" href="../index.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      All units
+    </a>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="60" height="60" rx="18" fill="#1A0033" stroke="url(#sg)" stroke-width="2"/>
+        <path d="M8 38 Q16 26 24 38 T40 38 T56 38" stroke="#FF006E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M8 32 Q16 20 24 32 T40 32 T56 32" stroke="#FFBE0B" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M8 26 Q16 14 24 26 T40 26 T56 26" stroke="#F72585" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="sg" x1="0" y1="0" x2="64" y2="64">
+            <stop offset="0" stop-color="#FF006E"/><stop offset=".5" stop-color="#FFBE0B"/><stop offset="1" stop-color="#7209B7"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div>
+        <div class="eyebrow">REDS Hall of Discovery</div>
+        <div class="wordmark">Investigating Waves <span class="unit">· Unit 03 · Sound</span></div>
+      </div>
+    </div>
+    <div class="class-pill"><span class="dot"></span>Mrs. Guyer's 5th Grade</div>
+  </div>
+</header>
+
+<!-- ========== Hero ========== -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 03 · Pitch · Volume · Echoes</div>
+    <h1>Sound Waves</h1>
+    <p class="tag">
+      Every sound you've ever heard — music, laughter, thunder, your own voice — is the <strong>air itself</strong>
+      squishing and stretching in waves. Your eardrums are tiny, amazing wave-readers. Let's make them dance. 🎵
+    </p>
+  </div>
+  <div class="scroll-cue">SCROLL · TURN IT UP</div>
+</section>
+
+<!-- ========== Concept 1: Compression Wave ========== -->
+<section class="concept" id="c1">
+  <div class="kicker">Concept 01 · Squish-and-stretch</div>
+  <h2 class="title">Sound is a <em>pressure</em> wave.</h2>
+  <p class="blurb">
+    Water waves go up and down. Sound waves go <strong>squish and stretch</strong>. A speaker pushes on the air,
+    making tiny bunches of <em>compressed</em> air (dense!) and <em>stretched</em> air (thin!) that race outward.
+    When they reach your ear, your eardrum wiggles and you hear. Watch the particles: 👂
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Live · Longitudinal (Pressure) Wave</span><span style="opacity:.8">air molecules in a row</span></div>
+    <canvas id="compression" class="demo"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>Frequency <span class="val" id="comp-f-val">1.0×</span></label>
+        <input type="range" id="comp-f" min="30" max="300" value="100"/>
+      </div>
+      <div class="control">
+        <label>Push strength <span class="val" id="comp-a-val">strong</span></label>
+        <input type="range" id="comp-a" min="20" max="100" value="70"/>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Watch:</strong> each dot only wiggles left-right a tiny bit — but the <em>pattern</em> of bunches travels all the way across.
+      That's why sound can cross a room faster than you can blink (~1,125 ft/s in air!).
+    </div>
+  </div>
+</section>
+
+<!-- ========== Lab 1: Pitch + Volume ========== -->
+<section class="lab" id="lab1">
+  <div class="kicker">Lab 01 · Pitch + volume</div>
+  <h2 class="title">Fast waves = high notes. Big waves = loud.</h2>
+  <p class="blurb">
+    Wiggle the air <strong>fast</strong> and you get a <em>high-pitched</em> sound (piccolo, whistle, squeak).
+    Wiggle it <strong>slow</strong> and you get a <em>low-pitched</em> sound (tuba, bass drum, rumble).
+    Wiggle it <strong>hard</strong> and it's loud — gently and it's soft.
+    You can see the wave AND hear it. 🎚️
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Oscilloscope + Optional Real Tone</span><span style="opacity:.8">click 🔊 to actually hear it</span></div>
+    <canvas id="osc" class="demo"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>Frequency (pitch) <span class="val" id="osc-f-val">440 Hz · A4</span></label>
+        <input type="range" id="osc-f" min="60" max="2000" value="440"/>
+      </div>
+      <div class="control">
+        <label>Volume <span class="val" id="osc-v-val">50%</span></label>
+        <input type="range" id="osc-v" min="0" max="100" value="50"/>
+      </div>
+      <div class="control">
+        <label>&nbsp;</label>
+        <div class="btn-row">
+          <button class="chip" id="osc-toggle">🔊 Play sound</button>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>For reference:</strong> a <em>dog's bark</em> is about 100 Hz (low). <em>Middle of a piano</em> is 262 Hz.
+      <em>Human scream</em> is about 3,000 Hz. A <em>dog whistle</em> is 25,000 Hz — too high for humans to hear at all! 🐕
+    </div>
+  </div>
+</section>
+
+<!-- ========== Lab 2: Doppler ========== -->
+<section class="lab" id="lab2">
+  <div class="kicker">Lab 02 · Doppler effect</div>
+  <h2 class="title">Why ambulance sirens change pitch.</h2>
+  <p class="blurb">
+    Have you ever heard a siren go <em>EEEEEEeeoowwww</em> as it drove past? That's the <strong>Doppler effect</strong>.
+    Sound waves in front of the moving ambulance get <em>squished</em> (higher pitch!). Sound waves behind it get
+    <em>stretched</em> (lower pitch!). Turn up the speed and watch it happen. 🚨
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Moving Sound Source</span><span style="opacity:.8">two listeners: front and back</span></div>
+    <canvas id="doppler" class="demo"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>Ambulance speed <span class="val" id="dop-s-val">1.0×</span></label>
+        <input type="range" id="dop-s" min="0" max="100" value="45"/>
+      </div>
+      <div class="control">
+        <label>&nbsp;</label>
+        <div class="btn-row">
+          <button class="chip active" id="dop-play">⏸ Pause</button>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Watch the spacing:</strong> the rings in front of the ambulance are <em>closer together</em> (squished = higher pitch).
+      The rings behind are <em>farther apart</em> (stretched = lower pitch). Same trick works for light waves from stars!
+    </div>
+  </div>
+</section>
+
+<!-- ========== Lab 3: Echo Chamber ========== -->
+<section class="lab" id="lab3">
+  <div class="kicker">Lab 03 · Echo chamber</div>
+  <h2 class="title">When sound bounces off walls.</h2>
+  <p class="blurb">
+    Yell in a canyon — you hear the echo come back. That's sound <strong>reflecting</strong> off a cliff, just like
+    light bouncing off a mirror. In a room, every sound bounces off every wall. Your ears hear the original AND all
+    the bounces, mixed into one. Click inside the room to make a sound! 👏
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Room Reflection</span><span style="opacity:.8">click anywhere inside the room</span></div>
+    <canvas id="echo" class="demo"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>Wave speed <span class="val" id="echo-s-val">1.0×</span></label>
+        <input type="range" id="echo-s" min="20" max="200" value="80"/>
+      </div>
+      <div class="control">
+        <label>Room size <span class="val" id="echo-r-val">medium</span></label>
+        <input type="range" id="echo-r" min="30" max="95" value="70"/>
+      </div>
+      <div class="control">
+        <label>&nbsp;</label>
+        <div class="btn-row">
+          <button class="chip" id="echo-clap">👏 Auto-clap</button>
+          <button class="chip" id="echo-clear">🧹 Clear</button>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Try this:</strong> click in the corner vs. the middle. Corners make WAY more echoes because the sound bounces off
+      multiple walls. That's why recording studios have fuzzy foam walls — to <em>stop</em> echoes and keep sound clean. 🎙️
+    </div>
+  </div>
+</section>
+
+<!-- ========== Lab 4: Vinyl Records ========== -->
+<section class="lab" id="lab4">
+  <div class="kicker">Lab 04 · Vinyl records</div>
+  <h2 class="title">You can actually <em>see</em> sound, frozen in plastic.</h2>
+  <p class="blurb">
+    Before MP3s, before Spotify, music lived as tiny <strong>wiggly grooves</strong> carved into a plastic disc.
+    A needle rides the groove while the record spins — and the same wiggle the singer made in the air becomes
+    the wiggle that pushes the speaker in your room. The entire song is drawn right into the plastic. 🎵
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Vinyl Record &amp; Groove Zoom</span><span style="opacity:.8">×1000 magnification</span></div>
+    <canvas id="vinyl" class="demo"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>Pitch being played <span class="val" id="vinyl-f-val">440 Hz · A4</span></label>
+        <input type="range" id="vinyl-f" min="60" max="2000" value="440"/>
+      </div>
+      <div class="control">
+        <label>Volume <span class="val" id="vinyl-v-val">loud</span></label>
+        <input type="range" id="vinyl-v" min="10" max="100" value="70"/>
+      </div>
+      <div class="control">
+        <label>&nbsp;</label>
+        <div class="btn-row">
+          <button class="chip active" id="vinyl-spin">⏸ Pause spinning</button>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Watch:</strong> a HIGH note makes <em>tight little wiggles</em> in the groove — many cycles per inch.
+      A LOW note makes <em>big slow wiggles</em>. A LOUD sound makes the wiggles <em>taller</em>. Every detail of the song is right there in the plastic — and the needle just rides along and retells it! 🪩
+    </div>
+  </div>
+</section>
+
+<!-- ========== Facts ========== -->
+<section class="facts">
+  <div class="kicker">Did you know?</div>
+  <h2 class="title">Six wild sound facts.</h2>
+  <div class="facts-grid">
+    <div class="fact">
+      <span class="emoji">🐬</span>
+      <h4>Dolphins see with sound.</h4>
+      <p>Dolphins make clicks and listen for echoes — it's called <strong>echolocation</strong>. They can "see" a fish hiding in mud from 100 feet away!</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">💥</span>
+      <h4>The loudest sound ever.</h4>
+      <p>When Krakatoa volcano erupted in 1883, the <em>boom</em> was heard 3,000 miles away. It was so loud it ruptured eardrums 40 miles away.</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🌌</span>
+      <h4>Space is totally silent.</h4>
+      <p>Sound needs air (or water, or something) to travel through. Outer space is empty — so no matter how big the explosion, there's no sound. 😮</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🐘</span>
+      <h4>Elephants talk through their feet.</h4>
+      <p>Elephants make super-low rumbles (below your hearing!) that travel through the ground. Other elephants "hear" them with their toes from miles away.</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">⚡</span>
+      <h4>Sound is slower than light.</h4>
+      <p>That's why you see lightning <em>before</em> you hear thunder. Count the seconds between — every 5 is about 1 mile to the storm!</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🦇</span>
+      <h4>Bats scream louder than a rock concert.</h4>
+      <p>A bat's echolocation cry hits <strong>140 decibels</strong> — but it's at such a high frequency (ultrasound) that our ears can't hear it at all.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Next Up ========== -->
+<section class="nextup">
+  <div class="kicker">Up next in the series</div>
+  <div class="nextup-card">
+    <div>
+      <h3>Unit 04 · Invisible Energy</h3>
+      <div class="big">⚡ Radio, microwaves, and X-rays.</div>
+      <p>Waves that carry wifi, cook popcorn, and peek inside your bones — all invisible, all around you, right now.</p>
+    </div>
+    <a class="chip active" href="../index.html">Back to all units →</a>
+  </div>
+</section>
+
+<footer>
+  <div><strong>REDS Hall of Discovery</strong> · Investigating Waves · Unit 03: Sound</div>
+  <div>Made with <span class="heart">♥</span> for Mrs. Guyer's 5th Grade Class</div>
+</footer>
+
+<script>
+/* ========= Canvas helper ========= */
+function setupCanvas(canvas){
+  const ctx = canvas.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  function resize(){
+    const r = canvas.getBoundingClientRect();
+    canvas.width  = Math.floor(r.width * DPR);
+    canvas.height = Math.floor(r.height * DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  return {ctx, DPR, resize, rect: () => canvas.getBoundingClientRect()};
+}
+
+/* ========= Note name for a frequency ========= */
+function noteName(hz){
+  const notes = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  const n = Math.round(12 * Math.log2(hz / 440)) + 57; // A4 = 440, MIDI 69
+  if (n < 0 || n > 127) return '';
+  const name = notes[n % 12];
+  const octave = Math.floor(n / 12) - 1;
+  return name + octave;
+}
+
+/* =========================================================
+   HERO — pulsing speaker + radiating rings + music notes
+   ========================================================= */
+(() => {
+  const c = document.getElementById('hero-canvas');
+  const {ctx} = setupCanvas(c);
+
+  const notes = ['♪','♫','♩','♬','♭','♮'];
+  const drifters = Array.from({length: 30}, () => ({
+    x: Math.random(), y: Math.random(),
+    note: notes[(Math.random()*notes.length)|0],
+    sp: 0.00004 + Math.random()*0.00010,
+    ph: Math.random()*Math.PI*2,
+    size: 16 + Math.random()*22,
+    col: ['#FF006E','#FFBE0B','#F72585','#FFD6E8','#7209B7'][(Math.random()*5)|0],
+  }));
+
+  const rings = [];
+  let lastRing = 0;
+
+  function tick(t){
+    const W = c.clientWidth, H = c.clientHeight;
+    // bg
+    const g = ctx.createRadialGradient(W*0.25, H*0.55, 40, W*0.25, H*0.55, Math.max(W,H));
+    g.addColorStop(0,'#4C0977'); g.addColorStop(.4,'#2A0052'); g.addColorStop(1,'#0C0020');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+    // Speaker position
+    const sx = W*0.18, sy = H*0.55;
+    const speakerR = Math.min(W,H)*0.09;
+
+    // Emit new rings regularly
+    if (t - lastRing > 360){
+      rings.push({birth: t, strength: 1});
+      lastRing = t;
+    }
+    // Draw rings
+    for (let i=rings.length-1; i>=0; i--){
+      const r = rings[i];
+      const age = (t - r.birth)/1000;
+      const rad = speakerR + age * 260;
+      const alpha = Math.max(0, 1 - age/2.2);
+      if (alpha <= 0){ rings.splice(i,1); continue; }
+      ctx.strokeStyle = `rgba(255,0,110,${alpha*0.9})`;
+      ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.arc(sx, sy, rad, -Math.PI*0.35, Math.PI*0.35); ctx.stroke();
+      ctx.strokeStyle = `rgba(255,190,11,${alpha*0.6})`;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(sx, sy, rad, -Math.PI*0.35, Math.PI*0.35); ctx.stroke();
+    }
+
+    // Speaker body (pulse with sound)
+    const pulse = 1 + 0.06 * Math.sin(t*0.006);
+    ctx.fillStyle = '#2A0052';
+    ctx.beginPath(); ctx.arc(sx, sy, speakerR*pulse, 0, Math.PI*2); ctx.fill();
+    // Cone ring
+    ctx.strokeStyle = '#FFBE0B'; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(sx, sy, speakerR*pulse, 0, Math.PI*2); ctx.stroke();
+    // Inner dome
+    ctx.fillStyle = '#FF006E';
+    ctx.beginPath(); ctx.arc(sx, sy, speakerR*0.45*pulse, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = '#FFD6E8'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(sx, sy, speakerR*0.45*pulse, 0, Math.PI*2); ctx.stroke();
+
+    // Drifting notes
+    for (const d of drifters){
+      const x = ((d.x + t*d.sp) % 1) * W;
+      const y = d.y * H + Math.sin(t*0.0008 + d.ph) * 18;
+      ctx.save();
+      ctx.globalAlpha = 0.55;
+      ctx.font = `${d.size}px ui-rounded, system-ui`;
+      ctx.fillStyle = d.col;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(d.note, x, y);
+      ctx.restore();
+    }
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   CONCEPT 1 — Compression/longitudinal wave of dots.
+   Each dot has a rest position along a horizontal line
+   and oscillates left-right. Bunches = compressions.
+   A pressure curve is drawn above as a sine wave.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('compression');
+  const {ctx} = setupCanvas(c);
+  const fEl = document.getElementById('comp-f');
+  const aEl = document.getElementById('comp-a');
+  const fV = document.getElementById('comp-f-val');
+  const aV = document.getElementById('comp-a-val');
+
+  function upd(){
+    fV.textContent = (+fEl.value/100).toFixed(1) + '×';
+    const a = +aEl.value;
+    aV.textContent = a < 40 ? 'soft' : a < 75 ? 'medium' : 'strong';
+  }
+  [fEl,aEl].forEach(e => e.addEventListener('input', upd)); upd();
+
+  function tick(t){
+    const W = c.clientWidth, H = c.clientHeight;
+    // bg
+    const g = ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#1A0033'); g.addColorStop(1,'#0C0020');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+    // Layout: speaker on left, particle strip in the middle, "ear" on right
+    const stripY = H*0.62;
+    const stripLeft = 70, stripRight = W - 50;
+    const len = stripRight - stripLeft;
+
+    // Pressure curve above particle strip
+    const pressureY = H*0.26;
+    const freqMul = +fEl.value/100;
+    const amp = +aEl.value;
+    // wavelength in px: base 180, scaled inversely with frequency
+    const wl = 300 / freqMul;
+    const omega = 2 * Math.PI * (freqMul * 1.4);
+    const phase = t*0.001*omega;
+
+    // Draw pressure curve
+    ctx.strokeStyle = 'rgba(255,190,11,.85)'; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let x = stripLeft; x <= stripRight; x += 2){
+      const p = Math.cos((x-stripLeft)/wl*Math.PI*2 - phase) * (amp/100) * 42;
+      const y = pressureY + p;
+      if (x === stripLeft) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    // glow
+    ctx.strokeStyle = 'rgba(255,190,11,.2)'; ctx.lineWidth = 12;
+    ctx.beginPath();
+    for (let x = stripLeft; x <= stripRight; x += 3){
+      const p = Math.cos((x-stripLeft)/wl*Math.PI*2 - phase) * (amp/100) * 42;
+      const y = pressureY + p;
+      if (x === stripLeft) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    // pressure curve label
+    ctx.font = 'bold 11px ui-rounded, system-ui';
+    ctx.fillStyle = 'rgba(255,190,11,.9)';
+    ctx.textAlign = 'left';
+    ctx.fillText('PRESSURE (squish + / stretch −)', stripLeft, pressureY - 60);
+    // axis line
+    ctx.strokeStyle = 'rgba(255,255,255,.12)';
+    ctx.setLineDash([3,5]); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(stripLeft, pressureY); ctx.lineTo(stripRight, pressureY); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Particles
+    const N = 60;
+    const spacing = len / N;
+    for (let i=0; i<N; i++){
+      const rest = stripLeft + (i+0.5) * spacing;
+      const displace = Math.sin((rest-stripLeft)/wl*Math.PI*2 - phase) * (amp/100) * (spacing*0.8);
+      const x = rest + displace;
+      // Color: red-hot for compressed (near neighbor), cool for stretched
+      // Use local compression via d(displacement)/dx ≈ cos()... approximate via neighbor distance.
+      // Simpler: use pressure at rest position
+      const pressure = Math.cos((rest-stripLeft)/wl*Math.PI*2 - phase);
+      let col;
+      if (pressure > 0){
+        const v = Math.min(1, pressure * (amp/100) * 1.2);
+        col = `rgb(${255}, ${Math.round(100 - v*100)}, ${Math.round(120 - v*110)})`;
+      } else {
+        const v = Math.min(1, -pressure * (amp/100) * 1.2);
+        col = `rgb(${Math.round(140 - v*60)}, ${Math.round(150 + v*100)}, ${255})`;
+      }
+      // glow
+      ctx.beginPath(); ctx.arc(x, stripY, 7, 0, Math.PI*2);
+      ctx.fillStyle = col + ''; ctx.globalAlpha = 0.25;
+      ctx.fill(); ctx.globalAlpha = 1;
+      // dot
+      ctx.beginPath(); ctx.arc(x, stripY, 4.5, 0, Math.PI*2);
+      ctx.fillStyle = col; ctx.fill();
+    }
+
+    // Strip label + reference line
+    ctx.strokeStyle = 'rgba(255,255,255,.08)';
+    ctx.beginPath(); ctx.moveTo(stripLeft, stripY+22); ctx.lineTo(stripRight, stripY+22); ctx.stroke();
+    ctx.font = 'bold 11px ui-rounded, system-ui';
+    ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.textAlign='left';
+    ctx.fillText('AIR MOLECULES (wiggling left + right)', stripLeft, stripY + 40);
+
+    // Speaker icon on left (pulsing)
+    const spx = 40, spy = stripY;
+    const pulse2 = 1 + 0.12 * Math.sin(phase*1.5);
+    ctx.fillStyle = '#FF006E';
+    ctx.beginPath(); ctx.arc(spx, spy, 20*pulse2, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = '#FFBE0B'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(spx, spy, 20*pulse2, 0, Math.PI*2); ctx.stroke();
+    ctx.font = '16px system-ui, Apple Color Emoji, Segoe UI Emoji';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('🔊', spx, spy);
+
+    // Ear icon on right
+    ctx.font = '28px system-ui, Apple Color Emoji, Segoe UI Emoji';
+    ctx.fillText('👂', W-26, stripY);
+
+    // Annotation arrows pointing at a compression and a rarefaction
+    // find a crest and trough in pressure curve (visible) to label
+    // pressure = cos((x-stripLeft)/wl*2π - phase); crest at arg=0 mod 2π
+    const argAtX = x => (x-stripLeft)/wl*Math.PI*2 - phase;
+    // find nearest crest to stripLeft + len*0.35
+    const refA = stripLeft + len*0.35;
+    const crestShift = Math.round(argAtX(refA) / (2*Math.PI)) * 2*Math.PI;
+    const crestX = stripLeft + (crestShift + phase) * wl / (2*Math.PI);
+    const troughShift = crestShift - Math.PI;
+    const troughX = stripLeft + (troughShift + phase) * wl / (2*Math.PI);
+
+    if (crestX > stripLeft + 40 && crestX < stripRight - 40){
+      ctx.fillStyle = '#FF006E'; ctx.font='bold 11px ui-rounded, system-ui'; ctx.textAlign='center';
+      ctx.fillText('COMPRESSION', crestX, stripY + 70);
+      ctx.strokeStyle = '#FF006E'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(crestX, stripY+55); ctx.lineTo(crestX, stripY+20); ctx.stroke();
+    }
+    if (troughX > stripLeft + 40 && troughX < stripRight - 40){
+      ctx.fillStyle = '#5FB4FF'; ctx.font='bold 11px ui-rounded, system-ui'; ctx.textAlign='center';
+      ctx.fillText('RAREFACTION', troughX, stripY + 70);
+      ctx.strokeStyle = '#5FB4FF'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(troughX, stripY+55); ctx.lineTo(troughX, stripY+20); ctx.stroke();
+    }
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 1 — Pitch + Volume
+   Oscilloscope waveform; optional Web Audio API tone.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('osc');
+  const {ctx} = setupCanvas(c);
+  const fEl = document.getElementById('osc-f');
+  const vEl = document.getElementById('osc-v');
+  const fV = document.getElementById('osc-f-val');
+  const vV = document.getElementById('osc-v-val');
+  const toggle = document.getElementById('osc-toggle');
+
+  let audioCtx = null, oscN = null, gain = null, playing = false;
+
+  function fmt(){
+    const f = +fEl.value;
+    fV.textContent = f + ' Hz · ' + noteName(f);
+    vV.textContent = vEl.value + '%';
+    if (playing && audioCtx){
+      oscN.frequency.setTargetAtTime(f, audioCtx.currentTime, 0.02);
+      gain.gain.setTargetAtTime((+vEl.value/100) * 0.12, audioCtx.currentTime, 0.02);
+    }
+  }
+  [fEl,vEl].forEach(e => e.addEventListener('input', fmt)); fmt();
+
+  toggle.addEventListener('click', () => {
+    if (!playing){
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        oscN = audioCtx.createOscillator();
+        gain = audioCtx.createGain();
+        oscN.type = 'sine';
+        oscN.frequency.value = +fEl.value;
+        gain.gain.value = 0;
+        oscN.connect(gain).connect(audioCtx.destination);
+        oscN.start();
+        gain.gain.setTargetAtTime((+vEl.value/100) * 0.12, audioCtx.currentTime, 0.05);
+        playing = true;
+        toggle.textContent = '🔇 Stop sound';
+        toggle.classList.add('active');
+      } catch (e){
+        toggle.textContent = '⚠ Audio not available';
+      }
+    } else {
+      try {
+        gain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);
+        setTimeout(() => { try { oscN.stop(); audioCtx.close(); } catch(e){} }, 150);
+      } catch(e){}
+      playing = false;
+      toggle.textContent = '🔊 Play sound';
+      toggle.classList.remove('active');
+    }
+  });
+
+  function tick(t){
+    const W = c.clientWidth, H = c.clientHeight;
+    // bg grid
+    ctx.fillStyle = '#0C0020'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle = 'rgba(247,37,133,.08)'; ctx.lineWidth = 1;
+    for (let x=0;x<W;x+=40){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y=0;y<H;y+=40){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    // mid line
+    const midY = H/2;
+    ctx.strokeStyle = 'rgba(255,255,255,.14)';
+    ctx.setLineDash([6,8]); ctx.beginPath(); ctx.moveTo(40,midY); ctx.lineTo(W-40, midY); ctx.stroke();
+    ctx.setLineDash([]);
+
+    const f = +fEl.value;
+    const v = +vEl.value;
+
+    // Wavelength on screen: compress so low freqs visible, high freqs show many cycles
+    // Map: 60 Hz → 4 cycles on screen; 2000 Hz → 40 cycles
+    const cycles = 4 + (f - 60) / (2000 - 60) * 36;
+    const amp = (v/100) * (H*0.35);
+
+    // Main waveform
+    ctx.strokeStyle = 'rgba(255,0,110,.25)'; ctx.lineWidth = 12;
+    ctx.beginPath();
+    const phase = t * 0.003 * (f/440);
+    for (let x=40; x<=W-40; x+=1.5){
+      const u = (x-40)/(W-80);
+      const y = midY - Math.sin(u * cycles * Math.PI * 2 - phase) * amp;
+      if (x===40) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    // core
+    ctx.strokeStyle = '#FF006E'; ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (let x=40; x<=W-40; x+=1.5){
+      const u = (x-40)/(W-80);
+      const y = midY - Math.sin(u * cycles * Math.PI * 2 - phase) * amp;
+      if (x===40) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    // Reference markers
+    const pitchLabel = f < 130 ? 'LOW (bass)' : f < 400 ? 'MID (voice)' : f < 1200 ? 'HIGH (whistle)' : 'VERY HIGH';
+    ctx.font = 'bold 14px ui-rounded, system-ui';
+    ctx.fillStyle = '#FFBE0B';
+    ctx.textAlign = 'left';
+    ctx.fillText(`${f} Hz   ·   ${pitchLabel}`, 20, 26);
+    ctx.fillStyle = 'rgba(255,255,255,.65)';
+    ctx.font = '12px ui-rounded, system-ui';
+    ctx.fillText(noteName(f) ? `≈ musical note ${noteName(f)}` : '', 20, 44);
+
+    // Volume meter on right
+    const mx = W - 26, my = 20, mh = H - 40, mw = 10;
+    ctx.fillStyle = 'rgba(255,255,255,.1)';
+    ctx.fillRect(mx, my, mw, mh);
+    const filled = mh * (v/100);
+    const vg = ctx.createLinearGradient(mx, my+mh, mx, my);
+    vg.addColorStop(0,'#3DFF77'); vg.addColorStop(.6,'#FFBE0B'); vg.addColorStop(1,'#FF006E');
+    ctx.fillStyle = vg;
+    ctx.fillRect(mx, my+mh-filled, mw, filled);
+    ctx.strokeStyle = 'rgba(255,255,255,.3)'; ctx.lineWidth = 1;
+    ctx.strokeRect(mx, my, mw, mh);
+    ctx.font = 'bold 10px ui-rounded, system-ui';
+    ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.textAlign = 'center';
+    ctx.save(); ctx.translate(mx+mw/2, my-6); ctx.fillText('VOL', 0, 0); ctx.restore();
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 2 — Doppler effect
+   Moving sound source emits expanding circles at a regular
+   interval (in source time). Because the source has moved
+   between emissions, rings bunch up in front (high pitch)
+   and spread out behind (low pitch).
+   ========================================================= */
+(() => {
+  const c = document.getElementById('doppler');
+  const {ctx, rect} = setupCanvas(c);
+  const sEl = document.getElementById('dop-s');
+  const sV = document.getElementById('dop-s-val');
+  const playBtn = document.getElementById('dop-play');
+
+  let playing = true;
+  playBtn.addEventListener('click', () => {
+    playing = !playing;
+    playBtn.textContent = playing ? '⏸ Pause' : '▶ Play';
+    playBtn.classList.toggle('active', playing);
+  });
+  sEl.addEventListener('input', () => sV.textContent = (+sEl.value/45).toFixed(1) + '×');
+  sV.textContent = (+sEl.value/45).toFixed(1) + '×';
+
+  const state = {
+    carX: 0,
+    rings: [],
+    lastEmit: 0,
+    t: 0,
+  };
+  // Seed a few rings so the image is populated at load time
+  for (let i=0; i<8; i++){
+    state.rings.push({x: -i*60, y: 0, birth: -i*0.4});
+  }
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    const dt = Math.min(0.05, (tick._last ? (now - tick._last)/1000 : 0.016));
+    tick._last = now;
+
+    // bg — night road
+    const sky = ctx.createLinearGradient(0,0,0,H);
+    sky.addColorStop(0,'#1A0033'); sky.addColorStop(.5,'#3D0066'); sky.addColorStop(1,'#0C0020');
+    ctx.fillStyle = sky; ctx.fillRect(0,0,W,H);
+
+    const roadY = H*0.62;
+    // Road
+    ctx.fillStyle = '#0E011A'; ctx.fillRect(0, roadY, W, H-roadY);
+    // center dashes
+    ctx.strokeStyle = '#FFBE0B';
+    ctx.lineWidth = 3; ctx.setLineDash([24, 22]);
+    ctx.beginPath(); ctx.moveTo(0, roadY + (H-roadY)*0.45); ctx.lineTo(W, roadY + (H-roadY)*0.45); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Car state
+    const speedPxPerSec = (+sEl.value) * 2; // max ~200 px/s
+    if (playing) state.t += dt;
+    // car x oscillates: loops across screen
+    if (playing) state.carX += speedPxPerSec * dt;
+    if (state.carX > W + 60) state.carX = -60;
+
+    // Emit rings at regular source time
+    const emitInterval = 0.28; // seconds between rings (source clock)
+    if (playing && state.t - state.lastEmit > emitInterval){
+      state.rings.push({x: state.carX, y: roadY - 14, birth: state.t});
+      state.lastEmit = state.t;
+      if (state.rings.length > 40) state.rings.shift();
+    }
+
+    // Speed of sound in this simulation
+    const soundSpeed = 160; // px/s
+
+    // Draw rings (clipped to canvas visually)
+    for (let i = state.rings.length-1; i >= 0; i--){
+      const r = state.rings[i];
+      const age = state.t - r.birth;
+      if (age < 0) continue;
+      const radius = age * soundSpeed;
+      if (radius > Math.max(W, H)*1.2){ state.rings.splice(i,1); continue; }
+      // color: front-of-car rings = hot pink (higher pitch) vs rear = violet (lower pitch)
+      const inFront = r.x < state.carX;
+      // actually: rings emitted before the car moved further rightward — ring is in front if car is to its right
+      const isAhead = state.carX > r.x;
+      const col = isAhead ? '#FF006E' : '#5E7BFF';
+      const alpha = Math.max(0, 1 - radius / Math.max(W,H));
+      ctx.strokeStyle = col + Math.round(alpha*200).toString(16).padStart(2,'0');
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(r.x, r.y, radius, 0, Math.PI*2); ctx.stroke();
+    }
+
+    // Listeners at far left and far right
+    const listenerLeft  = {x: 40, y: roadY - 40};
+    const listenerRight = {x: W-40, y: roadY - 40};
+    // Estimate pitch each hears: count rings that reach them per unit time.
+    // For the visual, label which side hears "higher" vs "lower" based on car direction.
+    const carGoingRight = speedPxPerSec > 0;
+    // right listener sees rings approaching from a car moving toward them → higher pitch
+    const rightLabel = carGoingRight ? 'HIGHER pitch 🔼' : 'LOWER pitch 🔽';
+    const leftLabel  = carGoingRight ? 'LOWER pitch 🔽' : 'HIGHER pitch 🔼';
+    const rightCol   = carGoingRight ? '#FF006E' : '#5E7BFF';
+    const leftCol    = carGoingRight ? '#5E7BFF' : '#FF006E';
+
+    // Listener ears
+    ctx.font = '28px system-ui, Apple Color Emoji, Segoe UI Emoji';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('👂', listenerLeft.x, listenerLeft.y);
+    ctx.fillText('👂', listenerRight.x, listenerRight.y);
+    ctx.font = 'bold 12px ui-rounded, system-ui';
+    ctx.fillStyle = leftCol;
+    ctx.fillText(leftLabel, listenerLeft.x + 8, listenerLeft.y - 28);
+    ctx.fillStyle = rightCol;
+    ctx.fillText(rightLabel, listenerRight.x - 8, listenerRight.y - 28);
+
+    // Car
+    ctx.save();
+    ctx.translate(state.carX, roadY - 14);
+    // shadow
+    ctx.fillStyle = 'rgba(0,0,0,.35)';
+    ctx.beginPath(); ctx.ellipse(2, 18, 28, 6, 0, 0, Math.PI*2); ctx.fill();
+    // body
+    ctx.fillStyle = '#FFFFFF';
+    const bw = 58, bh = 22;
+    ctx.beginPath();
+    ctx.moveTo(-bw/2, 6); ctx.lineTo(-bw/2+6, -bh/2); ctx.lineTo(bw/2-6, -bh/2);
+    ctx.lineTo(bw/2, 6); ctx.lineTo(bw/2, 8); ctx.lineTo(-bw/2, 8);
+    ctx.closePath(); ctx.fill();
+    // cross
+    ctx.fillStyle = '#FF006E';
+    ctx.fillRect(-4, -bh/2+2, 8, 18);
+    ctx.fillRect(-14, 0, 28, 6);
+    // siren lights (blinking)
+    const blink = Math.floor(state.t*6) % 2;
+    ctx.fillStyle = blink ? '#FF006E' : '#5E7BFF';
+    ctx.beginPath(); ctx.arc(-16, -bh/2 - 4, 5, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = blink ? '#5E7BFF' : '#FF006E';
+    ctx.beginPath(); ctx.arc(16, -bh/2 - 4, 5, 0, Math.PI*2); ctx.fill();
+    // wheels
+    ctx.fillStyle = '#111';
+    ctx.beginPath(); ctx.arc(-bw/2+10, 10, 5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(bw/2-10, 10, 5, 0, Math.PI*2); ctx.fill();
+    ctx.restore();
+
+    // title mini
+    ctx.font = 'bold 12px ui-rounded, system-ui';
+    ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.textAlign='center';
+    ctx.fillText('🚑 siren = steady pitch at the source · but listeners hear different pitches', W/2, 22);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 3 — Echo chamber.
+   Click to spawn an expanding sound pulse inside a room.
+   Reflections are rendered via mirror-image virtual sources,
+   clipped to the room rectangle, so the pulse visually "bounces"
+   off each wall. Second-order reflections included for realism.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('echo');
+  const {ctx, rect} = setupCanvas(c);
+  const sEl = document.getElementById('echo-s');
+  const rEl = document.getElementById('echo-r');
+  const sV = document.getElementById('echo-s-val');
+  const rV = document.getElementById('echo-r-val');
+  const clapBtn = document.getElementById('echo-clap');
+  const clearBtn = document.getElementById('echo-clear');
+
+  sEl.addEventListener('input', () => sV.textContent = (+sEl.value/80).toFixed(1)+'×');
+  rEl.addEventListener('input', () => {
+    const v = +rEl.value;
+    rV.textContent = v<50 ? 'small' : v<80 ? 'medium' : 'large';
+  });
+
+  const pulses = [];
+
+  function roomBounds(){
+    const W = c.clientWidth, H = c.clientHeight;
+    const fr = +rEl.value/100;
+    const mw = 36;    // margin
+    const rw = (W - mw*2) * fr + mw*2 * (1-fr) * 0.5;
+    const rh = (H - mw*2) * fr + mw*2 * (1-fr) * 0.5;
+    const rx = (W - rw)/2, ry = (H - rh)/2;
+    return {rx, ry, rw, rh};
+  }
+
+  function clickRoom(mx, my){
+    const {rx, ry, rw, rh} = roomBounds();
+    if (mx < rx || mx > rx+rw || my < ry || my > ry+rh) return;
+    pulses.push({x: mx, y: my, birth: performance.now(), strength: 1});
+    if (pulses.length > 10) pulses.shift();
+  }
+  c.addEventListener('click', e => {
+    const r = rect(); clickRoom(e.clientX-r.left, e.clientY-r.top);
+  });
+  c.addEventListener('touchstart', e => {
+    const r = rect(); const t = e.touches[0];
+    clickRoom(t.clientX-r.left, t.clientY-r.top);
+  }, {passive:true});
+
+  clapBtn.addEventListener('click', () => {
+    const {rx, ry, rw, rh} = roomBounds();
+    clickRoom(rx + rw*0.2 + Math.random()*rw*0.6,
+              ry + rh*0.2 + Math.random()*rh*0.6);
+  });
+  clearBtn.addEventListener('click', () => { pulses.length = 0; });
+
+  // seed a click after load
+  setTimeout(() => {
+    const {rx, ry, rw, rh} = roomBounds();
+    clickRoom(rx + rw*0.35, ry + rh*0.5);
+  }, 500);
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    const {rx, ry, rw, rh} = roomBounds();
+
+    // bg (outside room is "outside" — dark)
+    ctx.fillStyle = '#0C0020'; ctx.fillRect(0,0,W,H);
+
+    // room interior (slight wooden-warm tint)
+    const floorG = ctx.createLinearGradient(0, ry, 0, ry+rh);
+    floorG.addColorStop(0, '#2A0052');
+    floorG.addColorStop(1, '#1A0033');
+    ctx.fillStyle = floorG;
+    ctx.fillRect(rx, ry, rw, rh);
+
+    // Draw reflections (clipped to room)
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(rx, ry, rw, rh);
+    ctx.clip();
+
+    const speed = +sEl.value;
+
+    for (let i = pulses.length-1; i >= 0; i--){
+      const p = pulses[i];
+      const age = Math.max(0, (now - p.birth)/1000);
+      const radius = Math.max(0, age * speed);
+      const maxAge = 4.5;
+      const alpha = Math.max(0, 1 - age/maxAge);
+      if (alpha <= 0){ pulses.splice(i,1); continue; }
+
+      // Virtual sources: original + first-order + second-order reflections across walls
+      const L = rx, R = rx+rw, T = ry, B = ry+rh;
+      // Reflect a point across each wall
+      const srcs = [
+        {x: p.x, y: p.y, order: 0},
+        {x: 2*L - p.x, y: p.y, order: 1},                     // across left wall
+        {x: 2*R - p.x, y: p.y, order: 1},                     // across right wall
+        {x: p.x, y: 2*T - p.y, order: 1},                     // across top
+        {x: p.x, y: 2*B - p.y, order: 1},                     // across bottom
+        {x: 2*L - p.x, y: 2*T - p.y, order: 2},
+        {x: 2*R - p.x, y: 2*T - p.y, order: 2},
+        {x: 2*L - p.x, y: 2*B - p.y, order: 2},
+        {x: 2*R - p.x, y: 2*B - p.y, order: 2},
+      ];
+
+      for (const s of srcs){
+        const orderAlpha = alpha * Math.pow(0.7, s.order); // echoes get softer
+        // outer glow
+        ctx.strokeStyle = `rgba(255,0,110,${orderAlpha*0.22})`;
+        ctx.lineWidth = 10;
+        ctx.beginPath(); ctx.arc(s.x, s.y, radius, 0, Math.PI*2); ctx.stroke();
+        // core
+        ctx.strokeStyle = `rgba(255,190,11,${orderAlpha*0.9})`;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.arc(s.x, s.y, radius, 0, Math.PI*2); ctx.stroke();
+      }
+
+      // source marker (persistent glow where click happened)
+      ctx.fillStyle = `rgba(255,214,232,${alpha})`;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.restore();
+
+    // room walls (drawn on top so rings appear to reflect off them)
+    ctx.strokeStyle = '#FFBE0B'; ctx.lineWidth = 4;
+    ctx.strokeRect(rx, ry, rw, rh);
+    // inner shine
+    ctx.strokeStyle = 'rgba(255,214,232,.25)'; ctx.lineWidth = 1;
+    ctx.strokeRect(rx+4, ry+4, rw-8, rh-8);
+
+    // wall labels (N/E/S/W)
+    ctx.fillStyle = 'rgba(255,255,255,.3)'; ctx.font='bold 10px ui-rounded, system-ui'; ctx.textAlign='center';
+    ctx.fillText('WALL', rx + rw/2, ry - 8);
+    ctx.fillText('WALL', rx + rw/2, ry + rh + 18);
+    ctx.save(); ctx.translate(rx - 12, ry + rh/2); ctx.rotate(-Math.PI/2); ctx.fillText('WALL', 0, 0); ctx.restore();
+    ctx.save(); ctx.translate(rx + rw + 12, ry + rh/2); ctx.rotate(Math.PI/2); ctx.fillText('WALL', 0, 0); ctx.restore();
+
+    // hint
+    ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.font='13px ui-rounded, system-ui'; ctx.textAlign='left';
+    if (pulses.length === 0){
+      ctx.fillText('👆 click anywhere inside the room to make a sound!', rx + 14, ry + rh - 12);
+    }
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 4 — Vinyl Record
+   Left: spinning top-down record with REDS label + tonearm.
+   Right top: ×1000 zoom of two wiggly groove walls with a
+   stylus riding in the trough.
+   Right bottom: the resulting sound wave (identical shape!)
+   — driven by the same pitch + volume sliders.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('vinyl');
+  const {ctx} = setupCanvas(c);
+  const fEl = document.getElementById('vinyl-f');
+  const vEl = document.getElementById('vinyl-v');
+  const fV  = document.getElementById('vinyl-f-val');
+  const vV  = document.getElementById('vinyl-v-val');
+  const spinBtn = document.getElementById('vinyl-spin');
+
+  let spinning = true;
+  spinBtn.addEventListener('click', () => {
+    spinning = !spinning;
+    spinBtn.textContent = spinning ? '⏸ Pause spinning' : '▶ Spin the record';
+    spinBtn.classList.toggle('active', spinning);
+  });
+
+  function upd(){
+    fV.textContent = fEl.value + ' Hz · ' + (noteName(+fEl.value) || '');
+    const v = +vEl.value;
+    vV.textContent = v < 35 ? 'soft' : v < 75 ? 'medium' : 'loud';
+  }
+  [fEl, vEl].forEach(e => e.addEventListener('input', upd)); upd();
+
+  // round-rect helper (scoped)
+  function rr(x, y, w, h, r){
+    r = Math.min(r, Math.min(w,h)/2);
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+    ctx.lineTo(x+w, y+h-r); ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+    ctx.lineTo(x+r, y+h); ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+    ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y);
+    ctx.closePath();
+  }
+
+  let rotation = 0;
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    const dt = Math.min(0.05, (tick._last ? (now - tick._last)/1000 : 0.016));
+    tick._last = now;
+
+    // bg
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, '#1A0033'); bg.addColorStop(1, '#0C0020');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+    if (spinning) rotation += dt * 2.2;
+
+    const f    = +fEl.value;
+    const vFr  = +vEl.value / 100;
+
+    // --- Left: the record (top-down) ---
+    const leftCX = W * 0.24;
+    const cy     = H * 0.52;
+    const recR   = Math.min(W * 0.18, H * 0.38);
+
+    // shadow under the record
+    ctx.fillStyle = 'rgba(0,0,0,.45)';
+    ctx.beginPath(); ctx.ellipse(leftCX + 4, cy + recR*0.05 + 8, recR, recR*0.15, 0, 0, Math.PI*2); ctx.fill();
+
+    // vinyl body
+    ctx.fillStyle = '#0A0A0A';
+    ctx.beginPath(); ctx.arc(leftCX, cy, recR, 0, Math.PI*2); ctx.fill();
+
+    // grooves (concentric) rotating
+    ctx.save();
+    ctx.translate(leftCX, cy); ctx.rotate(rotation);
+    for (let r = recR * 0.34; r < recR - 1.5; r += 2.6){
+      ctx.strokeStyle = `rgba(90,70,110,${0.10 + 0.10*Math.sin(r*0.55)})`;
+      ctx.lineWidth = 0.9;
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI*2); ctx.stroke();
+    }
+    // reflection wedge — sweeps with rotation
+    ctx.globalAlpha = 0.45;
+    const reflG = ctx.createLinearGradient(-recR, -recR, recR, recR);
+    reflG.addColorStop(0, 'rgba(247,37,133,.45)');
+    reflG.addColorStop(0.5, 'rgba(255,190,11,.35)');
+    reflG.addColorStop(1, 'rgba(114,9,183,.35)');
+    ctx.fillStyle = reflG;
+    ctx.beginPath();
+    ctx.arc(0, 0, recR, Math.PI*1.15, Math.PI*1.65);
+    ctx.lineTo(0, 0);
+    ctx.closePath(); ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.restore();
+
+    // center label (spins with the record)
+    ctx.save();
+    ctx.translate(leftCX, cy); ctx.rotate(rotation);
+    const lr = recR * 0.30;
+    ctx.fillStyle = '#FFBE0B';
+    ctx.beginPath(); ctx.arc(0, 0, lr, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#FF006E';
+    ctx.beginPath(); ctx.arc(0, 0, lr*0.62, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#FFF8E7';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = `bold ${Math.round(lr*0.40)}px ui-rounded, system-ui`;
+    ctx.fillText('REDS', 0, -lr*0.12);
+    ctx.font = `bold ${Math.round(lr*0.18)}px ui-rounded, system-ui`;
+    ctx.fillText('HALL · 33⅓', 0, lr*0.22);
+    ctx.restore();
+
+    // spindle hole
+    ctx.fillStyle = '#000';
+    ctx.beginPath(); ctx.arc(leftCX, cy, 3, 0, Math.PI*2); ctx.fill();
+    // rim highlight
+    ctx.strokeStyle = 'rgba(255,255,255,.08)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(leftCX, cy, recR - 1, 0, Math.PI*2); ctx.stroke();
+
+    // tonearm
+    const armBaseX = leftCX + recR + 32;
+    const armBaseY = cy - recR * 0.85;
+    const needleX  = leftCX + recR * 0.72;
+    const needleY  = cy - 2;
+    ctx.strokeStyle = '#B8B8C0'; ctx.lineWidth = 7; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(armBaseX, armBaseY); ctx.lineTo(needleX, needleY); ctx.stroke();
+    ctx.lineCap = 'butt';
+    // pivot housing
+    ctx.fillStyle = '#2a2430';
+    ctx.beginPath(); ctx.arc(armBaseX, armBaseY, 14, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = '#FFBE0B'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(armBaseX, armBaseY, 14, 0, Math.PI*2); ctx.stroke();
+    ctx.fillStyle = '#111';
+    ctx.beginPath(); ctx.arc(armBaseX, armBaseY, 4, 0, Math.PI*2); ctx.fill();
+    // cartridge + needle tip
+    const armA = Math.atan2(needleY - armBaseY, needleX - armBaseX);
+    ctx.save();
+    ctx.translate(needleX, needleY); ctx.rotate(armA);
+    ctx.fillStyle = '#FF006E';
+    ctx.fillRect(-18, -6, 18, 12);
+    ctx.fillStyle = '#C0C0C0';
+    ctx.beginPath();
+    ctx.moveTo(0, 0); ctx.lineTo(-5, -3.5); ctx.lineTo(-5, 3.5);
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+
+    // label below record
+    ctx.font = 'bold 11px ui-rounded, system-ui';
+    ctx.fillStyle = '#FFBE0B'; ctx.textAlign = 'center';
+    ctx.fillText('🎵 VINYL RECORD (top view)', leftCX, cy + recR + 22);
+
+    // --- Right side: two stacked panels ---
+    const rightX0 = W * 0.48;
+    const rightX1 = W - 20;
+    const rightW  = rightX1 - rightX0;
+    const panelH  = H * 0.34;
+    const topY    = 18 + panelH/2;           // center of top panel
+    const botY    = H - 18 - panelH/2;       // center of bottom panel
+
+    // panel backgrounds
+    ctx.fillStyle = 'rgba(0,0,0,.35)';
+    rr(rightX0, topY - panelH/2, rightW, panelH, 10); ctx.fill();
+    ctx.strokeStyle = 'rgba(247,37,133,.3)'; ctx.lineWidth = 1.5; ctx.stroke();
+
+    ctx.fillStyle = 'rgba(0,0,0,.35)';
+    rr(rightX0, botY - panelH/2, rightW, panelH, 10); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,190,11,.3)'; ctx.lineWidth = 1.5; ctx.stroke();
+
+    // shared waveform params
+    // map frequency → cycles on screen (60 Hz → 3 cycles, 2000 Hz → 26 cycles)
+    const cycles = 3 + (f - 60) / (2000 - 60) * 23;
+    const amp    = vFr * (panelH * 0.30);
+    const phase  = spinning ? now * 0.003 * (f/440) : 0;
+
+    const innerX0 = rightX0 + 16;
+    const innerX1 = rightX1 - 16;
+    const innerW  = innerX1 - innerX0;
+    const yOf = (x, centerY, invert) => {
+      const u = (x - innerX0) / innerW;
+      const s = Math.sin(u * cycles * Math.PI * 2 - phase);
+      return centerY + (invert ? -1 : 1) * s * amp;
+    };
+
+    // ---- Top panel: groove zoom ----
+    const grooveGap = Math.min(48, panelH * 0.28);
+    const yWallTop = topY - grooveGap/2;
+    const yWallBot = topY + grooveGap/2;
+
+    // groove floor (dark trough between walls)
+    ctx.beginPath();
+    for (let x = innerX0; x <= innerX1; x += 1){
+      const y = yOf(x, yWallTop, false);
+      if (x === innerX0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    for (let x = innerX1; x >= innerX0; x -= 1){
+      const y = yOf(x, yWallBot, false);
+      ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    const floorG = ctx.createLinearGradient(0, yWallTop, 0, yWallBot);
+    floorG.addColorStop(0, '#1c0b24');
+    floorG.addColorStop(0.5, '#07000e');
+    floorG.addColorStop(1, '#1c0b24');
+    ctx.fillStyle = floorG; ctx.fill();
+
+    // upper groove wall
+    ctx.strokeStyle = '#2b1a30'; ctx.lineWidth = 11;
+    ctx.beginPath();
+    for (let x = innerX0; x <= innerX1; x += 1){
+      const y = yOf(x, yWallTop, false);
+      if (x === innerX0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    // shine line
+    ctx.strokeStyle = 'rgba(255,255,255,.14)'; ctx.lineWidth = 1.4;
+    ctx.stroke();
+
+    // lower groove wall
+    ctx.strokeStyle = '#2b1a30'; ctx.lineWidth = 11;
+    ctx.beginPath();
+    for (let x = innerX0; x <= innerX1; x += 1){
+      const y = yOf(x, yWallBot, false);
+      if (x === innerX0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,.08)'; ctx.lineWidth = 1.4;
+    ctx.stroke();
+
+    // stylus (needle) riding in the groove at a fixed x
+    const styX = innerX0 + innerW * 0.32;
+    const styY = yOf(styX, topY, false);
+
+    // drop-shadow on the groove floor
+    ctx.fillStyle = 'rgba(0,0,0,.35)';
+    ctx.beginPath(); ctx.ellipse(styX, styY + 2, 6, 2, 0, 0, Math.PI*2); ctx.fill();
+
+    // stylus body
+    ctx.fillStyle = '#DCDCE4'; ctx.strokeStyle = '#666'; ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(styX, styY - 2);
+    ctx.lineTo(styX - 11, styY - 40);
+    ctx.lineTo(styX + 11, styY - 40);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    // glowing tip
+    ctx.fillStyle = '#FF006E';
+    ctx.shadowColor = '#FF006E'; ctx.shadowBlur = 10;
+    ctx.beginPath(); ctx.arc(styX, styY - 1, 3, 0, Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // header label (top panel)
+    ctx.font = 'bold 11px ui-rounded, system-ui';
+    ctx.fillStyle = '#FFBE0B'; ctx.textAlign = 'left';
+    ctx.fillText('🔍 GROOVE at ×1000 zoom · needle rides the wiggles', rightX0 + 14, topY - panelH/2 + 16);
+
+    // ---- Bottom panel: resulting sound wave ----
+    // midline
+    ctx.setLineDash([3, 6]);
+    ctx.strokeStyle = 'rgba(255,255,255,.12)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(innerX0, botY); ctx.lineTo(innerX1, botY); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // glow
+    ctx.strokeStyle = 'rgba(247,37,133,.25)'; ctx.lineWidth = 12;
+    ctx.beginPath();
+    for (let x = innerX0; x <= innerX1; x += 1.5){
+      const y = yOf(x, botY, true);
+      if (x === innerX0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    // core
+    ctx.strokeStyle = '#FF006E'; ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (let x = innerX0; x <= innerX1; x += 1.5){
+      const y = yOf(x, botY, true);
+      if (x === innerX0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // header label (bottom panel)
+    ctx.fillStyle = '#FFBE0B'; ctx.textAlign = 'left';
+    ctx.font = 'bold 11px ui-rounded, system-ui';
+    ctx.fillText('🔊 SOUND WAVE (same shape — now in the air!)', rightX0 + 14, botY - panelH/2 + 16);
+
+    // arrow between the two panels: groove wiggle → sound wave
+    const arrX = rightX0 + rightW * 0.08;
+    const arrY0 = topY + panelH/2 + 2;
+    const arrY1 = botY - panelH/2 - 2;
+    ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(arrX, arrY0); ctx.lineTo(arrX, arrY1); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,.55)';
+    ctx.beginPath();
+    ctx.moveTo(arrX - 5, arrY1 - 6); ctx.lineTo(arrX + 5, arrY1 - 6); ctx.lineTo(arrX, arrY1);
+    ctx.closePath(); ctx.fill();
+
+    ctx.font = '10px ui-rounded, system-ui';
+    ctx.fillStyle = 'rgba(255,255,255,.65)'; ctx.textAlign = 'left';
+    const mY = (arrY0 + arrY1)/2;
+    ctx.fillText('needle wiggles →', arrX + 8, mY - 8);
+    ctx.fillText('pushes speaker →', arrX + 8, mY + 4);
+    ctx.fillText('pushes the air!', arrX + 8, mY + 16);
+
+    // dashed zoom lines from the record edge to top panel corners
+    const recEdgeX = leftCX + recR * 0.68;
+    ctx.strokeStyle = 'rgba(247,37,133,.35)'; ctx.lineWidth = 1;
+    ctx.setLineDash([4, 6]);
+    ctx.beginPath();
+    ctx.moveTo(recEdgeX, cy - 10); ctx.lineTo(rightX0, topY - panelH/2);
+    ctx.moveTo(recEdgeX, cy + 10); ctx.lineTo(rightX0, topY + panelH/2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

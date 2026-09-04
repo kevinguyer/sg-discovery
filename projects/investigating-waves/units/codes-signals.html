@@ -1,0 +1,1352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Codes, Signals & Communication · Investigating Waves · REDS Hall of Discovery</title>
+<style>
+  :root{
+    --bg:        #000A05;
+    --bg2:       #00170B;
+    --phosphor:  #00FF41;
+    --glow:      #7FFF90;
+    --amber:     #FFB000;
+    --dim:       #004410;
+    --cream:     #FFF8E7;
+    --danger:    #FF4040;
+    --cyan:      #0AEFFF;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body:  system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono:  ui-monospace, 'Cascadia Mono', 'Consolas', Menlo, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{
+    font-family:var(--font-body); color:var(--glow); background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(0,255,65,.15), transparent 55%),
+      radial-gradient(ellipse at 100% 80%, rgba(255,176,0,.12), transparent 55%),
+      linear-gradient(180deg, #000A05 0%, #000500 100%);
+    background-attachment:fixed;
+  }
+  /* Subtle CRT scanlines */
+  body::before{
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:30; opacity:.07;
+    background: repeating-linear-gradient(180deg, rgba(0,255,65,.8) 0 2px, transparent 2px 4px);
+  }
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  img,svg{display:block;max-width:100%}
+
+  /* ---------- Topbar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:20; backdrop-filter: blur(14px);
+    background:linear-gradient(180deg, rgba(0,10,5,.9), rgba(0,10,5,.6));
+    border-bottom:1px solid rgba(0,255,65,.25);
+  }
+  .topbar-inner{
+    max-width:1280px; margin:0 auto; padding:14px 28px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+  }
+  .back{
+    display:inline-flex; align-items:center; gap:8px; padding:8px 14px;
+    border-radius:999px; background:rgba(0,255,65,.08); font-family:var(--font-display); font-size:13px;
+    border:1px solid rgba(0,255,65,.25);
+    transition:background .15s;
+  }
+  .back:hover{background:rgba(0,255,65,.2)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand .logo{width:44px;height:44px; filter: drop-shadow(0 0 8px rgba(0,255,65,.6));}
+  .brand .eyebrow{font-family:var(--font-display);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--glow);opacity:.9}
+  .brand .wordmark{font-family:var(--font-display);font-size:18px; color:var(--cream)}
+  .brand .unit{font-family:var(--font-display);font-size:13px;color:var(--amber)}
+  .class-pill{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 14px; border-radius:999px;
+    background:linear-gradient(135deg, rgba(0,255,65,.22), rgba(255,176,0,.22));
+    border:1px solid rgba(0,255,65,.3);
+    font-family:var(--font-display); font-size:12px; color:var(--cream);
+  }
+  .class-pill .dot{width:7px;height:7px;border-radius:999px;background:var(--amber);box-shadow:0 0 10px var(--amber); animation: blink 1.6s ease-in-out infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    min-height:72vh;
+    display:flex; align-items:center;
+  }
+  #hero-canvas{position:absolute; inset:0; width:100%; height:100%; z-index:0;}
+  .hero-inner{
+    position:relative; z-index:2;
+    max-width:1280px; margin:0 auto; padding:40px 36px; width:100%;
+    text-align:center;
+  }
+  .hero .eyebrow{
+    font-family:var(--font-mono); color:var(--phosphor);
+    letter-spacing:.3em; font-size:12px; text-transform:uppercase; margin-bottom:18px;
+  }
+  .hero .eyebrow::before{content:'▸ '; color:var(--amber);}
+  .hero h1{
+    font-size: clamp(56px, 11vw, 160px);
+    line-height:.88; letter-spacing:-.02em;
+    background: linear-gradient(180deg, #7FFF90 0%, #00FF41 45%, #00AA28 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter: drop-shadow(0 0 30px rgba(0,255,65,.6));
+    margin-bottom: 22px;
+    font-family:var(--font-display);
+  }
+  .hero h1 .subrow{
+    display:block;
+    font-size: clamp(24px, 3.5vw, 48px);
+    color: transparent;
+    background: linear-gradient(90deg, #FFB000, #FFD56B);
+    -webkit-background-clip:text; background-clip:text;
+    letter-spacing:0.08em;
+    margin-top: 10px;
+  }
+  .hero .tag{
+    max-width:780px; margin:0 auto;
+    font-size: clamp(18px, 2vw, 24px); color:var(--cream); opacity:.95;
+  }
+  .hero .scroll-cue{
+    position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.3em;
+    color:var(--phosphor); opacity:.8; animation: nudge 2.4s ease-in-out infinite;
+  }
+  @keyframes nudge{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,6px)}}
+
+  /* ---------- Section scaffolding ---------- */
+  section.concept, section.lab, section.facts, section.nextup{
+    max-width:1280px; margin: 0 auto; padding: 28px 28px;
+  }
+  .kicker{
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--amber); margin-bottom:4px;
+  }
+  .kicker::before{content:'◆ ';}
+  .title{font-size:clamp(26px,3.2vw,40px); margin-bottom:6px; line-height:1; color:var(--cream); font-family:var(--font-display);}
+  .title em{color:var(--phosphor); font-style:normal;}
+  .blurb{max-width:740px; font-size:15px; line-height:1.5; color:rgba(255,248,231,.88)}
+
+  .panel{
+    margin-top:8px; border-radius:20px; overflow:hidden;
+    border:1px solid rgba(0,255,65,.3);
+    background: linear-gradient(180deg, rgba(0,255,65,.04), rgba(0,0,0,.2));
+    box-shadow: 0 20px 50px rgba(0,0,0,.7), 0 0 40px rgba(0,255,65,.1);
+    display:flex; flex-direction:column;
+  }
+  .panel-top{
+    padding:10px 18px; display:flex; justify-content:space-between; align-items:center;
+    background: linear-gradient(135deg, rgba(0,255,65,.2), rgba(255,176,0,.12));
+    border-bottom:1px solid rgba(0,255,65,.3);
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--cream);
+  }
+  .panel-top .dot{width:9px;height:9px;border-radius:999px;background:var(--amber);box-shadow:0 0 12px var(--amber);margin-right:8px;display:inline-block;vertical-align:middle;animation:blink 1.2s ease-in-out infinite}
+
+  canvas.demo{display:block; width:100%; background:#000500; height: clamp(220px, 48vh, 460px);}
+  .caption{
+    padding:10px 18px; font-size:13px; line-height:1.45; color:rgba(255,248,231,.82);
+    border-top:1px solid rgba(0,255,65,.2);
+  }
+
+  /* ---------- Controls ---------- */
+  .controls{
+    display:flex; flex-wrap:wrap; gap:18px 22px; padding:12px 18px;
+    border-top:1px solid rgba(0,255,65,.2);
+    background: rgba(0,5,0,.6);
+    align-items:center;
+  }
+  .control{ flex:1 1 180px; min-width:160px; }
+  .control label{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; margin-bottom:4px; text-transform:uppercase; color:var(--cream);
+  }
+  .control .val{color:var(--amber); font-family:var(--font-mono); font-size:13px; background:rgba(255,176,0,.12); padding:2px 8px; border-radius:6px;}
+  .control input[type=range]{
+    width:100%; -webkit-appearance:none; appearance:none;
+    height:6px; border-radius:999px; outline:none;
+    background: linear-gradient(90deg, var(--dim), var(--phosphor), var(--amber));
+  }
+  .control input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none;
+    width:22px;height:22px;border-radius:50%;
+    background:var(--phosphor); border:3px solid #000;
+    box-shadow:0 0 14px rgba(0,255,65,.85);
+    cursor:pointer;
+  }
+  .control input[type=range]::-moz-range-thumb{
+    width:22px;height:22px;border-radius:50%;
+    background:var(--phosphor); border:3px solid #000; cursor:pointer;
+  }
+  .control input[type=text]{
+    width:100%; padding:10px 14px; border-radius:8px;
+    background:#000; color:var(--phosphor);
+    border:1px solid var(--dim);
+    font-family:var(--font-mono); font-size:16px; letter-spacing:.08em;
+    outline:none;
+  }
+  .control input[type=text]:focus{border-color:var(--phosphor); box-shadow:0 0 12px rgba(0,255,65,.5);}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 16px; border-radius:999px;
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.08em;
+    background:rgba(0,255,65,.08); border:1px solid rgba(0,255,65,.3);
+    color: var(--glow);
+    transition:all .15s;
+    text-transform:uppercase;
+  }
+  .chip:hover{background:rgba(0,255,65,.2); transform:translateY(-2px)}
+  .chip.active{background:linear-gradient(135deg,var(--phosphor),var(--amber)); border-color:transparent; color:#000}
+
+  /* ---------- Facts ---------- */
+  .facts-grid{
+    display:grid; grid-template-columns: repeat(3, 1fr);
+    gap:22px; margin-top:32px;
+  }
+  @media (max-width: 900px){ .facts-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px){ .facts-grid{ grid-template-columns: 1fr; } }
+  .fact{
+    padding:30px 28px; border-radius:24px;
+    background: linear-gradient(135deg, rgba(0,255,65,.16), rgba(255,176,0,.10));
+    border:1px solid rgba(0,255,65,.3);
+    transition: transform .25s, box-shadow .25s;
+    color:var(--cream);
+  }
+  .fact:hover{transform: translateY(-6px) rotate(-.5deg); box-shadow: 0 24px 60px rgba(0,255,65,.25)}
+  .fact .emoji{font-size:52px; margin-bottom:14px; display:block; line-height:1}
+  .fact h4{font-size:22px; margin-bottom:10px; line-height:1.2; color:var(--phosphor); font-family:var(--font-display);}
+  .fact p{font-size:16px; line-height:1.55; color:rgba(255,248,231,.9)}
+
+  /* ---------- Next up ---------- */
+  .nextup-card{
+    margin-top:24px;
+    padding:40px; border-radius:28px;
+    background: linear-gradient(135deg, #001219 0%, #005F73 35%, #0077B6 70%, #FF006E 100%);
+    display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;
+    box-shadow:0 30px 80px rgba(0,119,182,.45);
+    color:var(--cream);
+  }
+  .nextup-card h3{font-size:28px; margin-bottom:8px; font-family:var(--font-display);}
+  .nextup-card .big{font-size:40px; margin-top:4px; font-family:var(--font-display);}
+  .nextup-card p{opacity:.95; max-width:460px}
+  .nextup-card .chip{background:rgba(255,255,255,.18); color:#fff; border-color:rgba(255,255,255,.3);}
+  .nextup-card .chip:hover{background:rgba(255,255,255,.3);}
+
+  footer{
+    padding:40px 28px; max-width:1280px; margin:0 auto;
+    border-top:1px solid rgba(0,255,65,.2);
+    display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:center;
+    font-size:13px; color:rgba(255,248,231,.7);
+    font-family:var(--font-mono);
+  }
+  footer .heart{color:var(--amber)}
+
+  @media (prefers-reduced-motion: reduce){
+    .hero .scroll-cue, .class-pill .dot, .panel-top .dot{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== Topbar ========== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="back" href="../index.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      All units
+    </a>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="60" height="60" rx="18" fill="#000A05" stroke="url(#cg)" stroke-width="2"/>
+        <path d="M8 38 Q16 26 24 38 T40 38 T56 38" stroke="#00FF41" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M8 32 Q16 20 24 32 T40 32 T56 32" stroke="#FFB000" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M8 26 Q16 14 24 26 T40 26 T56 26" stroke="#7FFF90" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="cg" x1="0" y1="0" x2="64" y2="64">
+            <stop offset="0" stop-color="#00FF41"/><stop offset=".5" stop-color="#FFB000"/><stop offset="1" stop-color="#00AA28"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div>
+        <div class="eyebrow">REDS Hall of Discovery</div>
+        <div class="wordmark">Investigating Waves <span class="unit">· Unit 05 · Codes &amp; Signals</span></div>
+      </div>
+    </div>
+    <div class="class-pill"><span class="dot"></span>Mrs. Guyer's 5th Grade</div>
+  </div>
+</header>
+
+<!-- ========== Hero ========== -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="eyebrow">UNIT 05 — FINAL TRANSMISSION</div>
+    <h1>Codes, Signals<br/>&amp; Communication
+      <span class="subrow">-.-. --- -.. . ·  01000011 01001111 01000100 01000101</span>
+    </h1>
+    <p class="tag">
+      Every text you send, every phone call, every wifi page, every text message from a satellite —
+      all just <strong>waves</strong>, wiggled in secret patterns. Dots, dashes, ones, zeros. Let's crack the code. 📡
+    </p>
+  </div>
+  <div class="scroll-cue">◆ BEGIN TRANSMISSION ◆</div>
+</section>
+
+<!-- ========== Concept 1: Encoding Pipeline ========== -->
+<section class="concept" id="c1">
+  <div class="kicker">Concept 01 · How a wiggle becomes a word</div>
+  <h2 class="title">Same message. <em>Different codes.</em></h2>
+  <p class="blurb">
+    To send a word across a wire or through the air, you have to turn it into a <strong>pattern of pulses</strong>.
+    Morse code uses <em>dots and dashes</em> (short and long blips). Computers use <em>binary</em> (0s and 1s).
+    Both carry the same message — just in different secret languages. Watch "WAVES" travel both ways at once. 👇
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Live · Encoding Pipeline</span><span style="opacity:.8">SENDER → WIRE → RECEIVER</span></div>
+    <canvas id="pipeline" class="demo"></canvas>
+    <div class="caption">
+      <strong>The big idea:</strong> a letter like "W" isn't really traveling through the wire. A <em>pattern</em> is.
+      The receiver knows the code and turns the pattern back into "W". That's how every message, picture, and video gets across the internet.
+    </div>
+  </div>
+</section>
+
+<!-- ========== Lab 1: Morse Code Trainer ========== -->
+<section class="lab" id="lab1">
+  <div class="kicker">Lab 01 · Telegraph key</div>
+  <h2 class="title">Tap out your own Morse messages.</h2>
+  <p class="blurb">
+    Hold down the key. <strong>Quick tap = dot.</strong> <strong>Hold longer = dash.</strong>
+    Wait a moment between letters. The telegraph listens, decodes, and spells out your message live.
+    Pause longer for a space. Try tapping your initials! (Press <kbd>SPACE</kbd> or click the key.) 🔑
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Live Morse Decoder</span><span style="opacity:.8">SPACE bar = tap · or click the key</span></div>
+    <canvas id="morse" class="demo"></canvas>
+    <div class="controls">
+      <div class="control">
+        <label>Transmit with <span class="val">⎵ SPACE or CLICK</span></label>
+      </div>
+      <div class="control">
+        <label>&nbsp;</label>
+        <div class="btn-row">
+          <button class="chip" data-send="SOS">📡 Send SOS</button>
+          <button class="chip" data-send="HELLO">👋 Send HELLO</button>
+          <button class="chip" data-send="REDS">🎓 Send REDS</button>
+          <button class="chip" id="morse-clear">🧹 Clear</button>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Fun fact:</strong> the SOS distress signal (···  ---  ···) was chosen because it's fast and unmistakable, not because it stands for "Save Our Ship."
+      Sailors have been tapping it since 1908!
+    </div>
+  </div>
+</section>
+
+<!-- ========== Lab 2: Binary Translator ========== -->
+<section class="lab" id="lab2">
+  <div class="kicker">Lab 02 · Binary translator</div>
+  <h2 class="title">Your name in computer language.</h2>
+  <p class="blurb">
+    Computers don't understand letters — they only understand <strong>0</strong> (off) and <strong>1</strong> (on).
+    Every letter on your keyboard is secretly <em>eight bits</em> of 0s and 1s. Type your name and watch the binary
+    zoom through the wire as pulses of light. 💡
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · ASCII Binary Encoder</span><span style="opacity:.8">type a word → see the bits</span></div>
+    <canvas id="binary" class="demo"></canvas>
+    <div class="controls">
+      <div class="control" style="flex-basis:260px;">
+        <label>Your word <span class="val">A–Z and 0–9</span></label>
+        <input type="text" id="bin-input" value="HELLO" maxlength="16" autocomplete="off"/>
+      </div>
+      <div class="control">
+        <label>Bit stream speed <span class="val" id="bin-s-val">1.0×</span></label>
+        <input type="range" id="bin-s" min="20" max="200" value="100"/>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Try this:</strong> type your own name. Each letter = 8 bits. The capital "A" is <code>01000001</code>.
+      That tiny difference is how your phone knows "Cat" from "Dog" — every letter has its own 8-bit ID card.
+    </div>
+  </div>
+</section>
+
+<!-- ========== Lab 3: Signal vs Noise ========== -->
+<section class="lab" id="lab3">
+  <div class="kicker">Lab 03 · Signal vs noise</div>
+  <h2 class="title">Can you still read the message?</h2>
+  <p class="blurb">
+    Out in the real world, signals don't arrive perfectly clean — they get messed up by <strong>noise</strong>
+    (other waves, weather, static, distance). The more noise, the harder it is to figure out what was sent.
+    Crank the noise dial and watch the message fall apart. 📉
+  </p>
+
+  <div class="panel">
+    <div class="panel-top"><span><span class="dot"></span>Lab · Transmission Noise Simulator</span><span style="opacity:.8">SENT → CHANNEL+NOISE → RECEIVED</span></div>
+    <canvas id="noiselab" class="demo"></canvas>
+    <div class="controls">
+      <div class="control" style="flex-basis:100%; max-width:420px;">
+        <label>Noise level <span class="val" id="noise-val">20%</span></label>
+        <input type="range" id="noise" min="0" max="100" value="20"/>
+      </div>
+      <div class="control">
+        <label>Message</label>
+        <div class="btn-row">
+          <button class="chip active" data-msg="HELLO">HELLO</button>
+          <button class="chip" data-msg="REDS">REDS</button>
+          <button class="chip" data-msg="WAVES">WAVES</button>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>The big idea:</strong> engineers spend lifetimes figuring out how to send messages through noise cleanly —
+      repeating them, encoding them with error checks, boosting the signal. That's why your phone works even when the wifi bars are low!
+    </div>
+  </div>
+</section>
+
+<!-- ========== Facts ========== -->
+<section class="facts">
+  <div class="kicker">Did you know?</div>
+  <h2 class="title">Six wild signal facts.</h2>
+  <div class="facts-grid">
+    <div class="fact">
+      <span class="emoji">👽</span>
+      <h4>We're listening for aliens.</h4>
+      <p>The <strong>SETI</strong> project aims giant radio telescopes at the stars, searching for signals that look like a code — a message from another civilization. No luck yet!</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🚢</span>
+      <h4>Submarines talk with HUGE waves.</h4>
+      <p>Normal radio can't reach under water. So submarines use <strong>ELF waves</strong> with wavelengths thousands of miles long — slow, but they can dive deep into the ocean.</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🕊️</span>
+      <h4>Pigeons used to be wifi.</h4>
+      <p>Before radio, armies tied tiny message capsules to homing pigeons — real-life feathered text messages. Some were awarded medals for saving lives!</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">💡</span>
+      <h4>The internet travels as light.</h4>
+      <p>Under the ocean are cables filled with glass threads thinner than your hair. Your YouTube videos zoom through them as pulses of <strong>laser light</strong>. 🚀</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🎥</span>
+      <h4>A Hollywood star invented wifi.</h4>
+      <p>In WWII, actress <strong>Hedy Lamarr</strong> co-invented a signal-hopping technique that eventually became the basis of wifi and Bluetooth. Scientist AND movie star!</p>
+    </div>
+    <div class="fact">
+      <span class="emoji">🛰️</span>
+      <h4>Voyager 1 is still calling home.</h4>
+      <p>Launched in 1977, NASA's Voyager 1 is now 15 BILLION miles away — and it still sends signals back. They take <em>22 hours</em> to reach Earth, traveling at light speed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Next Up ========== -->
+<section class="nextup">
+  <div class="kicker">You made it to the end!</div>
+  <div class="nextup-card">
+    <div>
+      <h3>🎉 Congratulations, Scientist!</h3>
+      <div class="big">You've explored all five kinds of waves.</div>
+      <p>Water, light, sound, invisible energy, codes &amp; signals — you've now seen how the whole universe whispers to itself. Go tell someone something cool! 🌊🌈🔊⚡📡</p>
+    </div>
+    <a class="chip active" href="../index.html">← Back to all units</a>
+  </div>
+</section>
+
+<footer>
+  <div><strong>REDS Hall of Discovery</strong> · Investigating Waves · Unit 05: Codes, Signals &amp; Communication</div>
+  <div>Made with <span class="heart">♥</span> for Mrs. Guyer's 5th Grade Class</div>
+</footer>
+
+<script>
+/* ========= Canvas helper ========= */
+function setupCanvas(canvas){
+  const ctx = canvas.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  function resize(){
+    const r = canvas.getBoundingClientRect();
+    canvas.width  = Math.floor(r.width * DPR);
+    canvas.height = Math.floor(r.height * DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  return {ctx, DPR, resize, rect: () => canvas.getBoundingClientRect()};
+}
+
+/* ========= Morse dictionary ========= */
+const MORSE = {
+  A:'.-', B:'-...', C:'-.-.', D:'-..', E:'.', F:'..-.', G:'--.', H:'....',
+  I:'..', J:'.---', K:'-.-', L:'.-..', M:'--', N:'-.', O:'---', P:'.--.',
+  Q:'--.-', R:'.-.', S:'...', T:'-', U:'..-', V:'...-', W:'.--', X:'-..-',
+  Y:'-.--', Z:'--..',
+  '0':'-----','1':'.----','2':'..---','3':'...--','4':'....-',
+  '5':'.....','6':'-....','7':'--...','8':'---..','9':'----.',
+};
+const FROM_MORSE = Object.fromEntries(Object.entries(MORSE).map(([k,v]) => [v,k]));
+
+/* ========= Binary (ASCII) helpers ========= */
+function toBinary(str){
+  return [...str.toUpperCase()].map(ch => ch.charCodeAt(0).toString(2).padStart(8,'0'));
+}
+function fromBinary(bin){
+  if (bin.length % 8 !== 0) return '';
+  const out = [];
+  for (let i=0; i<bin.length; i+=8){
+    out.push(String.fromCharCode(parseInt(bin.slice(i,i+8), 2)));
+  }
+  return out.join('');
+}
+
+/* =========================================================
+   HERO — CRT terminal background with scrolling streams of
+   morse dots/dashes and binary digits. Flickering glow.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('hero-canvas');
+  const {ctx} = setupCanvas(c);
+
+  // Parallel "channels" of scrolling text
+  const rows = 16;
+  const streams = [];
+  const glyphs = '01.-|·▪';
+
+  function tick(t){
+    const W = c.clientWidth, H = c.clientHeight;
+    // bg
+    ctx.fillStyle = '#000500'; ctx.fillRect(0,0,W,H);
+
+    // vignette
+    const vg = ctx.createRadialGradient(W*0.5, H*0.5, 80, W*0.5, H*0.5, Math.max(W,H));
+    vg.addColorStop(0, 'rgba(0,255,65,0)'); vg.addColorStop(1, 'rgba(0,0,0,.7)');
+    ctx.fillStyle = vg; ctx.fillRect(0,0,W,H);
+
+    // Seed streams if needed
+    const rowH = H / rows;
+    if (streams.length < rows){
+      for (let i=0; i<rows; i++){
+        streams.push({
+          y: (i+0.5) * rowH,
+          speed: 30 + Math.random()*50,
+          offset: Math.random()*2000,
+          kind: Math.random() < 0.5 ? 'morse' : 'binary',
+        });
+      }
+    }
+
+    ctx.font = 'bold 14px ui-monospace, Consolas';
+    ctx.textBaseline = 'middle';
+    for (const s of streams){
+      const x0 = -((t*0.06*s.speed + s.offset) % (W + 400));
+      for (let x = x0; x < W + 20; x += 18){
+        const ch = s.kind === 'morse'
+          ? (Math.sin(x*0.13 + s.offset) > 0 ? '·' : '—')
+          : (((x|0) ^ (s.offset|0)) & 1 ? '1' : '0');
+        const dist = Math.abs(x - W*0.5);
+        const fade = Math.max(0.1, 1 - dist/(W*0.7));
+        ctx.fillStyle = `rgba(0,255,65,${0.15 + 0.3*fade})`;
+        ctx.fillText(ch, x, s.y);
+      }
+    }
+
+    // Sweeping scan line
+    const sy = ((t*0.15) % (H + 200)) - 100;
+    const scanG = ctx.createLinearGradient(0, sy-40, 0, sy+40);
+    scanG.addColorStop(0, 'rgba(0,255,65,0)');
+    scanG.addColorStop(0.5, 'rgba(0,255,65,.22)');
+    scanG.addColorStop(1, 'rgba(0,255,65,0)');
+    ctx.fillStyle = scanG; ctx.fillRect(0, sy-40, W, 80);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   CONCEPT 1 — Encoding Pipeline
+   Animated: MESSAGE = 'WAVES' is shown on the left, encoded
+   into morse on top channel and binary on bottom channel,
+   pulses travel across to a receiver on the right.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('pipeline');
+  const {ctx} = setupCanvas(c);
+
+  const MESSAGE = 'WAVES';
+  const morseStr = MESSAGE.split('').map(ch => MORSE[ch]).join(' ');
+  const binaryStr = toBinary(MESSAGE).join(' ');
+
+  // Convert morse into a timeline of on/off segments
+  // '.' = 1 unit, '-' = 3 units, intra-letter gap 1 unit, inter-letter gap 3 units
+  function morseTimeline(morse){
+    const segs = [];
+    let t = 0;
+    for (let i = 0; i < morse.length; i++){
+      const ch = morse[i];
+      if (ch === '.'){ segs.push({start:t, end:t+1, on:true}); t += 1; }
+      else if (ch === '-'){ segs.push({start:t, end:t+3, on:true}); t += 3; }
+      else if (ch === ' '){ t += 3; continue; }
+      // intra-letter gap
+      if (i+1 < morse.length && morse[i+1] !== ' '){ t += 1; }
+    }
+    return {segs, total: t};
+  }
+  const morseTL = morseTimeline(morseStr);
+  // Binary: each bit = 1 unit, gap between letters (space in string) = 1 unit
+  function binaryTimeline(bits){
+    const segs = [];
+    let t = 0;
+    for (const ch of bits){
+      if (ch === '0' || ch === '1'){
+        if (ch === '1') segs.push({start:t, end:t+1, on:true, bit:1});
+        t += 1;
+      } else if (ch === ' '){ t += 0.5; }
+    }
+    return {segs, total: t};
+  }
+  const binTL = binaryTimeline(binaryStr);
+
+  const CYCLE_MS = 9000;
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle = '#000500'; ctx.fillRect(0,0,W,H);
+
+    // progress 0..1 of the cycle
+    const p = ((now % CYCLE_MS) / CYCLE_MS);
+
+    // layout
+    const leftX = 30, rightX = W - 30;
+    const pipeLeft = 180, pipeRight = W - 180;
+    const pipeW = pipeRight - pipeLeft;
+    const topY = H * 0.32;
+    const botY = H * 0.68;
+
+    // --- Sender box (left) ---
+    ctx.fillStyle = 'rgba(0,255,65,.06)';
+    ctx.strokeStyle = 'var(--phosphor)'; ctx.strokeStyle = '#00FF41';
+    const boxW = 130, boxH = 90;
+    roundRect(ctx, 30, H*0.5 - boxH/2, boxW, boxH, 10);
+    ctx.fill(); ctx.lineWidth = 2; ctx.stroke();
+    ctx.font = 'bold 10px ui-monospace, Consolas';
+    ctx.fillStyle = '#FFB000'; ctx.textAlign = 'center';
+    ctx.fillText('◆ SENDER ◆', 30 + boxW/2, H*0.5 - boxH/2 + 18);
+    ctx.font = 'bold 32px ui-rounded, system-ui';
+    ctx.fillStyle = '#7FFF90';
+    ctx.fillText(MESSAGE, 30 + boxW/2, H*0.5 + 10);
+    ctx.font = '10px ui-monospace, Consolas';
+    ctx.fillStyle = 'rgba(255,255,255,.5)';
+    ctx.fillText('sending…', 30 + boxW/2, H*0.5 + 30);
+
+    // --- Receiver box (right) ---
+    const rBoxX = W - 30 - boxW;
+    ctx.fillStyle = 'rgba(0,255,65,.06)';
+    roundRect(ctx, rBoxX, H*0.5 - boxH/2, boxW, boxH, 10);
+    ctx.fill(); ctx.strokeStyle = '#00FF41'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.font = 'bold 10px ui-monospace, Consolas';
+    ctx.fillStyle = '#FFB000'; ctx.textAlign = 'center';
+    ctx.fillText('◆ RECEIVER ◆', rBoxX + boxW/2, H*0.5 - boxH/2 + 18);
+    // letter-by-letter reveal as progress sweeps across
+    const letterIdx = Math.min(MESSAGE.length, Math.floor(p * (MESSAGE.length + 0.5)));
+    const received = MESSAGE.slice(0, letterIdx);
+    ctx.font = 'bold 32px ui-rounded, system-ui';
+    ctx.fillStyle = '#7FFF90';
+    ctx.fillText(received + (letterIdx < MESSAGE.length ? '_' : ''), rBoxX + boxW/2, H*0.5 + 10);
+    ctx.font = '10px ui-monospace, Consolas';
+    ctx.fillStyle = 'rgba(255,255,255,.5)';
+    ctx.fillText('decoding…', rBoxX + boxW/2, H*0.5 + 30);
+
+    // --- Channel lines ---
+    ctx.strokeStyle = 'rgba(0,255,65,.35)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(pipeLeft, topY); ctx.lineTo(pipeRight, topY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pipeLeft, botY); ctx.lineTo(pipeRight, botY); ctx.stroke();
+    // connect sender/receiver
+    ctx.strokeStyle = 'rgba(0,255,65,.2)';
+    ctx.beginPath(); ctx.moveTo(160, H*0.5); ctx.lineTo(pipeLeft, topY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(160, H*0.5); ctx.lineTo(pipeLeft, botY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pipeRight, topY); ctx.lineTo(rBoxX, H*0.5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pipeRight, botY); ctx.lineTo(rBoxX, H*0.5); ctx.stroke();
+
+    // Labels
+    ctx.font = 'bold 11px ui-monospace, Consolas';
+    ctx.fillStyle = '#FFB000'; ctx.textAlign = 'left';
+    ctx.fillText('MORSE  · - . -', pipeLeft, topY - 18);
+    ctx.fillText('BINARY 01010', pipeLeft, botY + 28);
+
+    // --- Morse pulses (top channel) ---
+    // map morse timeline onto pipeW over half the cycle
+    const scanProgress = p; // 0..1
+    const mTotal = morseTL.total;
+    const mUnitPx = pipeW / mTotal;
+    for (const seg of morseTL.segs){
+      const sx = pipeLeft + seg.start * mUnitPx;
+      const ex = pipeLeft + seg.end * mUnitPx;
+      // visibility: visible if scan has passed seg.start/mTotal
+      const segStartFrac = seg.start / mTotal;
+      const reveal = Math.max(0, Math.min(1, (scanProgress - segStartFrac) * 6));
+      if (reveal <= 0) continue;
+      const finalW = ex - sx;
+      const drawW = finalW * reveal;
+      // pulse rectangle above line
+      ctx.fillStyle = '#00FF41';
+      ctx.shadowColor = '#00FF41'; ctx.shadowBlur = 8;
+      roundRect(ctx, sx, topY - 14, drawW, 14, 3);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+    // scanning pulse head (top)
+    const scanX = pipeLeft + scanProgress * pipeW;
+    ctx.fillStyle = '#FFB000'; ctx.shadowColor = '#FFB000'; ctx.shadowBlur = 16;
+    ctx.beginPath(); ctx.arc(scanX, topY, 5, 0, Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // --- Binary pulses (bottom channel) ---
+    const bTotal = binTL.total;
+    const bUnitPx = pipeW / bTotal;
+    // draw dots at each bit position (filled for 1, hollow for 0)
+    let bitCursor = 0;
+    for (const ch of binaryStr){
+      if (ch === '0' || ch === '1'){
+        const sx = pipeLeft + bitCursor * bUnitPx;
+        const bitFrac = bitCursor / bTotal;
+        const reveal = Math.max(0, Math.min(1, (scanProgress - bitFrac) * 6));
+        if (reveal > 0){
+          const cx2 = sx + bUnitPx*0.5;
+          if (ch === '1'){
+            ctx.fillStyle = '#00FF41';
+            ctx.shadowColor = '#00FF41'; ctx.shadowBlur = 8;
+            ctx.beginPath(); ctx.arc(cx2, botY - 10, 5 * reveal, 0, Math.PI*2); ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = '#00FF41'; ctx.globalAlpha = reveal;
+            ctx.font = 'bold 12px ui-monospace, Consolas'; ctx.textAlign = 'center';
+            ctx.fillText('1', cx2, botY + 16); ctx.globalAlpha = 1;
+          } else {
+            ctx.strokeStyle = '#00AA28'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.arc(cx2, botY - 10, 4, 0, Math.PI*2); ctx.stroke();
+            ctx.fillStyle = 'rgba(127,255,144,.7)'; ctx.globalAlpha = reveal;
+            ctx.font = 'bold 12px ui-monospace, Consolas'; ctx.textAlign = 'center';
+            ctx.fillText('0', cx2, botY + 16); ctx.globalAlpha = 1;
+          }
+        }
+        bitCursor += 1;
+      } else if (ch === ' '){
+        bitCursor += 0.5;
+      }
+    }
+    // scanning pulse head (bottom)
+    ctx.fillStyle = '#FFB000'; ctx.shadowColor = '#FFB000'; ctx.shadowBlur = 16;
+    ctx.beginPath(); ctx.arc(scanX, botY, 5, 0, Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // at end of cycle, show the "received" letter briefly
+    if (p > 0.98){
+      ctx.font = 'bold 14px ui-rounded, system-ui';
+      ctx.fillStyle = '#FFB000'; ctx.textAlign = 'center';
+      ctx.fillText('✓ TRANSMISSION COMPLETE — restarting…', W/2, H - 14);
+    }
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+function roundRect(ctx, x, y, w, h, r){
+  r = Math.min(r, Math.min(w,h)/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+  ctx.lineTo(x+w, y+h-r); ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+  ctx.lineTo(x+r, y+h); ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+  ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y);
+  ctx.closePath();
+}
+
+/* =========================================================
+   LAB 1 — Morse Code Trainer
+   Press + hold (SPACE or click) to key in dots and dashes.
+   Silence → commit letter. Longer silence → word space.
+   Auto-send buttons play a preset message.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('morse');
+  const {ctx, rect} = setupCanvas(c);
+  const clearBtn = document.getElementById('morse-clear');
+  const sendBtns = document.querySelectorAll('[data-send]');
+
+  // Morse timing (standard ratios relative to one DOT):
+  //   DOT = 1 · DASH = 3 · intra-letter gap = 1 · inter-letter gap = 3 · word gap = 7
+  // Auto-send uses DOT=200ms below, so gaps are 200 / 600 / 1400.
+  // Thresholds must sit BETWEEN those:
+  const DOT_THRESHOLD_MS   = 300;   // press shorter than this = dot, longer = dash
+  const LETTER_SILENCE_MS  = 400;   // > intra-gap (200), < inter-letter gap (600)
+  const WORD_SILENCE_MS    = 1100;  // > inter-letter (600), < word gap (1400)
+
+  const state = {
+    pressing: false,
+    pressStart: 0,
+    currentSymbols: '',       // e.g. ".-"
+    decoded: '',              // spelled message
+    lastReleaseAt: 0,
+    letterCommitted: true,    // true means current letter already committed
+    // for visual key feedback
+    keyDownUntil: 0,
+    // auto-transmission queue
+    autoQueue: [],    // array of events: {at: time, type: 'press'|'release'}
+    autoStart: 0,
+    autoPlaying: false,
+    lastPulseTime: 0,
+    audioCtx: null,
+    osc: null,
+    gain: null,
+    lastSendName: '',
+  };
+
+  function ensureAudio(){
+    if (state.audioCtx) return;
+    try {
+      state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      state.osc = state.audioCtx.createOscillator();
+      state.gain = state.audioCtx.createGain();
+      state.osc.type = 'sine';
+      state.osc.frequency.value = 600;
+      state.gain.gain.value = 0;
+      state.osc.connect(state.gain).connect(state.audioCtx.destination);
+      state.osc.start();
+    } catch (e) { /* ignore */ }
+  }
+  function tone(on){
+    if (!state.audioCtx) return;
+    state.gain.gain.setTargetAtTime(on ? 0.12 : 0, state.audioCtx.currentTime, 0.003);
+  }
+
+  function press(now){
+    if (state.pressing) return;
+    ensureAudio();
+    state.pressing = true;
+    state.pressStart = now;
+    state.keyDownUntil = Infinity;
+    tone(true);
+  }
+  function release(now){
+    if (!state.pressing) return;
+    state.pressing = false;
+    const dur = now - state.pressStart;
+    state.currentSymbols += (dur < DOT_THRESHOLD_MS ? '.' : '-');
+    state.lastReleaseAt = now;
+    state.letterCommitted = false;
+    state.keyDownUntil = now + 80;  // after-glow
+    tone(false);
+  }
+
+  // keyboard
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space'){
+      e.preventDefault();
+      if (!e.repeat) press(performance.now());
+    }
+  });
+  document.addEventListener('keyup', e => {
+    if (e.code === 'Space'){
+      e.preventDefault();
+      release(performance.now());
+    }
+  });
+
+  // mouse/touch on the canvas key area (we'll detect via y > 0.5 of the canvas)
+  function inKeyZone(mx, my){
+    const H = c.clientHeight;
+    return my > H * 0.55;
+  }
+  c.addEventListener('mousedown', e => {
+    const r = rect(); const mx = e.clientX-r.left, my = e.clientY-r.top;
+    if (inKeyZone(mx, my)) press(performance.now());
+  });
+  window.addEventListener('mouseup', () => { if (state.pressing) release(performance.now()); });
+  c.addEventListener('touchstart', e => {
+    const r = rect(); const t0 = e.touches[0];
+    if (inKeyZone(t0.clientX-r.left, t0.clientY-r.top)){
+      e.preventDefault();
+      press(performance.now());
+    }
+  }, {passive:false});
+  window.addEventListener('touchend', () => { if (state.pressing) release(performance.now()); });
+
+  clearBtn.addEventListener('click', () => {
+    state.decoded = ''; state.currentSymbols = ''; state.letterCommitted = true;
+  });
+
+  function queueMessage(msg){
+    const DOT = 200, DASH = 3*DOT, GAP = DOT, LETTER_GAP = 3*DOT, WORD_GAP = 7*DOT;
+    const now = performance.now();
+    state.autoQueue = [];
+    state.decoded = '';
+    state.currentSymbols = '';
+    state.letterCommitted = true;
+    let t = now + 400;
+    for (let i=0; i<msg.length; i++){
+      const ch = msg[i].toUpperCase();
+      if (ch === ' '){ t += WORD_GAP; continue; }
+      const code = MORSE[ch]; if (!code) continue;
+      for (let j=0; j<code.length; j++){
+        const sym = code[j];
+        const dur = sym === '.' ? DOT : DASH;
+        state.autoQueue.push({at: t, type: 'press'});
+        t += dur;
+        state.autoQueue.push({at: t, type: 'release'});
+        if (j < code.length-1) t += GAP;
+      }
+      t += LETTER_GAP;
+    }
+    state.autoPlaying = true;
+    state.lastSendName = msg;
+  }
+  sendBtns.forEach(b => b.addEventListener('click', () => queueMessage(b.dataset.send)));
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    // bg terminal
+    ctx.fillStyle = '#000800'; ctx.fillRect(0,0,W,H);
+
+    // run auto queue
+    if (state.autoPlaying){
+      while (state.autoQueue.length && state.autoQueue[0].at <= now){
+        const ev = state.autoQueue.shift();
+        if (ev.type === 'press') press(now);
+        else release(now);
+      }
+      if (state.autoQueue.length === 0 && !state.pressing) state.autoPlaying = false;
+    }
+
+    // commit letter / word-space based on silence
+    if (!state.pressing && state.currentSymbols && now - state.lastReleaseAt > LETTER_SILENCE_MS){
+      const letter = FROM_MORSE[state.currentSymbols] || '?';
+      state.decoded += letter;
+      state.currentSymbols = '';
+      state.letterCommitted = true;
+    }
+    if (!state.pressing && state.letterCommitted && state.decoded && !state.decoded.endsWith(' ') &&
+        now - state.lastReleaseAt > WORD_SILENCE_MS && state.autoQueue.length === 0){
+      // only add space if this isn't during auto-send pause
+      // Actually we want NOT to add space mid-send; only after auto-send done. Good.
+    }
+
+    // --- Output panel (top half) ---
+    const panelY = 14, panelH = H*0.48;
+    ctx.fillStyle = 'rgba(0,255,65,.05)';
+    roundRect(ctx, 20, panelY, W-40, panelH, 10);
+    ctx.fill();
+    ctx.strokeStyle = '#00FF41'; ctx.lineWidth = 1.5; ctx.stroke();
+
+    // terminal header
+    ctx.font = 'bold 11px ui-monospace, Consolas';
+    ctx.fillStyle = '#FFB000'; ctx.textAlign = 'left';
+    ctx.fillText('◆ MORSE TERMINAL · live decoder', 36, panelY + 22);
+    ctx.fillStyle = 'rgba(0,255,65,.5)'; ctx.textAlign = 'right';
+    ctx.fillText(new Date().toTimeString().slice(0,8), W - 36, panelY + 22);
+
+    // Current symbols (what you're tapping now)
+    ctx.font = 'bold 36px ui-monospace, Consolas';
+    ctx.fillStyle = '#7FFF90';
+    ctx.textAlign = 'left';
+    ctx.fillText(state.currentSymbols || ' ', 36, panelY + 68);
+
+    ctx.font = '11px ui-monospace, Consolas';
+    ctx.fillStyle = 'rgba(255,255,255,.55)';
+    ctx.fillText('current letter pattern:', 36, panelY + 45);
+
+    // Decoded message
+    ctx.font = '11px ui-monospace, Consolas';
+    ctx.fillStyle = 'rgba(255,255,255,.55)';
+    ctx.fillText('decoded message:', 36, panelY + 100);
+
+    ctx.font = 'bold 32px ui-rounded, system-ui';
+    ctx.fillStyle = '#00FF41';
+    ctx.textAlign = 'left';
+    // Blinking cursor
+    const cursor = (Math.floor(now/500) % 2) ? '▌' : ' ';
+    const text = state.decoded + cursor;
+    // truncate if too long
+    let toShow = text;
+    while (ctx.measureText(toShow).width > W - 80 && toShow.length > 1){
+      toShow = '…' + toShow.slice(-Math.floor(toShow.length*0.9));
+    }
+    ctx.fillText(toShow, 36, panelY + 134);
+
+    // --- Key (bottom half) ---
+    const keyY = panelY + panelH + 16;
+    const keyH = H - keyY - 16;
+    // key base
+    ctx.fillStyle = '#120800';
+    roundRect(ctx, 20, keyY, W-40, keyH, 10);
+    ctx.fill();
+    ctx.strokeStyle = '#FFB000'; ctx.lineWidth = 1; ctx.stroke();
+
+    // The telegraph key — a pill-shaped "paddle"
+    const paddleW = Math.min(360, W*0.5), paddleH = Math.min(keyH*0.55, 70);
+    const paddleX = (W - paddleW)/2, paddleYBase = keyY + (keyH - paddleH)/2;
+    const pressed = state.pressing || now < state.keyDownUntil;
+    const paddleOffset = pressed ? 6 : 0;
+    // shadow
+    ctx.fillStyle = 'rgba(0,0,0,.6)';
+    roundRect(ctx, paddleX+2, paddleYBase + paddleOffset + 4, paddleW, paddleH, 14);
+    ctx.fill();
+    // paddle
+    const pg = ctx.createLinearGradient(paddleX, paddleYBase + paddleOffset, paddleX, paddleYBase + paddleOffset + paddleH);
+    pg.addColorStop(0, pressed ? '#FF7700' : '#FFB000');
+    pg.addColorStop(1, pressed ? '#B04400' : '#8A5400');
+    ctx.fillStyle = pg;
+    roundRect(ctx, paddleX, paddleYBase + paddleOffset, paddleW, paddleH, 14);
+    ctx.fill();
+    ctx.strokeStyle = pressed ? '#FFEE99' : '#FFCC44'; ctx.lineWidth = 2;
+    ctx.stroke();
+    // label
+    ctx.font = 'bold 22px ui-rounded, system-ui';
+    ctx.fillStyle = pressed ? '#FFF' : '#1A0800';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(pressed ? '◉ KEYING' : 'TAP HERE  ⎵', paddleX + paddleW/2, paddleYBase + paddleOffset + paddleH/2);
+
+    // Helper hints
+    ctx.font = '11px ui-monospace, Consolas'; ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = 'rgba(255,176,0,.6)'; ctx.textAlign = 'left';
+    ctx.fillText('· short = DOT     — long = DASH', 36, keyY + keyH - 14);
+    ctx.textAlign = 'right';
+    ctx.fillText(state.autoPlaying ? `auto-sending "${state.lastSendName}"…` : 'ready.', W - 36, keyY + keyH - 14);
+
+    // Live "envelope" showing how long you've been holding (growing bar)
+    if (state.pressing){
+      const heldMs = now - state.pressStart;
+      const barW = Math.min(160, (heldMs / 400) * 160);
+      const barH2 = 4;
+      ctx.fillStyle = heldMs < DOT_THRESHOLD_MS ? '#00FF41' : '#FFB000';
+      ctx.fillRect(paddleX + paddleW/2 - 80, paddleYBase + paddleOffset - 12, barW, barH2);
+      ctx.fillStyle = 'rgba(255,255,255,.3)';
+      ctx.fillRect(paddleX + paddleW/2 - 80 + barW, paddleYBase + paddleOffset - 12, 160 - barW, barH2);
+      ctx.font = 'bold 10px ui-monospace, Consolas'; ctx.textAlign = 'center';
+      ctx.fillStyle = heldMs < DOT_THRESHOLD_MS ? '#00FF41' : '#FFB000';
+      ctx.fillText(heldMs < DOT_THRESHOLD_MS ? '· · · DOT' : '— — — DASH', paddleX + paddleW/2, paddleYBase + paddleOffset - 20);
+    }
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 2 — Binary Translator
+   Type text → show each letter with its 8-bit binary code.
+   A flowing "bit stream" animates along a wire.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('binary');
+  const {ctx} = setupCanvas(c);
+  const input = document.getElementById('bin-input');
+  const spEl = document.getElementById('bin-s');
+  const spV = document.getElementById('bin-s-val');
+
+  spEl.addEventListener('input', () => spV.textContent = (+spEl.value/100).toFixed(1) + '×');
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle = '#000500'; ctx.fillRect(0,0,W,H);
+
+    const raw = (input.value || '').toUpperCase().replace(/[^A-Z0-9 ]/g, '').slice(0, 12);
+    const letters = raw.split('');
+    const binList = letters.map(ch => ch === ' ' ? ' ' : ch.charCodeAt(0).toString(2).padStart(8,'0'));
+
+    // --- Letter table (top) ---
+    const tableY = 24, rowH = 30;
+    // heading
+    ctx.font = 'bold 11px ui-monospace, Consolas';
+    ctx.fillStyle = '#FFB000'; ctx.textAlign = 'left';
+    ctx.fillText('◆ ASCII LOOKUP', 36, tableY - 4);
+    ctx.fillStyle = 'rgba(255,255,255,.45)'; ctx.textAlign = 'right';
+    ctx.fillText(`${letters.length} chars · ${letters.length*8} bits`, W - 36, tableY - 4);
+
+    const availableWidth = W - 80;
+    const slotW = Math.min(120, availableWidth / Math.max(1, letters.length));
+    const startX = 40;
+    for (let i = 0; i < letters.length; i++){
+      const x = startX + i * slotW;
+      const ch = letters[i];
+      const bin = binList[i];
+
+      // slot bg
+      ctx.fillStyle = 'rgba(0,255,65,.05)';
+      roundRect(ctx, x + 4, tableY, slotW - 8, 60, 6);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0,255,65,.25)'; ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // letter
+      ctx.font = 'bold 24px ui-rounded, system-ui';
+      ctx.fillStyle = '#7FFF90'; ctx.textAlign = 'center';
+      ctx.fillText(ch === ' ' ? '·' : ch, x + slotW/2, tableY + 28);
+
+      // binary
+      ctx.font = `${Math.max(10, Math.min(14, slotW/12))}px ui-monospace, Consolas`;
+      ctx.fillStyle = '#00FF41';
+      ctx.fillText(bin, x + slotW/2, tableY + 52);
+    }
+
+    // --- Bit stream "wire" (middle-bottom) ---
+    const wireY = H * 0.78;
+    // wire
+    ctx.strokeStyle = '#004410'; ctx.lineWidth = 6;
+    ctx.beginPath(); ctx.moveTo(40, wireY); ctx.lineTo(W-40, wireY); ctx.stroke();
+    ctx.strokeStyle = '#00FF41'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(40, wireY); ctx.lineTo(W-40, wireY); ctx.stroke();
+
+    // Build continuous bit stream
+    const streamBits = binList.join(' ').trim();
+    const speed = +spEl.value;
+    const pxPerBit = 22;
+    // total width of stream
+    const totalStreamPx = streamBits.length * pxPerBit;
+    // the stream scrolls right-to-left: offset = - (time * speed) % (totalStreamPx + W)
+    const offset = ((now * speed / 1000)) % (totalStreamPx + W + 200);
+    // draw each bit as a pulse on the wire
+    for (let i = 0; i < streamBits.length; i++){
+      const bit = streamBits[i];
+      if (bit === ' ') continue;
+      // bit's x (entering from right, moving to the left over time)
+      const x = (W - 40) - offset + i * pxPerBit;
+      if (x < 20 || x > W - 20) continue;
+      const on = bit === '1';
+      if (on){
+        // pulse: raised on the wire
+        ctx.fillStyle = '#00FF41';
+        ctx.shadowColor = '#00FF41'; ctx.shadowBlur = 14;
+        roundRect(ctx, x - 8, wireY - 22, 16, 22, 3);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        // label
+        ctx.font = 'bold 12px ui-monospace, Consolas';
+        ctx.fillStyle = '#FFF';
+        ctx.textAlign = 'center';
+        ctx.fillText('1', x, wireY - 6);
+      } else {
+        // 0 — flat on the wire
+        ctx.fillStyle = '#002200';
+        ctx.strokeStyle = '#00AA28'; ctx.lineWidth = 1;
+        roundRect(ctx, x - 8, wireY - 8, 16, 8, 2);
+        ctx.fill(); ctx.stroke();
+        ctx.font = 'bold 11px ui-monospace, Consolas';
+        ctx.fillStyle = 'rgba(127,255,144,.7)';
+        ctx.textAlign = 'center';
+        ctx.fillText('0', x, wireY + 14);
+      }
+    }
+
+    // endpoints: sender (right), receiver (left)
+    ctx.font = 'bold 10px ui-monospace, Consolas';
+    ctx.fillStyle = '#FFB000'; ctx.textAlign = 'left';
+    ctx.fillText('◀ RECEIVER', 46, wireY + 32);
+    ctx.textAlign = 'right';
+    ctx.fillText('SENDER ▶', W - 46, wireY + 32);
+
+    // computer / "screen" icons
+    ctx.font = '20px system-ui, Apple Color Emoji, Segoe UI Emoji';
+    ctx.textAlign = 'center';
+    ctx.fillText('💻', 52, wireY);
+    ctx.fillText('📱', W - 52, wireY);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 3 — Signal vs Noise
+   Draw a clean square-wave signal representing bits of the
+   word "HELLO"/etc. Add noise scaled by slider. Decode by
+   sampling at bit centers with threshold flip due to noise.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('noiselab');
+  const {ctx} = setupCanvas(c);
+  const noiseEl = document.getElementById('noise');
+  const noiseV  = document.getElementById('noise-val');
+  const msgBtns = document.querySelectorAll('[data-msg]');
+
+  noiseEl.addEventListener('input', () => noiseV.textContent = noiseEl.value + '%');
+  let currentMsg = 'HELLO';
+  msgBtns.forEach(b => b.addEventListener('click', () => {
+    msgBtns.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    currentMsg = b.dataset.msg;
+  }));
+
+  // Deterministic per-bit noise based on bit index + time tick so we can display
+  // a stable but evolving noise pattern. Use a simple hash.
+  function noiseValue(bitIdx, tTick){
+    const n = Math.sin(bitIdx*12.9898 + tTick*0.001) * 43758.5453;
+    return (n - Math.floor(n)) * 2 - 1;   // -1..1
+  }
+
+  function tick(now){
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle = '#000500'; ctx.fillRect(0,0,W,H);
+
+    const bits = toBinary(currentMsg).join('');   // 8 bits per char
+    const N = bits.length;
+    const noiseFrac = +noiseEl.value/100;
+    const noiseAmp = noiseFrac * 1.2;             // allow overshoot for strong corruption
+
+    const pad = 36;
+    const top = 30;
+    const rowH = (H - top - 120) / 3;
+    const trackTopY = top + rowH*0.5;
+    const noiseY    = top + rowH*1.5;
+    const receivedY = top + rowH*2.5;
+
+    const signalAmp = rowH*0.32;
+
+    // Compute per-bit received value (averaged signal+noise at bit center)
+    const nowBin = Math.floor(now/120);
+    const bitW = (W - pad*2) / N;
+    const receivedBits = [];
+    for (let i = 0; i < N; i++){
+      const clean = bits[i] === '1' ? 1 : -1;
+      const nz = noiseValue(i, nowBin) * noiseAmp;
+      const received = clean + nz;
+      receivedBits.push(received > 0 ? '1' : '0');
+    }
+
+    // Draw each row axis
+    ctx.setLineDash([3,4]); ctx.strokeStyle = 'rgba(0,255,65,.15)'; ctx.lineWidth = 1;
+    [trackTopY, noiseY, receivedY].forEach(y => {
+      ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(W-pad, y); ctx.stroke();
+    });
+    ctx.setLineDash([]);
+
+    // --- Row 1: clean signal (step function) ---
+    ctx.font = 'bold 11px ui-monospace, Consolas';
+    ctx.fillStyle = '#FFB000'; ctx.textAlign = 'left';
+    ctx.fillText('① SENT   ·   clean signal', pad, top + 14);
+
+    ctx.strokeStyle = '#00FF41'; ctx.lineWidth = 2;
+    ctx.shadowColor = '#00FF41'; ctx.shadowBlur = 6;
+    ctx.beginPath();
+    for (let i = 0; i < N; i++){
+      const x0 = pad + i*bitW, x1 = x0 + bitW;
+      const y = trackTopY - (bits[i] === '1' ? signalAmp : -signalAmp);
+      if (i === 0) ctx.moveTo(x0, y);
+      else {
+        // previous y
+        const prevY = trackTopY - (bits[i-1] === '1' ? signalAmp : -signalAmp);
+        ctx.lineTo(x0, prevY);
+        ctx.lineTo(x0, y);
+      }
+      ctx.lineTo(x1, y);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // --- Row 2: noise ---
+    ctx.fillStyle = '#FFB000'; ctx.textAlign = 'left';
+    ctx.fillText(`② NOISE  ·   ${noiseEl.value}% random interference`, pad, noiseY - rowH*0.5 + 14);
+
+    ctx.strokeStyle = `rgba(255,176,0,${0.4 + noiseFrac*0.5})`; ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (let x = pad; x <= W-pad; x += 2){
+      const bitIdx = (x-pad) / bitW;
+      const nz = noiseValue(bitIdx*30 + x*0.17, nowBin) * noiseAmp;
+      const y = noiseY - nz * signalAmp * 0.9;
+      if (x === pad) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    // --- Row 3: received (signal + noise) ---
+    ctx.fillStyle = '#FFB000'; ctx.textAlign = 'left';
+    ctx.fillText('③ RECEIVED   ·   signal + noise', pad, receivedY - rowH*0.5 + 14);
+
+    // continuous trace
+    ctx.strokeStyle = '#7FFF90'; ctx.lineWidth = 2;
+    ctx.shadowColor = '#7FFF90'; ctx.shadowBlur = 6;
+    ctx.beginPath();
+    for (let x = pad; x <= W-pad; x += 1.5){
+      const bitIdx = Math.min(N-1, Math.floor((x-pad) / bitW));
+      const clean = bits[bitIdx] === '1' ? 1 : -1;
+      const nz = noiseValue(bitIdx*30 + x*0.17, nowBin) * noiseAmp;
+      const v = clean + nz;
+      const y = receivedY - v * signalAmp * 0.85;
+      if (x === pad) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // threshold line
+    ctx.strokeStyle = 'rgba(255,255,255,.3)'; ctx.setLineDash([6,6]);
+    ctx.beginPath(); ctx.moveTo(pad, receivedY); ctx.lineTo(W-pad, receivedY); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = '10px ui-monospace, Consolas'; ctx.fillStyle = 'rgba(255,255,255,.4)';
+    ctx.textAlign = 'right'; ctx.fillText('decision threshold (0)', W-pad-4, receivedY - 4);
+
+    // Decode to text. If a char has any flipped bit, mark with '■'; if >2 flips, '?'
+    const received = receivedBits.join('');
+    let decoded = '';
+    let flipsTotal = 0;
+    for (let i = 0; i < N; i += 8){
+      const chunk = received.slice(i, i+8);
+      const charCode = parseInt(chunk, 2);
+      // count flips vs original
+      let flips = 0;
+      for (let k = 0; k < 8; k++){ if (chunk[k] !== bits[i+k]) flips++; }
+      flipsTotal += flips;
+      if (flips === 0) decoded += String.fromCharCode(charCode);
+      else if (flips <= 2) decoded += '▓';  // garbled but close
+      else decoded += '█';                   // heavily damaged
+    }
+
+    // Result readout bar
+    const resY = H - 68, resH = 56;
+    ctx.fillStyle = 'rgba(0,0,0,.5)';
+    roundRect(ctx, pad, resY, W-pad*2, resH, 10);
+    ctx.fill();
+    ctx.strokeStyle = flipsTotal === 0 ? '#00FF41' : flipsTotal < N*0.15 ? '#FFB000' : '#FF4040';
+    ctx.lineWidth = 2; ctx.stroke();
+
+    ctx.font = 'bold 11px ui-monospace, Consolas';
+    ctx.fillStyle = '#FFB000'; ctx.textAlign = 'left';
+    ctx.fillText('◆ DECODED MESSAGE', pad + 14, resY + 18);
+    ctx.font = 'bold 26px ui-monospace, Consolas';
+    ctx.fillStyle = flipsTotal === 0 ? '#00FF41' : flipsTotal < N*0.15 ? '#FFB000' : '#FF4040';
+    ctx.fillText(`"${decoded}"`, pad + 14, resY + 46);
+
+    // quality label on right
+    ctx.font = 'bold 14px ui-rounded, system-ui';
+    ctx.textAlign = 'right';
+    const qualityTxt = flipsTotal === 0 ? '✓ PERFECT'
+                     : flipsTotal < N*0.10 ? '◎ OK'
+                     : flipsTotal < N*0.20 ? '△ GARBLED'
+                     : '✗ UNREADABLE';
+    const qualityCol = flipsTotal === 0 ? '#00FF41'
+                     : flipsTotal < N*0.10 ? '#FFB000'
+                     : flipsTotal < N*0.20 ? '#FF9040'
+                     : '#FF4040';
+    ctx.fillStyle = qualityCol;
+    ctx.fillText(qualityTxt, W - pad - 14, resY + 30);
+    ctx.font = '10px ui-monospace, Consolas';
+    ctx.fillStyle = 'rgba(255,255,255,.5)';
+    ctx.fillText(`${flipsTotal}/${N} bit errors`, W - pad - 14, resY + 46);
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

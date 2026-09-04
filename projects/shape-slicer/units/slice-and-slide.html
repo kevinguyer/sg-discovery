@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Slice &amp; Slide · Shape Slicer · REDS Hall of Discovery</title>
+<link rel="stylesheet" href="../shared/slicer.css"/>
+<style>
+  /* ═══════ UNIT 01 PALETTE — "the cutting board" (warm kitchen) ═══════ */
+  :root{
+    --bg:#2B140B; --bg2:#4A2413; --wood:#8B5A2B; --board:#C98B4B; --boardlight:#E3B27A;
+    --tomato:#FF4D3D; --butter:#FFE08A; --olive:#9BC53D; --mint:#7FE3C0; --cream:#FFF8E7; --ink:#2B140B;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+    --sc-accent:var(--butter); --sc-accent-2:var(--olive); --sc-ink:#2B140B; --sc-panel:#4A2413; --sc-line:rgba(255,224,138,.25);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body); color:var(--cream); min-height:100vh; overflow-x:hidden; -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(ellipse at 15% 10%, rgba(255,77,61,.22), transparent 55%),
+      radial-gradient(ellipse at 90% 90%, rgba(155,197,61,.16), transparent 55%),
+      linear-gradient(180deg, #2B140B 0%, #3A1B0E 60%, #22100A 100%);
+    background-attachment:fixed}
+  /* gingham tablecloth overlay */
+  body::before{content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.06;
+    background:
+      repeating-linear-gradient(90deg, #FF4D3D 0 22px, transparent 22px 44px),
+      repeating-linear-gradient(0deg, #FF4D3D 0 22px, transparent 22px 44px)}
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  button{font:inherit}
+
+  /* ═══════ TOPBAR ═══════ */
+  .topbar{position:sticky; top:0; z-index:20; backdrop-filter:blur(14px);
+    background:linear-gradient(180deg, rgba(43,20,11,.92), rgba(43,20,11,.75)); border-bottom:1px solid rgba(255,224,138,.16)}
+  .topbar-inner{max-width:1280px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px}
+  .brand-group{display:flex; align-items:center; gap:16px}
+  .back{display:inline-flex; align-items:center; gap:8px; padding:9px 14px; border-radius:999px; background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.16); font-family:var(--font-display); font-size:13px; transition:transform .15s, background .15s}
+  .back:hover{transform:translateX(-3px); background:rgba(255,255,255,.14)}
+  .brand{display:flex; align-items:center; gap:12px}
+  .brand .logo{width:44px; height:44px; filter:drop-shadow(0 0 12px rgba(255,77,61,.5))}
+  .brand .eyebrow{font-family:var(--font-display); font-size:10px; letter-spacing:.24em; text-transform:uppercase; opacity:.8}
+  .brand .wordmark{font-family:var(--font-display); font-weight:800; font-size:19px; line-height:1.1}
+  .brand .wordmark .unit{color:var(--butter); font-weight:600}
+  .class-pill{display:inline-flex; align-items:center; gap:8px; padding:9px 15px; border-radius:999px; font-family:var(--font-display); font-size:12px;
+    background:linear-gradient(135deg, rgba(255,77,61,.25), rgba(255,224,138,.25)); border:1px solid rgba(255,255,255,.18)}
+  .class-pill .dot{width:8px;height:8px;border-radius:999px;background:var(--olive);box-shadow:0 0 12px var(--olive);animation:blink 2s infinite}
+  @keyframes blink{50%{opacity:.35}}
+
+  /* ═══════ HERO ═══════ */
+  .hero{position:relative; min-height:72vh; display:flex; align-items:center; justify-content:center; overflow:hidden; z-index:1}
+  #hero-canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+  .hero-inner{position:relative; z-index:2; text-align:center; padding:60px 24px; max-width:900px}
+  .hero .eyebrow{font-family:var(--font-display); letter-spacing:.34em; text-transform:uppercase; font-size:13px; color:var(--butter); margin-bottom:16px}
+  .hero h1{font-size:clamp(50px, 8.5vw, 118px); letter-spacing:-.02em; line-height:.95; margin-bottom:18px;
+    background:linear-gradient(95deg, #FFE08A, #FF4D3D 55%, #FF9A62); -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 10px 40px rgba(255,77,61,.35))}
+  .hero .tag{font-size:clamp(17px,2vw,22px); line-height:1.55; opacity:.95; text-shadow:0 2px 12px rgba(0,0,0,.5)}
+  .scroll-cue{position:absolute; bottom:22px; left:50%; transform:translateX(-50%); z-index:2; font-family:var(--font-display); font-size:12px; letter-spacing:.2em; opacity:.7; animation:nudge 2.4s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translate(-50%, 8px)}}
+
+  /* ═══════ SECTIONS ═══════ */
+  section.concept, section.lab, section.facts, section.nextup{position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:56px 28px 20px}
+  .kicker{font-family:var(--font-display); font-size:12px; letter-spacing:.26em; text-transform:uppercase; color:var(--butter); margin-bottom:10px}
+  .kicker::before{content:'🔪 '; }
+  h2.title{font-size:clamp(30px, 4vw, 50px); margin-bottom:14px; letter-spacing:-.01em}
+  h2.title em{font-style:normal; color:var(--tomato)}
+  p.blurb{font-size:18px; line-height:1.65; max-width:820px; opacity:.94}
+  p.blurb strong{color:var(--butter)}
+  .concept-row{display:grid; grid-template-columns:1.2fr 1fr; gap:26px; align-items:center; margin-top:22px}
+  @media (max-width:860px){ .concept-row{grid-template-columns:1fr} }
+  .concept-card{padding:24px 26px; border-radius:20px; background:rgba(0,0,0,.28); border:1px solid rgba(255,224,138,.2)}
+  .concept-card h3{font-size:20px; color:var(--butter); margin-bottom:8px}
+  .concept-card p{font-size:15px; line-height:1.6; opacity:.92}
+  .concept-card p + p{margin-top:8px}
+  .concept-card .formula{margin-top:12px; font-family:var(--font-display); font-size:22px; padding:12px 16px; border-radius:12px; background:rgba(255,224,138,.12); border:1px dashed rgba(255,224,138,.4); text-align:center}
+  .concept-card .formula b{color:var(--tomato)}
+  svg.figure{width:100%; height:auto; display:block}
+
+  /* ═══════ PANEL (lab container) ═══════ */
+  .panel{margin-top:22px; border-radius:24px; overflow:hidden; background:linear-gradient(180deg, rgba(201,139,75,.16), rgba(0,0,0,.35));
+    border:1px solid rgba(255,224,138,.22); box-shadow:0 30px 70px rgba(0,0,0,.45)}
+  .panel-top{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:14px 20px; border-bottom:1px solid rgba(255,224,138,.16); background:rgba(0,0,0,.25)}
+  .panel-top .name{display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:800; font-size:17px}
+  .panel-top .dot{width:10px; height:10px; border-radius:999px; background:var(--tomato); box-shadow:0 0 12px var(--tomato); animation:blink 1.6s infinite}
+  .panel-top .hint{font-family:var(--font-mono); font-size:12px; opacity:.75}
+  .panel-body{padding:18px 20px 22px}
+  .lab-grid{display:grid; grid-template-columns:1fr 300px; gap:18px}
+  @media (max-width:900px){ .lab-grid{grid-template-columns:1fr} }
+  .controls{display:flex; flex-direction:column; gap:12px}
+  .control{padding:12px 14px; border-radius:14px; background:rgba(0,0,0,.28); border:1px solid rgba(255,224,138,.16)}
+  .control label{display:flex; justify-content:space-between; font-family:var(--font-display); font-size:13px; letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px}
+  .control .val{color:var(--butter)}
+  input[type=range]{width:100%; accent-color:var(--tomato); height:6px}
+  .btn-row{display:flex; flex-wrap:wrap; gap:8px}
+  .caption{margin-top:14px; font-size:15px; line-height:1.6; opacity:.92}
+  .caption strong{color:var(--butter)}
+  .big-btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 20px; border-radius:16px; border:none; cursor:pointer; color:#fff;
+    font-family:var(--font-display); font-weight:800; font-size:17px; background:linear-gradient(135deg, var(--tomato), #FF8A62); box-shadow:0 12px 30px rgba(255,77,61,.4); transition:transform .15s, box-shadow .15s}
+  .big-btn:hover{transform:translateY(-2px); box-shadow:0 18px 40px rgba(255,77,61,.55)}
+  .big-btn[disabled]{opacity:.5; cursor:not-allowed; transform:none}
+  .score-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; font-family:var(--font-display)}
+  .score-row .pill{padding:8px 14px; border-radius:999px; background:rgba(0,0,0,.3); border:1px solid rgba(255,224,138,.2); font-size:14px}
+  .score-row .pill b{color:var(--butter)}
+  .options{display:flex; gap:8px; flex-wrap:wrap}
+  .opt{flex:1 1 90px; padding:12px; border-radius:14px; cursor:pointer; color:#fff; font-family:var(--font-display); font-weight:800; font-size:16px;
+    background:rgba(255,255,255,.08); border:2px solid rgba(255,255,255,.18); transition:transform .15s, background .15s}
+  .opt:hover{transform:translateY(-2px); background:rgba(255,255,255,.14)}
+  .opt.good{background:rgba(74,222,128,.25); border-color:#4ADE80}
+  .opt.bad{background:rgba(251,113,133,.25); border-color:#FB7185}
+  .opt[disabled]{cursor:default; transform:none}
+
+  /* ═══════ FACTS ═══════ */
+  .facts-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:22px}
+  @media (max-width:900px){ .facts-grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:560px){ .facts-grid{grid-template-columns:1fr} }
+  .fact{padding:22px; border-radius:20px; background:rgba(0,0,0,.3); border:1px solid rgba(255,224,138,.18); transition:transform .2s}
+  .fact:hover{transform:translateY(-4px)}
+  .fact .emoji{font-size:44px; line-height:1; margin-bottom:10px}
+  .fact h4{font-size:18px; margin-bottom:6px; color:var(--butter)}
+  .fact p{font-size:14px; line-height:1.55; opacity:.9}
+
+  /* ═══════ NEXT UP ═══════ */
+  .nextup-card{border-radius:26px; padding:34px 36px; background:linear-gradient(145deg, #0A1A4A, #5AB8FF 55%, #E6EEF5); color:#061128;
+    display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between; box-shadow:0 30px 70px rgba(0,0,0,.45)}
+  .nextup-card h3{font-size:14px; letter-spacing:.24em; text-transform:uppercase; opacity:.8}
+  .nextup-card .big{font-family:var(--font-display); font-size:clamp(26px,3.5vw,40px); font-weight:800; margin:6px 0 8px}
+  .nextup-card p{max-width:560px; font-size:15px; line-height:1.55}
+  .chip{display:inline-flex; align-items:center; gap:8px; padding:12px 18px; border-radius:999px; font-family:var(--font-display); font-weight:700; font-size:14px;
+    background:rgba(255,255,255,.35); border:1px solid rgba(0,0,0,.15); color:#061128; transition:transform .15s}
+  .chip:hover{transform:translateY(-2px)}
+  .chip.active{background:#061128; color:#fff}
+  .chip-row{display:flex; gap:10px; flex-wrap:wrap}
+
+  footer{position:relative; z-index:1; max-width:1280px; margin:40px auto 0; padding:30px 28px; border-top:1px solid rgba(255,224,138,.14);
+    display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:13px; opacity:.75}
+  footer .heart{color:var(--tomato)}
+  .sound-toggle{position:fixed; right:18px; bottom:18px; z-index:50; width:46px; height:46px; border-radius:999px; border:1px solid rgba(255,255,255,.2);
+    background:rgba(0,0,0,.5); color:#fff; font-size:20px; cursor:pointer; backdrop-filter:blur(8px)}
+  @media (max-width:640px){ .topbar-inner{padding:12px 16px} .class-pill{display:none} section.concept, section.lab, section.facts, section.nextup{padding:40px 16px 10px} .panel-body{padding:14px} }
+  @media (prefers-reduced-motion: reduce){ .scroll-cue, .class-pill .dot, .panel-top .dot{animation:none} }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand-group">
+      <a class="back" href="../index.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 5l-7 7 7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        All units
+      </a>
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="60" height="60" rx="18" fill="#2B140B" stroke="url(#lg)" stroke-width="2"/>
+          <path d="M12 44 L34 44 L44 20 L22 20 Z" fill="#FF4D3D"/>
+          <path d="M26 44 L26 20" stroke="#FFE08A" stroke-width="2.5" stroke-dasharray="4 4"/>
+          <defs><linearGradient id="lg" x1="0" y1="0" x2="64" y2="64"><stop offset="0" stop-color="#FFE08A"/><stop offset="1" stop-color="#FF4D3D"/></linearGradient></defs>
+        </svg>
+        <div>
+          <div class="eyebrow">REDS Hall of Discovery</div>
+          <div class="wordmark">Shape Slicer <span class="unit">· Unit 01 · Parallelograms</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="class-pill"><span class="dot"></span>Grades 5 &amp; 6</div>
+  </div>
+</header>
+
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 01 · The cutting board</div>
+    <h1>Slice &amp; Slide</h1>
+    <p class="tag">A parallelogram looks like a rectangle that got <strong>pushed over</strong>. One straight cut and one slide put it right back — and that tells you exactly how big it is.</p>
+  </div>
+  <div class="scroll-cue">▼ SCROLL TO START CUTTING</div>
+</section>
+
+<!-- ═══════ CONCEPT 01 ═══════ -->
+<section class="concept" id="c1">
+  <div class="kicker">Concept 01 · The disguise</div>
+  <h2 class="title">A parallelogram is a rectangle <em>in disguise</em>.</h2>
+  <p class="blurb">
+    A <strong>parallelogram</strong> is a four-sided shape whose opposite sides are parallel. Rectangles are parallelograms too — they're just the ones with square corners.
+    Take any slanted parallelogram, snip off the slanted triangle on one end, and slide it to the other end. The bumps fit perfectly. You've built a rectangle with the <strong>same base</strong>, the <strong>same height</strong>, and the <strong>same area</strong>.
+  </p>
+  <div class="concept-row">
+    <div>
+      <svg class="figure" viewBox="0 0 640 220" aria-label="A parallelogram is cut into a triangle and a trapezoid; the triangle slides to the other side to form a rectangle">
+        <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#FFE08A"/></marker></defs>
+        <g transform="translate(20,30)">
+          <polygon points="0,150 180,150 240,30 60,30" fill="#FF4D3D" opacity=".9"/>
+          <line x1="60" y1="30" x2="60" y2="150" stroke="#FFE08A" stroke-width="3" stroke-dasharray="7 6"/>
+          <text x="90" y="185" fill="#FFF8E7" font-size="15" font-family="system-ui">base</text>
+          <text x="20" y="20" fill="#FFE08A" font-size="15" font-family="system-ui">✂ cut straight down</text>
+        </g>
+        <path d="M290 95 L340 95" stroke="#FFE08A" stroke-width="3" marker-end="url(#arr)"/>
+        <g transform="translate(370,30)">
+          <polygon points="0,150 180,150 180,30 0,30" fill="#9BC53D" opacity=".9"/>
+          <polygon points="180,150 240,150 240,30 180,30" fill="#FF4D3D" opacity=".9"/>
+          <text x="80" y="185" fill="#FFF8E7" font-size="15" font-family="system-ui">same base</text>
+          <text x="250" y="95" fill="#FFF8E7" font-size="15" font-family="system-ui">same</text>
+          <text x="250" y="113" fill="#FFF8E7" font-size="15" font-family="system-ui">height</text>
+        </g>
+      </svg>
+    </div>
+    <div class="concept-card">
+      <h3>So the rule is easy</h3>
+      <p>A rectangle's area is <strong>base × height</strong>. After the slide, the parallelogram <em>is</em> a rectangle with the same base and height. So…</p>
+      <div class="formula">Area of a parallelogram = <b>base × height</b></div>
+      <p style="margin-top:12px">Try it yourself below. Cut in different places. Does it <em>always</em> work?</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ LAB 01 — THE SHEAR MACHINE ═══════ -->
+<section class="lab" id="lab1">
+  <div class="kicker">Lab 01 · Hands on</div>
+  <h2 class="title">The <em>Shear Machine</em></h2>
+  <p class="blurb">Drag the ✂️ handle to choose where to cut. Then hit <strong>Slide it!</strong> and watch the left piece glide to the other side. Use the sliders to change the shape and try again.</p>
+  <div class="panel">
+    <div class="panel-top">
+      <div class="name"><span class="dot"></span>The Shear Machine</div>
+      <div class="hint">drag the ✂ handle · press Slide · change the sliders</div>
+    </div>
+    <div class="panel-body">
+      <div class="lab-grid">
+        <div>
+          <div class="board-wrap"><canvas class="board" id="shear"></canvas></div>
+          <div class="readouts">
+            <div class="readout"><div class="label">Base</div><div class="value" id="r-base">6<small>units</small></div></div>
+            <div class="readout"><div class="label">Height</div><div class="value" id="r-height">4<small>units</small></div></div>
+            <div class="readout"><div class="label">Slanted side</div><div class="value" id="r-slant">4.5<small>units</small></div><div class="formula">not the height!</div></div>
+            <div class="readout hot"><div class="label">Area</div><div class="value" id="r-area">?<small>sq units</small></div><div class="formula" id="r-formula">slide it to find out</div></div>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="control"><label>Base <span class="val" id="v-base">6</span></label><input type="range" id="s-base" min="3" max="10" value="6" step="1"></div>
+          <div class="control"><label>Height <span class="val" id="v-height">4</span></label><input type="range" id="s-height" min="2" max="6" value="4" step="1"></div>
+          <div class="control"><label>Slant (push-over) <span class="val" id="v-skew">2</span></label><input type="range" id="s-skew" min="0" max="6" value="2" step="1"></div>
+          <button class="big-btn" id="slide-btn">Slide it! →</button>
+          <div class="btn-row">
+            <button class="tool-btn" id="back-btn">↺ Put it back</button>
+            <button class="tool-btn" id="rand-btn">🎲 Random</button>
+            <button class="tool-btn" id="zone-btn">💡 Show cut zone</button>
+          </div>
+        </div>
+      </div>
+      <div class="caption" id="shear-cap"><strong>Try this:</strong> slide with the cut in the middle. Then drag the ✂ handle way over to the left edge and slide again. What goes wrong?</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ CONCEPT 02 ═══════ -->
+<section class="concept" id="c2">
+  <div class="kicker">Concept 02 · The trap</div>
+  <h2 class="title">Height is <em>not</em> the slanted side.</h2>
+  <p class="blurb">
+    This is the #1 mistake in the whole unit. The <strong>height</strong> is the straight-up-and-down distance between the base and the opposite side — it always makes a
+    <strong>right angle</strong> (a square corner) with the base. The slanted side is longer than the height, so using it gives you an area that's too big.
+    Sometimes the height even lands <em>outside</em> the shape — that's fine, it's still the height.
+  </p>
+</section>
+
+<!-- ═══════ LAB 02 — HEIGHT HUNT ═══════ -->
+<section class="lab" id="lab2">
+  <div class="kicker">Lab 02 · Quick eyes</div>
+  <h2 class="title">Height <em>Hunt</em></h2>
+  <p class="blurb">Three lines are drawn on each parallelogram. Only one is the true height for the base shown in yellow. Click it!</p>
+  <div class="panel">
+    <div class="panel-top">
+      <div class="name"><span class="dot"></span>Height Hunt</div>
+      <div class="hint">click the line that is the height · 6 rounds</div>
+    </div>
+    <div class="panel-body">
+      <div class="lab-grid">
+        <div>
+          <div class="board-wrap"><canvas class="board" id="hunt"></canvas></div>
+          <div class="feedback" id="hunt-fb"></div>
+        </div>
+        <div class="controls">
+          <div class="score-row"><span class="pill">Round <b id="h-round">1</b>/6</span><span class="pill">Score <b id="h-score">0</b></span><span class="pill">Streak <b id="h-streak">0</b></span></div>
+          <div class="control">
+            <label>Remember</label>
+            <p style="font-size:14px;line-height:1.5;opacity:.9">The height makes a <strong>square corner</strong> with the base. It can be inside the shape or outside it — but it's never slanted.</p>
+          </div>
+          <button class="big-btn" id="hunt-next" disabled>Next round →</button>
+          <button class="tool-btn" id="hunt-restart">↺ Start over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ LAB 03 — AREA KITCHEN ═══════ -->
+<section class="lab" id="lab3">
+  <div class="kicker">Lab 03 · Put it together</div>
+  <h2 class="title">The Area <em>Kitchen</em></h2>
+  <p class="blurb">Now you know the recipe: <strong>base × height</strong>. Each parallelogram shows three numbers — but only two of them belong in the recipe. Type the area.</p>
+  <div class="panel">
+    <div class="panel-top">
+      <div class="name"><span class="dot"></span>Area Kitchen</div>
+      <div class="hint">type the area · press Enter · 6 rounds</div>
+    </div>
+    <div class="panel-body">
+      <div class="lab-grid">
+        <div>
+          <div class="board-wrap"><canvas class="board" id="kitchen"></canvas></div>
+          <div class="answer-row">
+            <span style="font-family:var(--font-display);font-weight:800;font-size:18px">Area =</span>
+            <input type="number" id="k-answer" step="0.5" placeholder="?" aria-label="Area answer">
+            <button class="big-btn" id="k-check">Check ✓</button>
+            <button class="tool-btn" id="k-next" disabled>Next →</button>
+          </div>
+          <div class="feedback" id="k-fb"></div>
+        </div>
+        <div class="controls">
+          <div class="score-row"><span class="pill">Round <b id="k-round">1</b>/6</span><span class="pill">Correct <b id="k-score">0</b></span></div>
+          <div class="control">
+            <label>The recipe</label>
+            <div style="font-family:var(--font-display);font-size:22px;text-align:center;padding:8px 0">base × height</div>
+            <p style="font-size:13px;opacity:.85;text-align:center">Ignore the slanted side. It's a decoy. 🍋</p>
+          </div>
+          <button class="tool-btn" id="k-restart">↺ Start over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FACTS ═══════ -->
+<section class="facts">
+  <div class="kicker">Bonus</div>
+  <h2 class="title">Six wild <em>slicing</em> facts.</h2>
+  <div class="facts-grid">
+    <div class="fact"><div class="emoji">🏛️</div><h4>Euclid did this first</h4><p>Around 300 BC, the Greek mathematician Euclid proved that parallelograms with the same base and height have the same area — by cutting and sliding, just like you.</p></div>
+    <div class="fact"><div class="emoji">🃏</div><h4>Push a deck of cards</h4><p>Stack a deck of cards and push the top sideways. It becomes a parallelogram — but it's still the same 52 cards. Same "amount of stuff," different shape.</p></div>
+    <div class="fact"><div class="emoji">🔪</div><h4>Any cut in the zone works</h4><p>You don't have to cut from the corner. Any straight-down cut between the two dashed lines makes a rectangle after the slide. Outside the zone, the pieces don't fit.</p></div>
+    <div class="fact"><div class="emoji">📏</div><h4>Height can be outside</h4><p>For a very slanted parallelogram, the height line drops down past the end of the base. Mathematicians just extend the base with a dotted line. Still counts!</p></div>
+    <div class="fact"><div class="emoji">🧲</div><h4>Shearing keeps area</h4><p>The sliding motion has a name: a <em>shear</em>. Shears change shapes but never change area. Computer graphics use shears to make italic letters!</p></div>
+    <div class="fact"><div class="emoji">🎯</div><h4>Two cuts for extra-slanted</h4><p>If a parallelogram is pushed over farther than its base is long, one cut isn't enough. Cut it into strips first. You'll try this in Unit 04.</p></div>
+  </div>
+</section>
+
+<!-- ═══════ NEXT UP ═══════ -->
+<section class="nextup">
+  <div class="nextup-card">
+    <div>
+      <h3>Next up · Unit 02</h3>
+      <div class="big">🪞 Triangle Twins</div>
+      <p>If a parallelogram is a rectangle in disguise, what's a triangle? It's exactly <strong>half</strong> a parallelogram — and you'll prove it by making a twin.</p>
+    </div>
+    <div class="chip-row">
+      <a class="chip" href="../index.html">← All units</a>
+      <a class="chip active" href="triangle-twins.html">Go to Unit 02 →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>REDS Hall of Discovery · Shape Slicer · Unit 01: Slice &amp; Slide</div>
+  <div>Made with <span class="heart">♥</span> for Mrs. Guyer's classes</div>
+</footer>
+<button class="sound-toggle" id="soundToggle" aria-label="Turn sound off">🔊</button>
+
+<script src="../shared/slicer-core.js"></script>
+<script>
+const SC = window.SlicerCore;
+SC.bindSoundToggle(document.getElementById('soundToggle'));
+const REDUCE = SC.reduceMotion();
+const ease = t => t < .5 ? 2*t*t : -1 + (4 - 2*t)*t;
+
+/* =========================================================
+   HERO — a wooden cutting board where parallelograms get
+   sliced and slid into rectangles, on a loop.
+   ========================================================= */
+(() => {
+  const c = document.getElementById('hero-canvas');
+  let ctx, W, H;
+  function resize(){ ({ctx, w:W, h:H} = SC.fitCanvas(c)); }
+  resize(); addEventListener('resize', resize);
+  const specs = [{b:6,h:4,s:2},{b:5,h:3,s:3},{b:7,h:4,s:1},{b:4,h:4,s:2}];
+  let idx = 0, t0 = performance.now();
+  const CYCLE = 6200;
+  function drawBoard(){
+    // wood planks
+    const g = ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#5A2E15'); g.addColorStop(1,'#3A1B0E');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 2;
+    for (let y = 0; y < H; y += 38){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(255,224,138,.05)';
+    for (let i=0;i<40;i++){ const y = (i*97)%H; ctx.beginPath(); ctx.moveTo(0,y); ctx.bezierCurveTo(W*.3,y+12,W*.6,y-12,W,y+4); ctx.stroke(); }
+    // vignette
+    const v = ctx.createRadialGradient(W/2,H/2,H*.2,W/2,H/2,H); v.addColorStop(0,'rgba(0,0,0,0)'); v.addColorStop(1,'rgba(20,8,4,.75)');
+    ctx.fillStyle = v; ctx.fillRect(0,0,W,H);
+  }
+  function tick(now){
+    drawBoard();
+    const spec = specs[idx % specs.length];
+    let k = (now - t0) / CYCLE;
+    if (k >= 1){ idx++; t0 = now; k = 0; }
+    const unit = Math.min(W/ (2*spec.b + spec.s + 6), H / (spec.h + 6));
+    const ox = W/2 - (spec.b + spec.s/2) * unit * .5 - spec.b*unit*.25, oy = H*.62;
+    const X = x => ox + x*unit, Y = y => oy - y*unit;
+    const {b,h,s} = spec;
+    const cx = s + (b - s) * 0.5;            // cut position
+    const slideK = k < .3 ? 0 : k < .6 ? ease((k-.3)/.3) : 1;
+    const dx = slideK * b;
+    const fade = k > .92 ? (1 - (k-.92)/.08) : k < .06 ? k/.06 : 1;
+    ctx.globalAlpha = fade;
+    // right piece (stays)
+    const right = SC.splitByLine([SC.P(0,0),SC.P(b,0),SC.P(b+s,h),SC.P(s,h)], SC.P(cx,0), SC.P(0,1));
+    const parts = right.map(p => ({pts:p, cen:SC.centroid(p)})).sort((a,b2) => a.cen.x - b2.cen.x);
+    const draw = (pts, col, shift) => { ctx.beginPath(); pts.forEach((p,i)=> i?ctx.lineTo(X(p.x+shift),Y(p.y)):ctx.moveTo(X(p.x+shift),Y(p.y))); ctx.closePath();
+      ctx.fillStyle = col; ctx.fill(); ctx.strokeStyle = 'rgba(255,248,231,.85)'; ctx.lineWidth = 2; ctx.stroke(); };
+    if (parts.length === 2){ draw(parts[1].pts, '#9BC53D', 0); draw(parts[0].pts, '#FF4D3D', dx); }
+    // knife line
+    if (k > .12 && k < .3){
+      const kk = (k-.12)/.18;
+      ctx.strokeStyle = '#FFE08A'; ctx.lineWidth = 3; ctx.setLineDash([8,6]);
+      ctx.beginPath(); ctx.moveTo(X(cx), Y(h+1)); ctx.lineTo(X(cx), Y(h+1) + (h+1)*unit*Math.min(1,kk*1.4)); ctx.stroke(); ctx.setLineDash([]);
+      ctx.font = '28px system-ui'; ctx.fillText('🔪', X(cx)-14, Y(h+1)-8);
+    }
+    if (slideK >= 1){
+      ctx.strokeStyle = '#FFE08A'; ctx.lineWidth = 3; ctx.shadowColor = '#FFE08A'; ctx.shadowBlur = 18;
+      ctx.strokeRect(X(cx), Y(h), b*unit, h*unit); ctx.shadowBlur = 0;
+      ctx.fillStyle = '#FFF8E7'; ctx.font = `800 ${Math.max(16, unit*.55)}px ui-rounded, system-ui`; ctx.textAlign = 'center';
+      ctx.fillText(`${b} × ${h} = ${b*h}`, X(cx + b/2), Y(h) - 12);
+      ctx.textAlign = 'left';
+    }
+    ctx.globalAlpha = 1;
+    if (!REDUCE) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* =========================================================
+   LAB 1 — THE SHEAR MACHINE
+   A parallelogram on a Board (pieces locked), a draggable
+   cut handle, and an animated slide.
+   ========================================================= */
+(() => {
+  const canvas = document.getElementById('shear');
+  const st = { b:6, h:4, s:2, c:4, slid:false, anim:null, zone:false, wins:0 };
+  const el = id => document.getElementById(id);
+  const inputs = { b: el('s-base'), h: el('s-height'), s: el('s-skew') };
+  const vals = { b: el('v-base'), h: el('v-height'), s: el('v-skew') };
+  let left = null, right = null;
+
+  const board = new SC.Board(canvas, {
+    world: worldFor(), snap:false, showVertices:false,
+    colors:['#FF4D3D','#9BC53D'],
+    handles: () => st.slid ? [] : [{ x: st.c, y: -0.75, color:'#FFE08A', onDrag: w => { st.c = Math.max(0, Math.min(st.b + st.s, Math.round(w.x*2)/2)); build(); } }],
+    draw: overlay,
+  });
+  board.setMode('move'); canvas.style.cursor = 'default';
+
+  function worldFor(){ const maxX = Math.max(st.b + st.s, 2*st.b) ; return { minX:-1.5, maxX: maxX + 1.5, minY:-2.2, maxY: st.h + 1.6 }; }
+  function poly(){ const {b,h,s} = st; return [SC.P(0,0), SC.P(b,0), SC.P(b+s,h), SC.P(s,h)]; }
+  function build(){
+    if (st.anim) cancelAnimationFrame(st.anim), st.anim = null;
+    st.slid = false; left = right = null;
+    board.clear();
+    const parts = SC.splitByLine(poly(), SC.P(st.c, 0), SC.P(0,1));
+    if (parts.length === 2){
+      const sorted = parts.map(p => ({p, cx: SC.centroid(p).x})).sort((a,b)=>a.cx-b.cx);
+      left = board.addPiece(sorted[0].p, {locked:true, color:'#FF4D3D'});
+      right = board.addPiece(sorted[1].p, {locked:true, color:'#9BC53D'});
+    } else {
+      right = board.addPiece(parts[0], {locked:true, color:'#9BC53D'});
+    }
+    el('r-area').innerHTML = '?<small>sq units</small>'; el('r-formula').textContent = 'slide it to find out';
+    el('r-base').innerHTML = st.b + '<small>units</small>'; el('r-height').innerHTML = st.h + '<small>units</small>';
+    el('r-slant').innerHTML = SC.fmt(Math.hypot(st.s, st.h)) + '<small>units</small>';
+    el('slide-btn').disabled = !left;
+    board.draw();
+  }
+  function overlay(ctx, b, layer){
+    if (layer !== 'over') return;
+    const {b:B,h,s,c} = st;
+    // base label & height
+    b.dim(SC.P(0,0), SC.P(B,0), `base ${B}`, '#FFE08A', -0.5);
+    const hx = st.slid ? c + B : s; // after the slide, show the height on the rectangle's right edge
+    ctx.save(); ctx.setLineDash([6,5]); ctx.strokeStyle = '#7FE3C0'; ctx.lineWidth = 2;
+    const top = b.toScreen(SC.P(hx, h)), bot = b.toScreen(SC.P(hx, 0));
+    ctx.beginPath(); ctx.moveTo(top.x, top.y); ctx.lineTo(bot.x, bot.y); ctx.stroke(); ctx.setLineDash([]);
+    // right-angle marker
+    const m = 10; ctx.strokeStyle = '#7FE3C0'; ctx.beginPath(); ctx.moveTo(bot.x + m, bot.y); ctx.lineTo(bot.x + m, bot.y - m); ctx.lineTo(bot.x, bot.y - m); ctx.stroke();
+    ctx.restore();
+    b.dim(SC.P(hx,0), SC.P(hx,h), `height ${h}`, '#7FE3C0', 0.55);
+    if (!st.slid){
+      b.dim(SC.P(0,0), SC.P(s,h), `slant ${SC.fmt(Math.hypot(s,h))}`, '#FF9A62', 0.5);
+      // cut line
+      const a = b.toScreen(SC.P(c, -0.75)), t = b.toScreen(SC.P(c, h + 0.6));
+      ctx.save(); ctx.setLineDash([8,6]); ctx.strokeStyle = '#FFE08A'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(t.x, t.y); ctx.stroke(); ctx.restore();
+      ctx.font = '22px system-ui'; ctx.textAlign = 'center'; ctx.fillText('✂️', t.x, t.y - 6);
+      if (st.zone){
+        for (const zx of [s, B]){
+          const p1 = b.toScreen(SC.P(zx, -0.3)), p2 = b.toScreen(SC.P(zx, h + 0.3));
+          ctx.save(); ctx.setLineDash([3,5]); ctx.strokeStyle = 'rgba(127,227,192,.8)'; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); ctx.restore();
+        }
+        const zp = b.toScreen(SC.P((s+B)/2, h + 1.1));
+        ctx.font = '700 13px ui-rounded, system-ui'; ctx.fillStyle = '#7FE3C0'; ctx.textAlign = 'center';
+        ctx.fillText(s < B ? '← cut zone →' : 'no cut zone: slant is too big!', zp.x, zp.y);
+      }
+    } else if (st.ok){
+      const p = b.toScreen(SC.P(c, h));
+      ctx.save(); ctx.shadowColor = '#FFE08A'; ctx.shadowBlur = 20; ctx.strokeStyle = '#FFE08A'; ctx.lineWidth = 3;
+      ctx.strokeRect(p.x, p.y, B*b.scale, h*b.scale); ctx.restore();
+    }
+  }
+  function slide(){
+    if (!left || st.slid || st.anim) return;
+    const x0 = left.x, x1 = left.x + st.b; const t0 = performance.now(); const dur = REDUCE ? 0 : 900;
+    SC.sfx.snip();
+    const step = now => {
+      const k = dur ? Math.min(1, (now - t0)/dur) : 1;
+      left.x = x0 + (x1 - x0) * ease(k); board.draw();
+      if (k < 1) st.anim = requestAnimationFrame(step); else finish();
+    };
+    st.anim = requestAnimationFrame(step);
+  }
+  function finish(){
+    st.anim = null; st.slid = true;
+    const rect = [SC.P(st.c,0), SC.P(st.c+st.b,0), SC.P(st.c+st.b,st.h), SC.P(st.c,st.h)];
+    st.ok = SC.coversTarget(rect, [board.worldPts(left), board.worldPts(right)]).ok;
+    if (st.ok){
+      el('r-area').innerHTML = (st.b*st.h) + '<small>sq units</small>'; el('r-formula').textContent = `${st.b} × ${st.h} = ${st.b*st.h}`;
+      SC.sfx.win(); st.wins++;
+      SC.toast(`A rectangle! ${st.b} × ${st.h} = ${st.b*st.h} square units.`, 'good');
+      if (st.wins === 1) SC.confetti({colors:['#FF4D3D','#FFE08A','#9BC53D','#7FE3C0']});
+      el('shear-cap').innerHTML = `<strong>It worked:</strong> the parallelogram became a ${st.b} × ${st.h} rectangle. Now change the <em>slant</em> slider and slide again. Does the area change? (Hint: the base and height didn't.)`;
+    } else {
+      SC.sfx.nope(); st.zone = true;
+      SC.toast('Hmm — the pieces don\'t line up. Cut inside the green cut zone.', 'bad', 3400);
+      el('shear-cap').innerHTML = `<strong>No rectangle this time.</strong> The pieces overlap or leave a gap. The cut has to be somewhere in the <em>cut zone</em> — between the slanted corners. Press <em>Put it back</em> and try a cut in the zone.`;
+    }
+    board.draw();
+  }
+  function setShape(){
+    st.b = +inputs.b.value; st.h = +inputs.h.value; st.s = +inputs.s.value;
+    vals.b.textContent = st.b; vals.h.textContent = st.h; vals.s.textContent = st.s;
+    st.c = Math.max(0, Math.min(st.b + st.s, st.c));
+    board.opts.world = worldFor(); board.resize(); build();
+  }
+  for (const k in inputs) inputs[k].addEventListener('input', () => { setShape(); SC.sfx.click(); });
+  el('slide-btn').onclick = slide;
+  el('back-btn').onclick = () => { build(); SC.sfx.click(); };
+  el('rand-btn').onclick = () => {
+    inputs.b.value = 3 + Math.floor(Math.random()*8); inputs.h.value = 2 + Math.floor(Math.random()*5); inputs.s.value = Math.floor(Math.random()*5);
+    st.c = Math.round((+inputs.s.value + +inputs.b.value)/2); setShape(); SC.sfx.click();
+  };
+  el('zone-btn').onclick = () => { st.zone = !st.zone; el('zone-btn').classList.toggle('active', st.zone); board.draw(); };
+  build();
+})();
+
+/* =========================================================
+   LAB 2 — HEIGHT HUNT
+   Click the segment that is the true height. Pure canvas.
+   ========================================================= */
+(() => {
+  const canvas = document.getElementById('hunt');
+  const el = id => document.getElementById(id);
+  let round = 0, score = 0, streak = 0, q = null, answered = false;
+  const view = { ctx:null, w:0, h:0, scale:1, ox:0, oy:0 };
+  function fit(){
+    ({ctx:view.ctx, w:view.w, h:view.h} = SC.fitCanvas(canvas));
+    if (!q) return;
+    const bb = SC.bbox(q.all); const pad = 1.6;
+    view.scale = Math.min(view.w / (bb.w + pad*2), view.h / (bb.h + pad*2));
+    view.ox = view.w/2 - (bb.minX + bb.w/2)*view.scale; view.oy = view.h/2 + (bb.minY + bb.h/2)*view.scale;
+    draw();
+  }
+  const S = p => SC.P(view.ox + p.x*view.scale, view.oy - p.y*view.scale);
+  new ResizeObserver(fit).observe(canvas);
+  function makeQ(){
+    const b = 4 + Math.floor(Math.random()*4), h = 2 + Math.floor(Math.random()*3), s = 1 + Math.floor(Math.random()*3);
+    const A = SC.P(0,0), B = SC.P(b,0), C = SC.P(b+s,h), D = SC.P(s,h);
+    const outside = Math.random() < 0.45;
+    const height = outside ? [SC.P(b+s,h), SC.P(b+s,0)] : [D, SC.P(s,0)];
+    const slant = [A, D];
+    const diag = Math.random() < .5 ? [A, C] : [B, D];
+    const fake = [D, SC.P(Math.min(b, s + 1.2), 0)];
+    const distract = [slant, diag, fake];
+    const cands = [{seg:height, right:true, why:'It makes a square corner with the base.'},
+      {seg: distract[Math.floor(Math.random()*2)], right:false, why:'That one is slanted — it does not make a square corner with the base.'},
+      {seg: Math.random() < .6 ? fake : distract[2 - Math.floor(Math.random()*2)], right:false, why:'Close, but it leans. The height must be perfectly straight up from the base.'}];
+    // ensure the 3 candidates are distinct
+    if (cands[1].seg === cands[2].seg) cands[2].seg = slant === cands[1].seg ? diag : slant;
+    for (let i = cands.length-1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [cands[i],cands[j]] = [cands[j],cands[i]]; }
+    q = { b,h,s, poly:[A,B,C,D], cands, outside, all:[A,B,C,D, SC.P(-0.5,0), SC.P(b+s+0.5,0)] };
+  }
+  const COLS = ['#FF9A62','#7FE3C0','#B8A6FF'];
+  function draw(){
+    const ctx = view.ctx; if (!ctx || !q) return;
+    ctx.clearRect(0,0,view.w,view.h);
+    // grid
+    ctx.strokeStyle = 'rgba(255,255,255,.06)'; ctx.lineWidth = 1;
+    for (let x = -2; x < 14; x++){ const p = S(SC.P(x,-3)), p2 = S(SC.P(x,8)); ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); }
+    for (let y = -3; y < 8; y++){ const p = S(SC.P(-2,y)), p2 = S(SC.P(14,y)); ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); }
+    // shape
+    ctx.beginPath(); q.poly.forEach((p,i)=>{ const s = S(p); i?ctx.lineTo(s.x,s.y):ctx.moveTo(s.x,s.y); }); ctx.closePath();
+    ctx.fillStyle = 'rgba(255,77,61,.55)'; ctx.fill(); ctx.strokeStyle = 'rgba(255,248,231,.7)'; ctx.lineWidth = 2; ctx.stroke();
+    // base highlight
+    const a = S(q.poly[0]), b = S(q.poly[1]);
+    ctx.strokeStyle = '#FFE08A'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    ctx.font = '700 14px ui-rounded, system-ui'; ctx.fillStyle = '#FFE08A'; ctx.textAlign = 'center'; ctx.fillText('base', (a.x+b.x)/2, a.y + 22);
+    if (q.outside){ // extended base
+      const e = S(SC.P(q.b + q.s + 0.3, 0)); ctx.save(); ctx.setLineDash([4,6]); ctx.strokeStyle = 'rgba(255,224,138,.6)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(b.x,b.y); ctx.lineTo(e.x,e.y); ctx.stroke(); ctx.restore();
+    }
+    q.cands.forEach((cd, i) => {
+      const p1 = S(cd.seg[0]), p2 = S(cd.seg[1]);
+      ctx.save();
+      if (answered && cd.right){ ctx.shadowColor = '#4ADE80'; ctx.shadowBlur = 18; ctx.strokeStyle = '#4ADE80'; }
+      else if (answered && cd.chosen){ ctx.strokeStyle = '#FB7185'; }
+      else ctx.strokeStyle = COLS[i];
+      ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
+      ctx.restore();
+      const mx = (p1.x+p2.x)/2, my = (p1.y+p2.y)/2;
+      ctx.fillStyle = answered && cd.right ? '#4ADE80' : COLS[i]; ctx.beginPath(); ctx.arc(mx, my, 14, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#2B140B'; ctx.font = '800 15px ui-rounded, system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(i+1), mx, my+1); ctx.textBaseline = 'alphabetic';
+    });
+  }
+  function pick(e){
+    if (answered || !q) return;
+    const r = canvas.getBoundingClientRect(); const w = SC.P((e.clientX - r.left - view.ox)/view.scale, (view.oy - (e.clientY - r.top))/view.scale);
+    let best = null, bd = 0.45;
+    q.cands.forEach(cd => { const d = SC.distPointSeg(w, cd.seg[0], cd.seg[1]); if (d < bd){ bd = d; best = cd; } });
+    if (!best) return;
+    answered = true; best.chosen = true;
+    const fb = el('hunt-fb');
+    if (best.right){ score++; streak++; SC.sfx.win(); fb.className = 'feedback good'; fb.innerHTML = `✅ <strong>That's the height!</strong> ${best.why}${q.outside ? ' Notice it lands <em>outside</em> the shape — the base was extended with a dotted line.' : ''}`; }
+    else { streak = 0; SC.sfx.nope(); fb.className = 'feedback bad'; fb.innerHTML = `❌ <strong>Not that one.</strong> ${best.why} The true height is glowing green.`; }
+    if (streak === 3) SC.toast('🔥 Three in a row! Your eyes are calibrated.', 'good');
+    el('h-score').textContent = score; el('h-streak').textContent = streak;
+    el('hunt-next').disabled = false; el('hunt-next').textContent = round >= 6 ? 'See results →' : 'Next round →';
+    draw();
+  }
+  function next(){
+    if (round >= 6){
+      const fb = el('hunt-fb'); fb.className = 'feedback good';
+      fb.innerHTML = score === 6 ? `🏆 <strong>Perfect hunt! 6 for 6.</strong> You can spot a height anywhere.` : `🎉 <strong>Hunt complete:</strong> ${score} out of 6. Remember — square corner with the base, never slanted.`;
+      if (score >= 5) SC.confetti({colors:['#FF4D3D','#FFE08A','#9BC53D']});
+      el('hunt-next').disabled = true; return;
+    }
+    round++; answered = false; makeQ(); el('h-round').textContent = round; el('hunt-fb').textContent = ''; el('hunt-fb').className = 'feedback';
+    el('hunt-next').disabled = true; fit();
+  }
+  canvas.addEventListener('pointerdown', pick);
+  el('hunt-next').onclick = next;
+  el('hunt-restart').onclick = () => { round = 0; score = 0; streak = 0; el('h-score').textContent = 0; el('h-streak').textContent = 0; next(); };
+  next();
+})();
+
+/* =========================================================
+   LAB 3 — AREA KITCHEN
+   Parallelogram with base, height, and a decoy slanted side.
+   ========================================================= */
+(() => {
+  const canvas = document.getElementById('kitchen');
+  const el = id => document.getElementById(id);
+  let round = 0, score = 0, q = null, done = false;
+  const view = { ctx:null, w:0, h:0, scale:1, ox:0, oy:0 };
+  const S = p => SC.P(view.ox + p.x*view.scale, view.oy - p.y*view.scale);
+  function fit(){
+    ({ctx:view.ctx, w:view.w, h:view.h} = SC.fitCanvas(canvas));
+    if (!q) return;
+    const bb = SC.bbox(q.poly); const pad = 1.8;
+    view.scale = Math.min(view.w / (bb.w + pad*2), view.h / (bb.h + pad*2));
+    view.ox = view.w/2 - (bb.minX + bb.w/2)*view.scale; view.oy = view.h/2 + (bb.minY + bb.h/2)*view.scale;
+    draw();
+  }
+  new ResizeObserver(fit).observe(canvas);
+  function makeQ(){
+    const half = round >= 4;
+    const b = 3 + Math.floor(Math.random()*7) + (half && Math.random()<.5 ? .5 : 0);
+    const h = 2 + Math.floor(Math.random()*4) + (half && Math.random()<.5 ? .5 : 0);
+    const s = 1 + Math.floor(Math.random()*3);
+    q = { b, h, s, poly:[SC.P(0,0),SC.P(b,0),SC.P(b+s,h),SC.P(s,h)], slant: Math.round(Math.hypot(s,h)*10)/10, flip: Math.random()<.5 };
+  }
+  function dim(a, b, text, color, off){
+    const ctx = view.ctx; const dx = b.x-a.x, dy = b.y-a.y, L = Math.hypot(dx,dy)||1; const nx = -dy/L*off, ny = dx/L*off;
+    const p1 = S(SC.P(a.x+nx,a.y+ny)), p2 = S(SC.P(b.x+nx,b.y+ny));
+    ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
+    const m = S(SC.P((a.x+b.x)/2 + nx*1.9, (a.y+b.y)/2 + ny*1.9));
+    ctx.font = '800 15px ui-rounded, system-ui'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    const tw = ctx.measureText(text).width + 12; ctx.fillStyle = 'rgba(0,0,0,.55)'; SC.roundRect(ctx, m.x-tw/2, m.y-11, tw, 22, 7); ctx.fill();
+    ctx.fillStyle = color; ctx.fillText(text, m.x, m.y+1); ctx.textBaseline='alphabetic';
+  }
+  function draw(){
+    const ctx = view.ctx; if (!ctx || !q) return;
+    ctx.clearRect(0,0,view.w,view.h);
+    ctx.beginPath(); q.poly.forEach((p,i)=>{ const s = S(p); i?ctx.lineTo(s.x,s.y):ctx.moveTo(s.x,s.y); }); ctx.closePath();
+    ctx.fillStyle = done ? 'rgba(155,197,61,.55)' : 'rgba(255,77,61,.55)'; ctx.fill(); ctx.strokeStyle = 'rgba(255,248,231,.8)'; ctx.lineWidth = 2; ctx.stroke();
+    const [A,B,C,D] = q.poly;
+    dim(A, B, `${q.b}`, '#FFE08A', -0.5);
+    // height dashed
+    const t = S(SC.P(q.s, q.h)), bt = S(SC.P(q.s, 0));
+    ctx.save(); ctx.setLineDash([6,5]); ctx.strokeStyle = '#7FE3C0'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(t.x,t.y); ctx.lineTo(bt.x,bt.y); ctx.stroke(); ctx.restore();
+    ctx.strokeStyle = '#7FE3C0'; ctx.beginPath(); ctx.moveTo(bt.x+10, bt.y); ctx.lineTo(bt.x+10, bt.y-10); ctx.lineTo(bt.x, bt.y-10); ctx.stroke();
+    dim(SC.P(q.s,0), SC.P(q.s,q.h), `${q.h}`, '#7FE3C0', -0.55);
+    dim(A, D, `${q.slant}`, '#FF9A62', 0.5);
+    if (done){ const m = S(SC.P((q.b+q.s)/2, q.h/2)); ctx.fillStyle = '#FFF8E7'; ctx.font = '800 22px ui-rounded, system-ui'; ctx.textAlign = 'center'; ctx.fillText(`${q.b} × ${q.h} = ${q.b*q.h}`, m.x, m.y + 8); }
+  }
+  function check(){
+    if (done) return;
+    const v = parseFloat(el('k-answer').value); const fb = el('k-fb'); const inp = el('k-answer');
+    if (isNaN(v)) { SC.toast('Type a number first.', 'hint'); return; }
+    const ans = q.b*q.h;
+    if (Math.abs(v - ans) < 1e-6){
+      done = true; score++; inp.className = 'good'; fb.className = 'feedback good'; SC.sfx.win();
+      fb.innerHTML = `✅ <strong>${q.b} × ${q.h} = ${ans}.</strong> You ignored the ${q.slant} decoy. Chef's kiss. 👩‍🍳`;
+      el('k-score').textContent = score; el('k-next').disabled = false;
+    } else if (Math.abs(v - q.b*q.slant) < 1e-6){
+      inp.className = 'bad'; fb.className = 'feedback bad'; SC.sfx.nope();
+      fb.innerHTML = `❌ You used the <strong>slanted side</strong> (${q.slant}). That's the decoy! The height is the ${q.h} — the line with the square corner.`;
+    } else {
+      inp.className = 'bad'; fb.className = 'feedback bad'; SC.sfx.nope();
+      fb.innerHTML = `❌ Not quite. Multiply the base (${q.b}) by the height (${q.h}). Try again!`;
+    }
+    draw();
+  }
+  function next(){
+    if (round >= 6){
+      const fb = el('k-fb'); fb.className = 'feedback good';
+      fb.innerHTML = score === 6 ? `🏆 <strong>Six for six.</strong> The kitchen is closed — you've mastered base × height.` : `🎉 <strong>Round complete:</strong> ${score} of 6 correct.`;
+      if (score >= 5) SC.confetti({colors:['#FF4D3D','#FFE08A','#9BC53D']});
+      el('k-next').disabled = true; return;
+    }
+    round++; done = false; makeQ(); el('k-round').textContent = round; el('k-answer').value = ''; el('k-answer').className = '';
+    el('k-fb').textContent = ''; el('k-fb').className = 'feedback'; el('k-next').disabled = true; fit(); el('k-answer').focus({preventScroll:true});
+  }
+  el('k-check').onclick = check;
+  el('k-answer').addEventListener('keydown', e => { if (e.key === 'Enter'){ if (done && !el('k-next').disabled) next(); else check(); } });
+  el('k-next').onclick = next;
+  el('k-restart').onclick = () => { round = 0; score = 0; el('k-score').textContent = 0; next(); };
+  next();
+})();
+</script>
+</body>
+</html>

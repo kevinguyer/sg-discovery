@@ -402,15 +402,16 @@ const ease = t => t < .5 ? 2*t*t : -1 + (4 - 2*t)*t;
     const spec = specs[idx % specs.length];
     let k = (now - t0) / CYCLE;
     if (k >= 1){ idx++; t0 = now; k = 0; }
-    const unit = Math.min(W/ (2*spec.b + spec.s + 6), H / (spec.h + 6));
-    const ox = W/2 - (spec.b + spec.s/2) * unit * .5 - spec.b*unit*.25, oy = H*.62;
+    // keep the demo small and low so it never sits behind the title
+    const unit = Math.min(W / (2*spec.b + spec.s + 6), H / (spec.h + 6)) * .55;
+    const ox = W*.5 - (spec.b + spec.s/2 + spec.b*.5) * unit * .5, oy = H*.86;
     const X = x => ox + x*unit, Y = y => oy - y*unit;
     const {b,h,s} = spec;
     const cx = s + (b - s) * 0.5;            // cut position
     const slideK = k < .3 ? 0 : k < .6 ? ease((k-.3)/.3) : 1;
     const dx = slideK * b;
     const fade = k > .92 ? (1 - (k-.92)/.08) : k < .06 ? k/.06 : 1;
-    ctx.globalAlpha = fade;
+    ctx.globalAlpha = fade * .75;
     // right piece (stays)
     const right = SC.splitByLine([SC.P(0,0),SC.P(b,0),SC.P(b+s,h),SC.P(s,h)], SC.P(cx,0), SC.P(0,1));
     const parts = right.map(p => ({pts:p, cen:SC.centroid(p)})).sort((a,b2) => a.cen.x - b2.cen.x);
@@ -428,7 +429,7 @@ const ease = t => t < .5 ? 2*t*t : -1 + (4 - 2*t)*t;
       ctx.strokeStyle = '#FFE08A'; ctx.lineWidth = 3; ctx.shadowColor = '#FFE08A'; ctx.shadowBlur = 18;
       ctx.strokeRect(X(cx), Y(h), b*unit, h*unit); ctx.shadowBlur = 0;
       ctx.fillStyle = '#FFF8E7'; ctx.font = `800 ${Math.max(16, unit*.55)}px ui-rounded, system-ui`; ctx.textAlign = 'center';
-      ctx.fillText(`${b} × ${h} = ${b*h}`, X(cx + b/2), Y(h) - 12);
+      ctx.fillText(`${b} × ${h} = ${b*h}`, X(cx + b/2), Y(0) + 24);
       ctx.textAlign = 'left';
     }
     ctx.globalAlpha = 1;

@@ -1,8 +1,8 @@
-# PRD — The Story of Virginia & the Hall of Discovery expansion
+# PRD — Virginia Explorer & the Hall of Discovery expansion
 
 | | |
 |---|---|
-| **Status** | Draft v1 for review with Sandra |
+| **Status** | v2 — Sandra's decisions incorporated (see §9) |
 | **Date** | 2026-09-06 |
 | **Author** | Kevin Guyer, with Claude Code |
 | **Sources** | Planning transcript (Kevin & Sandra); *2023 History & Social Science SOL — Grade 4: Virginia Studies* (VDOE, final 09.11.24); *USI with Virginia Touchstones* course outline |
@@ -14,7 +14,7 @@
 
 The REDS Hall of Discovery currently has three open exhibits, all science or math, all "labs" where a
 student does something with a simulation. Sandra wants to add a **Social Studies wing**, starting with a
-**Virginia Studies** exhibit for grades 4–5, working title **"The Story of Virginia."**
+**Virginia Studies** exhibit for grades 4–5 named **Virginia Explorer** (Sandra's pick; "The Story of Virginia" was the working title).
 
 This requires two kinds of work:
 
@@ -43,8 +43,8 @@ Everything must keep working from `file://` with no internet, because that is ho
 - G5. Enrich beyond the standards where it makes the story more concrete (see §6.5).
 - G6. Offer self-check quizzes for geography only: regions, rivers, bordering states, and the locations of
   the Indigenous language groups.
-- G7. Brand for the school (REDS), not for a teacher or a grade, so multiple 4th and 5th grade teachers
-  can use it.
+- G7. Brand the **whole Hall** for the school (REDS), not for a teacher or a grade, so multiple 4th and 5th
+  grade teachers can use it. (Decided: site-wide.)
 - G8. Restructure the hub so science, math, social studies (and future disciplines such as language
   arts) are equally easy to find.
 
@@ -82,17 +82,16 @@ The hub (`index.html`) is a flat grid of seven exhibit cards. Change it to **win
 
 ### 4.2 School-level branding
 Today the hub says "Mrs. Guyer's 5th Grade Class" and footers say "Made with ♥ for Mrs. Guyer's
-classes." Sandra asked that the new exhibit be branded for **Redeemer Episcopal Day School only**, not a
-teacher or a grade. Recommendation: apply that site-wide for consistency:
+classes." Sandra decided the **whole Hall** is branded for **Redeemer Episcopal Day School**, not a teacher or a grade:
 
 - Hub pill and footers → "Redeemer Episcopal Day School" / "REDS Hall of Discovery."
 - Exhibit and unit footers → "Built for REDS students" (or similar).
 - Grade guidance moves into each exhibit's card and teacher panel ("Grades 4–5") instead of the brand.
 
-*Decision needed:* confirm site-wide rebrand vs. new-exhibit-only (see §9).
+*Decided 2026-09-06:* site-wide rebrand, now.
 
 ### 4.3 A third exhibit shape: the reference atlas
-The site has two exhibit shapes (multi-unit labs, single-page tabbed labs). The Story of Virginia is a
+The site has two exhibit shapes (multi-unit labs, single-page tabbed labs). Virginia Explorer is a
 **map-driven reference**: browse, look up, cross-link, read, see pictures, with light quizzing. This
 needs conventions the labs never needed:
 
@@ -101,8 +100,8 @@ needs conventions the labs never needed:
   script files are the rule). Pages render from that data. This is what makes the map-vs-index dual
   access possible without duplicating content.
 - **Assets folder with attribution.** `assets/img/` per exhibit plus an `assets/CREDITS.md` listing source
-  and license for every image. Images are public-domain or CC (Library of Congress, Wikimedia Commons,
-  National Park Service, Library of Virginia, Encyclopedia Virginia where licensed). Target ≤ 200 KB per
+  and license for every image. Images are **public domain** (decided): Library of Congress, National Park Service, National Archives,
+  Wikimedia Commons public-domain files, Library of Virginia where PD. Target ≤ 200 KB per
   image, ≤ 1200 px wide, so the whole exhibit stays portable on a USB drive.
 - **Standards tagging.** Every content node carries the standard IDs it serves (`VS.1b`, `VS.7e`, …).
   This powers a teacher-facing "Standards index" page and lets the same nodes be re-tagged for USI later.
@@ -121,15 +120,15 @@ grade range, suggested sequence, and a link to the standards index. Add it to ev
 - Update `CLAUDE.md` with the wing model, the atlas shape, the content-module and assets conventions, and
   the branding rule.
 - Add a `docs/` folder (this PRD is the first file) for planning documents that should travel with the repo.
-- Keep `expansionResources/` out of the published site (it is source material, not content). Decide whether
-  it belongs in git at all; the SOL document is a public VDOE document and is fine to keep for reference.
+- `expansionResources/` (the planning transcript and source documents) stays local and is listed in
+  `.gitignore`; it is not part of the site or the public repo.
 
 ---
 
-## 5. The Story of Virginia — experience design
+## 5. Virginia Explorer — experience design
 
 ### 5.1 Identity
-- **Name:** The Story of Virginia (working title; Sandra's suggestion).
+- **Name:** **Virginia Explorer** (decided).
 - **Branding:** REDS Hall of Discovery · Redeemer Episcopal Day School. No teacher, no grade.
 - **Aesthetic:** era-appropriate, never anachronistic. The geography chapter uses a clean modern map. History
   chapters borrow the visual language of their period: Indigenous Virginia (natural materials, river and
@@ -188,8 +187,13 @@ planning, not commitments.
 
 Cross-cutting pages: **People**, **Places**, **Events**, **Timeline**, **Standards index** (teacher view).
 
+*Chapter count, decided:* keep all eleven. Chapters 1–7 (pre–Civil War) carry the most weight for this
+course; Chapters 8–11 stay as available reference because they feed the following US History II course.
+More information than the VS/USI course needs is fine.
+
 ### 5.5 Quizzing (geography only)
-Per Sandra: quizzes for regions, rivers, bordering states, and Indigenous language-group locations. Format
+Confirmed: quizzes for regions, rivers, bordering states, and Indigenous language-group locations. (States and
+their capitals are a separate, later tool.) Format
 follows the family's existing quiz pattern: click-the-map or drag-the-label, immediate feedback, always show
 the explanation, streaks and confetti, no saving. Optional "practice mode" (labels visible) and "test yourself"
 (labels hidden). No quizzes elsewhere in the exhibit.
@@ -213,8 +217,9 @@ contrast) is exercised through the interactive moments rather than taught as a t
 ### 6.2 Reading level and tone
 4th–5th grade, leaning 5th. Second person where it helps ("Find the river that runs past Richmond"). Short
 paragraphs. Vocabulary in bold with a one-line definition on hover/tap. Hard history (enslavement, Nat
-Turner's Rebellion, Massive Resistance) is told plainly and factually, as the standards require, without
-graphic detail and without euphemism.
+Turner's Rebellion, Massive Resistance) follows the school's guidance: **factual and apolitical, realistic,
+not overly graphic**. Plain language, no euphemism, no gratuitous detail; every such card is reviewed with
+Sandra before it ships.
 
 ### 6.3 Named people (must all appear)
 Powhatan, Captain John Smith, George Washington, Thomas Jefferson, George Mason, James Madison, Patrick
@@ -230,13 +235,32 @@ Lake Drummond and the Dismal Swamp; the bordering states; Werowocomoco; Jamestow
 Yorktown; Harpers Ferry; West Virginia; major Civil War battle sites in Virginia; Chesterfield County (school
 home).
 
-### 6.5 Enrichment beyond the standards (Sandra's asks + suggestions)
+### 6.5 Present-day tribes (VS.2e), decided
+Feature the tribes that are most active today and, especially, those with a presence in Central Virginia:
+the **Monacan Indian Nation** (Amherst County), the **Chickahominy** and **Chickahominy Eastern Division**
+(Charles City / New Kent), the **Pamunkey**, **Mattaponi**, and **Upper Mattaponi** (King William County,
+home of the two oldest reservations in the country). Also name the other federally recognized nations
+(Rappahannock, Nansemond) and note the remaining state-recognized tribes (Patawomeck, Cheroenhaka Nottoway,
+Nottoway of Virginia) so the "leading to the present day" story is complete. Map them on the language-group
+layer and on a "Virginia's tribes today" layer.
+
+### 6.6 The Great Dismal Swamp, decided
+A featured place that appears in several chapters:
+- **Geography (Ch. 1):** Coastal Plain, straddling the Virginia–North Carolina line; Lake Drummond at its
+  centre; one of the largest wetlands on the East Coast; now a National Wildlife Refuge.
+- **First Peoples (Ch. 2):** Indigenous use of the swamp for hunting, fishing, and shelter for thousands of years.
+- **Colony and antebellum Virginia (Ch. 4, 6, 7):** maroon communities of people who escaped enslavement and
+  lived free inside the swamp for generations; its role on the Underground Railroad; George Washington's
+  Dismal Swamp Company and the canal that made it a working landscape.
+Told to the school's guidance (§6.2): factual, realistic, not graphic.
+
+### 6.7 Enrichment beyond the standards (Sandra's asks + suggestions)
 - **Mother of Presidents, made explicit:** all eight presidents with birthplace, home, region, and a
   one-line "why he matters," pinned on the map.
 - **The travelling capital:** Jamestown → Williamsburg → Richmond, with why each move happened, and Thomas
   Jefferson's design of the Capitol in Richmond (modelled on a Roman temple in France), with a photo.
 - **Chesterfield County** called out on the map as "you are here."
-- Suggested additions, to confirm with Sandra: the Fall Line and why cities grew there; the first Africans at
+- Suggested additions (Sandra confirmed the list; the swamp is now §6.6): the Fall Line and why cities grew there; the first Africans at
   Old Point Comfort (Fort Monroe) in 1619; Cactus Hill as one of the oldest human sites in the Americas;
   the Pamunkey and Mattaponi reservations as the oldest in the country; state symbols (dogwood, cardinal)
   as a light-touch decoration layer; Roanoke as the railroad city; NASA Langley and the Hampton "human
@@ -246,7 +270,7 @@ home).
 
 ## 7. Technical design (summary)
 
-- **Location:** `projects/story-of-virginia/` with `index.html` (map + chapter picker), `chapters/*.html`,
+- **Location:** `projects/virginia-explorer/` with `index.html` (map + chapter picker), `chapters/*.html`,
   `people.html`, `places.html`, `events.html`, `timeline.html`, `standards.html`, `content/*.js`,
   `shared/va-map.js` (the SVG map + layer API), `shared/va-core.js` (cards, index, cross-links, quiz helpers),
   `shared/va.css`, `assets/img/`, `assets/CREDITS.md`.
@@ -271,9 +295,9 @@ home).
 ## 8. Relationship to the USI course (future)
 
 The *USI with Virginia Touchstones* outline describes the eventual hybrid course: USI as the spine, VS as a
-lens. The Story of Virginia should be built so it slots into that sequence later:
+lens. Virginia Explorer should be built so it slots into that sequence later:
 
-| USI touchstone unit | Story of Virginia chapters that serve it |
+| USI touchstone unit | Virginia Explorer chapters that serve it |
 |---|---|
 | 1 Geography of North America | 1 The Lay of the Land |
 | 2 Indigenous North America | 2 First Peoples |
@@ -290,25 +314,25 @@ now is what makes it cheap later.
 
 ---
 
-## 9. Open questions for Sandra
+## 9. Decisions from Sandra (2026-09-06)
 
-1. **Branding scope:** rebrand the whole Hall to school-level now, or only the new exhibit?
-2. **Name:** "The Story of Virginia" — keep, or alternatives ("Virginia Explorer," "Our Virginia")?
-3. **Chapter count:** 11 chapters as above, or merge to ~7 to match the USI touchstone units?
-4. **Quiz scope:** confirm regions, rivers, bordering states, language-group areas; anything else (capitals over time)?
-5. **Images:** any school-owned photos (field trips to Jamestown, Richmond) you'd like included?
-6. **Sensitive content:** any school guidance on how enslavement, Nat Turner, and Massive Resistance are presented?
-7. **Present-day tribes:** the standards ask for "leading to the present day" (VS.2e); which of the seven federally recognized and eleven state-recognized tribes should be featured?
-8. **Enrichment list (§6.5):** which suggestions to include, and anything to add?
-
----
+| # | Question | Decision |
+|---|---|---|
+| 1 | Branding scope | Rebrand the **whole Hall** to school level now. |
+| 2 | Name | **Virginia Explorer**. |
+| 3 | Chapter count | Keep all eleven. Pre–Civil War chapters matter most for this course; post–Civil War content stays as reference and supports the following US History II course. |
+| 4 | Quiz scope | Confirm all: regions, rivers, bordering states, language-group areas. States and capitals will be a separate later tool. |
+| 5 | Images | Public domain. |
+| 6 | Sensitive content | School guidance: factual and apolitical, realistic, not overly graphic. |
+| 7 | Present-day tribes | The most active tribes, and definitely those with a presence in Central Virginia (§6.5). |
+| 8 | Enrichment | Add the **Great Dismal Swamp**: its geography, and how Indigenous and enslaved people used it (§6.6). |
 
 ## 10. Phased delivery
 
 | Phase | Scope | Exit criteria |
 |---|---|---|
 | **0. Platform** | Hub wings + school branding + `CLAUDE.md` update + content/assets conventions | Hub shows three wings; all pages carry REDS branding; conventions documented |
-| **1. Map + Geography** | SVG map, region/water/neighbor layers, Chapter 1 with quiz, People/Places index shell | A student can name regions, rivers, and neighbors from the map and pass the geography quiz |
+| **1. Map + Geography** | SVG map, region/water/neighbor layers, Chapter 1 with quiz (incl. the Dismal Swamp), People/Places index shell | A student can name regions, rivers, and neighbors from the map and pass the geography quiz |
 | **2. Early history** | Chapters 2–5, first ~30 content nodes with images, timeline | VS.2–VS.6c fully covered in the standards index |
 | **3. 19th century** | Chapters 6–8 | VS.6d–VS.9 covered |
 | **4. Modern + enrichment** | Chapters 9–11, Mother of Presidents, capital story, Chesterfield callout, teacher panel | VS.10–VS.13 covered; every standard resolves to a node |
@@ -321,7 +345,7 @@ Each phase ends with a commit and a `CLAUDE.md` touch-up so a fresh session can 
 ## 11. Acceptance criteria
 
 - A1. Every VS.1–VS.13 sub-standard appears in the Standards index with at least one linked node.
-- A2. From the hub, a student reaches the Story of Virginia map in two clicks.
+- A2. From the hub, a student reaches the Virginia Explorer map in two clicks.
 - A3. Clicking any region, pin, or index entry opens the same detail card, and the map highlights the matching location.
 - A4. The geography quiz covers regions, rivers, bordering states, and language-group areas, with feedback.
 - A5. Every place/person card has an image with alt text and a credit, or is explicitly marked "no image yet."

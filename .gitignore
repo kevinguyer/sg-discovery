@@ -13,3 +13,6 @@ node_modules/
 # Local Claude Code state (the launch config is committed on purpose)
 .claude/*
 !.claude/launch.json
+
+# Local planning material (private transcript + source docs); not part of the site
+expansionResources/

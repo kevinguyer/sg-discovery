@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Jamestown · Virginia Explorer · REDS Hall of Discovery</title>
+<link rel="stylesheet" href="../shared/va.css"/>
+<style>
+  /* ═══════ CHAPTER 3 — "the manuscript": parchment, iron-gall ink, a splash of oxblood wax ═══════ */
+  :root{
+    --parch:#EFE3C8; --parch2:#E4D5B3; --parch3:#F6EDD8; --ink:#3B2A1A; --ink2:#6B5640; --gall:#2B3A67; --wax:#8E2A2A; --gilt:#B8892E; --sea:#C9D6D2;
+    --va-paper:#EFE3C8; --va-card:#F6EDD8; --va-ink:#3B2A1A; --va-ink-2:#6B5640; --va-line:#CDB98E; --va-blue:#2B3A67; --va-red:#8E2A2A;
+    --va-sea:#D5DEDA; --va-water:#9DB4B0; --va-water-deep:#4C6E7E; --va-neighbor:#E3D6B8; --va-neighbor-hover:#D6C69F; --va-far:#E9DEC4;
+    --va-r-coastal:#BFC9A6; --va-r-piedmont:#D9C58F; --va-r-blueridge:#9FAE8A; --va-r-valley:#C2C3B0; --va-r-plateau:#C8AE8C;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+    --font-serif: Georgia, 'Times New Roman', serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body); background:var(--parch); color:var(--ink); min-height:100vh; -webkit-font-smoothing:antialiased; line-height:1.5;
+    background-image:radial-gradient(ellipse at 20% 10%, rgba(255,255,255,.35), transparent 50%), radial-gradient(ellipse at 90% 90%, rgba(107,86,64,.18), transparent 55%)}
+  /* aged-paper mottling */
+  body::before{content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+    background:radial-gradient(circle at 10% 20%, rgba(107,86,64,.08) 0, transparent 30%), radial-gradient(circle at 80% 40%, rgba(107,86,64,.07) 0, transparent 28%), radial-gradient(circle at 40% 85%, rgba(107,86,64,.08) 0, transparent 26%)}
+  a{color:inherit; text-decoration:none}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  button{font:inherit}
+  .va-label{stroke:var(--parch)} .va-label-water{fill:var(--gall); stroke:var(--parch)} .va-pin-label{stroke:var(--parch)} .va-outline{stroke:var(--ink)}
+  .va-state{stroke:var(--parch)} .va-region{stroke:var(--parch)}
+  .va-card{box-shadow:0 10px 30px rgba(59,42,26,.15); border-color:var(--va-line)}
+  .va-card-title{font-family:var(--font-serif); font-weight:700}
+  .va-empty{border-color:var(--va-line); color:var(--ink2)}
+
+  .topbar{position:sticky; top:0; z-index:20; background:rgba(239,227,200,.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--va-line)}
+  .topbar-inner{max-width:1280px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px}
+  .brand-group{display:flex; align-items:center; gap:14px}
+  .back{display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:999px; background:var(--parch3); border:1px solid var(--va-line); font-family:var(--font-display); font-size:13px; transition:transform .15s}
+  .back:hover{transform:translateX(-3px)}
+  .brand{display:flex; align-items:center; gap:12px}
+  .brand .logo{width:42px; height:42px}
+  .brand .eyebrow{font-family:var(--font-mono); font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink2)}
+  .brand .wordmark{font-family:var(--font-display); font-weight:800; font-size:18px; line-height:1.1}
+  .brand .wordmark .unit{color:var(--wax); font-weight:600}
+  .chapter-nav{display:flex; gap:6px; flex-wrap:wrap}
+  .chapter-nav a{font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; padding:6px 10px; border-radius:6px; color:var(--ink2); border:1px solid transparent}
+  .chapter-nav a:hover{border-color:var(--va-line); background:var(--parch3)}
+  @media (max-width:900px){ .chapter-nav{display:none} }
+
+  .hero{position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:54px 24px 24px; display:grid; grid-template-columns:1.15fr 1fr; gap:30px; align-items:center}
+  @media (max-width:900px){ .hero{grid-template-columns:1fr} }
+  .hero .eyebrow{font-family:var(--font-mono); font-size:12px; letter-spacing:.3em; text-transform:uppercase; color:var(--wax); margin-bottom:12px}
+  .hero h1{font-family:var(--font-serif); font-weight:700; font-size:clamp(46px, 7vw, 96px); letter-spacing:-.01em; line-height:.95; margin-bottom:16px; color:var(--ink)}
+  .hero h1 em{font-style:italic; color:var(--gall)}
+  .hero .tag{font-size:clamp(17px,1.8vw,21px); line-height:1.6; max-width:56ch; color:var(--ink2)}
+  .hero .tag strong{color:var(--ink)}
+  .hero .tag::first-letter{font-family:var(--font-serif); font-size:3.2em; float:left; line-height:.8; padding:6px 8px 0 0; color:var(--wax)}
+  .ships{justify-self:center; width:min(100%, 420px)}
+  .ships svg{width:100%; height:auto}
+
+  section.chapter{position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:48px 24px 12px; scroll-margin-top:70px}
+  .kicker{font-family:var(--font-mono); font-size:12px; letter-spacing:.26em; text-transform:uppercase; color:var(--wax); margin-bottom:8px}
+  h2.title{font-family:var(--font-serif); font-weight:700; font-size:clamp(28px, 3.6vw, 44px); margin-bottom:12px; color:var(--ink)}
+  h2.title em{font-style:italic; color:var(--gall)}
+  p.blurb{font-size:17px; line-height:1.65; max-width:78ch; color:var(--ink); margin-bottom:20px}
+  p.blurb strong{color:var(--gall)}
+  .task{display:flex; gap:12px; align-items:flex-start; padding:12px 16px; border-radius:12px; background:rgba(142,42,42,.08); border:1px solid rgba(142,42,42,.3); font-size:14.5px; line-height:1.5; margin-bottom:14px}
+  .task .n{flex:0 0 28px; height:28px; border-radius:999px; background:var(--wax); color:#fff; display:grid; place-items:center; font-family:var(--font-display); font-weight:800}
+  .panel-title{font-family:var(--font-display); font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink2); margin-bottom:8px}
+  .side-box{background:var(--parch3); border:1px solid var(--va-line); border-radius:14px; padding:14px 16px}
+  .side-box p{font-size:14px; line-height:1.55; color:var(--ink2)}
+
+  /* reasons */
+  .reasons{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:14px}
+  @media (max-width:900px){ .reasons{grid-template-columns:repeat(2,1fr)} }
+  .reason{font:inherit; text-align:left; background:var(--parch3); border:1px solid var(--va-line); border-radius:14px; padding:16px; cursor:pointer; color:var(--ink); transition:transform .15s, box-shadow .15s; position:relative; min-height:150px}
+  .reason:hover{transform:translateY(-3px); box-shadow:0 10px 24px rgba(59,42,26,.15)}
+  .reason .ic{font-size:30px; display:block; margin-bottom:6px}
+  .reason b{font-family:var(--font-display); font-size:16px; display:block}
+  .reason p{font-size:13.5px; line-height:1.5; color:var(--ink2); margin-top:6px; display:none}
+  .reason.open p{display:block} .reason.open{border-color:var(--gilt); background:#fff8e6}
+  .reason .seal{position:absolute; top:10px; right:12px; width:22px; height:22px; border-radius:999px; border:2px solid var(--va-line); font-size:12px; display:grid; place-items:center; color:#fff}
+  .reason.open .seal{background:var(--wax); border-color:var(--wax)}
+  .charter-row{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media (max-width:900px){ .charter-row{grid-template-columns:1fr} }
+  .sign-btn{font-family:var(--font-serif); font-style:italic; font-size:18px; padding:14px 22px; border-radius:10px; border:2px solid var(--wax); background:var(--parch3); color:var(--wax); cursor:pointer; transition:transform .15s}
+  .sign-btn:hover{transform:translateY(-2px)} .sign-btn[disabled]{opacity:.45; cursor:not-allowed; transform:none}
+  .sealed{display:inline-block; transform:rotate(-8deg); font-family:var(--font-display); font-weight:900; letter-spacing:.2em; color:#fff; background:var(--wax); padding:6px 14px; border-radius:999px; box-shadow:0 6px 16px rgba(142,42,42,.4)}
+
+  /* site choice */
+  .sites{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px}
+  .verdict{background:var(--parch3); border:1px solid var(--va-line); border-radius:14px; padding:14px 16px}
+  .verdict h4{font-size:16px; margin-bottom:8px; color:var(--gall)}
+  .pros{display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13.5px; line-height:1.5}
+  @media (max-width:600px){ .pros{grid-template-columns:1fr} }
+  .pros div{padding:10px 12px; border-radius:10px}
+  .pros .good{background:rgba(63,120,74,.12)} .pros .bad{background:rgba(142,42,42,.10)}
+  .pros b{display:block; font-family:var(--font-display); margin-bottom:4px}
+  .pros ul{padding-left:18px}
+  .voyage{stroke:var(--wax); stroke-width:2.2; fill:none; stroke-dasharray:6 5; stroke-linecap:round}
+
+  /* match the fix */
+  .fixgame{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px}
+  @media (max-width:900px){ .fixgame{grid-template-columns:1fr} }
+  .hardship{background:var(--parch3); border:1px solid var(--va-line); border-radius:14px; padding:14px 16px}
+  .hardship h4{font-size:17px; margin-bottom:8px} .hardship h4 span{margin-right:8px}
+  .choices{display:grid; gap:6px}
+  .choice{font:inherit; text-align:left; padding:9px 12px; border-radius:10px; border:1px solid var(--va-line); background:#fff; cursor:pointer; font-size:14px; color:var(--ink)}
+  .choice:hover{border-color:var(--gall)}
+  .choice.good{background:rgba(63,120,74,.14); border-color:#3F784A; font-weight:600} .choice.bad{background:rgba(142,42,42,.10); border-color:var(--wax); opacity:.7}
+  .hardship .why{font-size:13px; color:var(--ink2); margin-top:8px; min-height:18px}
+  .hardship.solved{border-color:#3F784A}
+
+  /* people chips */
+  .people{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px}
+  /* 1619 tiles */
+  .tiles{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px}
+  @media (max-width:900px){ .tiles{grid-template-columns:1fr} }
+  .tile{font:inherit; text-align:left; background:var(--parch3); border:1px solid var(--va-line); border-radius:14px; padding:16px; cursor:pointer; color:var(--ink); transition:transform .15s}
+  .tile:hover{transform:translateY(-3px)} .tile.active{border-color:var(--wax); background:#fff8e6}
+  .tile .ic{font-size:30px; display:block; margin-bottom:6px} .tile b{font-family:var(--font-display); font-size:16px; display:block} .tile small{color:var(--ink2); font-size:13px}
+  .burgess{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+  @media (max-width:900px){ .burgess{grid-template-columns:1fr} }
+  .person{background:#fff; border:1px solid var(--va-line); border-radius:12px; padding:12px 14px; font-size:13.5px; line-height:1.45}
+  .person b{display:block; font-family:var(--font-display); font-size:15px; margin-bottom:6px}
+  .person .yn{display:flex; gap:6px; margin-top:8px}
+  .person .yn button{flex:1; font:inherit; font-weight:700; padding:7px; border-radius:8px; border:1px solid var(--va-line); background:var(--parch3); cursor:pointer}
+  .person.right .yn button.pick{background:rgba(63,120,74,.2); border-color:#3F784A} .person.wrong .yn button.pick{background:rgba(142,42,42,.15); border-color:var(--wax)}
+  .person .ans{font-size:12.5px; color:var(--ink2); margin-top:6px; min-height:16px}
+
+  /* order game */
+  .order-chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px}
+  .order-chip{font:inherit; font-family:var(--font-display); font-weight:700; font-size:14px; padding:10px 14px; border-radius:999px; border:1px solid var(--va-line); background:var(--parch3); cursor:pointer; color:var(--ink)}
+  .order-chip:hover{border-color:var(--gall)} .order-chip.placed{background:var(--gall); color:#fff; border-color:transparent; cursor:default}
+  .order-line{display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-height:48px; padding:10px; border-radius:12px; border:1px dashed var(--va-line); background:rgba(255,255,255,.35)}
+  .order-line .slot{font-family:var(--font-mono); font-size:12px; padding:8px 12px; border-radius:999px; background:#fff; border:1px solid var(--va-line); color:var(--ink2)}
+  .order-line .slot.filled{background:var(--gall); color:#fff; border-color:transparent; font-family:var(--font-display); font-size:13px}
+
+  .teacher{max-width:1280px; margin:40px auto 0; padding:0 24px}
+  .teacher-card{border:1px dashed var(--va-line); border-radius:14px; padding:20px 22px; background:var(--parch3); display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start}
+  .teacher-card h3{font-size:16px; margin-bottom:6px; color:var(--gall)}
+  .teacher-card p{font-size:13.5px; line-height:1.55; color:var(--ink2); max-width:80ch}
+  .teacher-card .std{font-family:var(--font-mono); font-size:11px; padding:2px 7px; border-radius:4px; background:rgba(142,42,42,.1); color:var(--wax)}
+  .nextup{max-width:1280px; margin:40px auto 0; padding:0 24px}
+  .nextup-card{border-radius:18px; padding:30px 32px; background:linear-gradient(145deg, #3B2A1A, #8E6B3E 60%, #D9C58F); color:#fff; display:flex; flex-wrap:wrap; gap:18px; align-items:center; justify-content:space-between}
+  .nextup-card h3{font-size:13px; letter-spacing:.24em; text-transform:uppercase; opacity:.85}
+  .nextup-card .big{font-family:var(--font-display); font-size:clamp(24px,3.2vw,36px); font-weight:800; margin:6px 0 8px}
+  .nextup-card p{max-width:560px; font-size:14.5px; line-height:1.55}
+  .chip{display:inline-flex; align-items:center; gap:8px; padding:11px 16px; border-radius:999px; font-family:var(--font-display); font-weight:700; font-size:14px; background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.35); color:#fff}
+  .chip.active{background:#fff; color:#3B2A1A}
+  footer{position:relative; z-index:1; max-width:1280px; margin:36px auto 0; padding:24px; border-top:1px solid var(--va-line); display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:13px; color:var(--ink2)}
+  footer .heart{color:var(--wax)}
+  .sound-toggle{position:fixed; right:18px; bottom:18px; z-index:50; width:46px; height:46px; border-radius:999px; border:1px solid var(--va-line); background:var(--parch3); font-size:20px; cursor:pointer; box-shadow:0 8px 24px rgba(59,42,26,.2)}
+  @media (max-width:640px){ .topbar-inner{padding:10px 14px} section.chapter{padding:36px 14px 8px} }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand-group">
+      <a class="back" href="../index.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 5l-7 7 7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        All chapters
+      </a>
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="60" height="60" rx="14" fill="#2B3A67"/>
+          <path d="M14 44 Q32 36 50 44" stroke="#9DB4B0" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M30 40 L30 16 L44 30 L30 30 Z" fill="#EFE3C8"/><path d="M22 40 L40 40 L36 46 L26 46 Z" fill="#B8892E"/>
+        </svg>
+        <div>
+          <div class="eyebrow">REDS Hall of Discovery · Virginia Explorer</div>
+          <div class="wordmark">Jamestown <span class="unit">· Chapter 3</span></div>
+        </div>
+      </div>
+    </div>
+    <nav class="chapter-nav" aria-label="Sections">
+      <a href="#why">1 Why</a><a href="#where">2 Where</a><a href="#survive">3 Survive</a><a href="#powhatan">4 Powhatan</a><a href="#year1619">5 1619</a><a href="#order">6 In order</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">Chapter 3 · 1607 through the American Revolution · VS.3</div>
+    <h1>Jamestown, <em>1607</em></h1>
+    <p class="tag">Three small ships. One hundred and four men and boys. A swampy island on a river they named for their king. The first English colony in North America that <strong>lasted</strong> almost didn't. This is the story of why they came, why they chose that spot, how they nearly died, and who kept them alive.</p>
+  </div>
+  <div class="ships" aria-hidden="true">
+    <svg viewBox="0 0 420 260">
+      <defs><linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9DB4B0"/><stop offset="1" stop-color="#4C6E7E"/></linearGradient></defs>
+      <rect x="0" y="170" width="420" height="90" fill="url(#sea)" opacity=".8"/>
+      <path d="M0 176 Q40 166 80 176 T160 176 T240 176 T320 176 T400 176 T440 176" stroke="#EFE3C8" stroke-width="2" fill="none" opacity=".7"/>
+      <g id="ship1" transform="translate(60,120) scale(1.1)"><path d="M0 50 L110 50 L100 70 L14 70 Z" fill="#3B2A1A"/><rect x="52" y="0" width="4" height="52" fill="#3B2A1A"/><path d="M56 6 L96 30 L56 30 Z" fill="#EFE3C8"/><path d="M52 12 L20 34 L52 34 Z" fill="#EFE3C8"/><path d="M56 2 L70 6 L56 10 Z" fill="#8E2A2A"/></g>
+      <g transform="translate(210,132) scale(.85)"><path d="M0 50 L110 50 L100 70 L14 70 Z" fill="#3B2A1A"/><rect x="52" y="0" width="4" height="52" fill="#3B2A1A"/><path d="M56 6 L96 30 L56 30 Z" fill="#EFE3C8"/><path d="M52 12 L20 34 L52 34 Z" fill="#EFE3C8"/><path d="M56 2 L70 6 L56 10 Z" fill="#8E2A2A"/></g>
+      <g transform="translate(320,142) scale(.65)"><path d="M0 50 L110 50 L100 70 L14 70 Z" fill="#3B2A1A"/><rect x="52" y="0" width="4" height="52" fill="#3B2A1A"/><path d="M56 6 L96 30 L56 30 Z" fill="#EFE3C8"/><path d="M52 12 L20 34 L52 34 Z" fill="#EFE3C8"/><path d="M56 2 L70 6 L56 10 Z" fill="#8E2A2A"/></g>
+      <g font-family="Georgia, serif" font-style="italic" font-size="13" fill="#3B2A1A"><text x="60" y="110">Susan Constant</text><text x="215" y="124">Godspeed</text><text x="322" y="136">Discovery</text></g>
+      <text x="210" y="248" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#EFE3C8" letter-spacing="2">LONDON · DEC 1606 → CAPE HENRY · APR 1607</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════ 1. WHY ═══════ -->
+<section class="chapter" id="why">
+  <div class="kicker">Section 1 · Reasons for colonization · VS.3a, VS.3c</div>
+  <h2 class="title">Why would anyone <em>leave England</em> for this?</h2>
+  <p class="blurb">In the early 1600s England was crowded, running short of timber and other <strong>natural resources</strong>, and jealous of Spain, whose colonies were sending home shiploads of silver. A group of wealthy men formed a business, the <strong>Virginia Company of London</strong>, and asked the king for permission to plant a colony. They hoped it would make them rich. It nearly ruined them instead.</p>
+  <div class="task"><span class="n">1</span><div><strong>The investor's pitch.</strong> Click each reason the Company gave for starting a colony. Reveal all four, then sign the charter.</div></div>
+  <div class="reasons" id="reasons">
+    <button class="reason" data-r="wealth"><span class="seal"></span><span class="ic">💰</span><b>Wealth and power</b><p>England, Spain, France, and the Netherlands were racing to build <strong>empires</strong>. Colonies meant land, trade, and bragging rights. Whoever owned more of America would be stronger in Europe.</p></button>
+    <button class="reason" data-r="resources"><span class="seal"></span><span class="ic">🌲</span><b>Natural resources</b><p>England's forests were nearly cut down. Virginia could send back <strong>timber</strong> for ships, tar and pitch, furs, glass, and iron, things England had to buy from other countries.</p></button>
+    <button class="reason" data-r="markets"><span class="seal"></span><span class="ic">🧵</span><b>New markets</b><p>A colony full of English people would need English cloth, tools, and goods. A colony is also a <strong>customer</strong>.</p></button>
+    <button class="reason" data-r="gold"><span class="seal"></span><span class="ic">✨</span><b>Gold and silver</b><p>The Spanish had found mountains of silver in Mexico and Peru. Investors <strong>hoped</strong> Virginia hid the same. It did not. The colonists wasted their first months digging for gold that wasn't there.</p></button>
+  </div>
+  <div class="charter-row">
+    <div class="side-box">
+      <div class="panel-title">The king's permission</div>
+      <p style="margin-bottom:10px">A colony needed the king's blessing. On April 10, 1606, King James I signed a <strong>charter</strong> giving the Virginia Company the right to settle Virginia, and promising the colonists the rights of English people.</p>
+      <button class="sign-btn" id="sign-btn" disabled>✒️ Sign the charter of 1606</button>
+      <div id="sealed" style="margin-top:10px"></div>
+    </div>
+    <div id="card-why"><div class="va-empty">Reveal all four reasons, then sign the charter to read it.</div></div>
+  </div>
+</section>
+
+<!-- ═══════ 2. WHERE ═══════ -->
+<section class="chapter" id="where">
+  <div class="kicker">Section 2 · Choosing the site · VS.3b</div>
+  <h2 class="title">Why <em>here</em>?</h2>
+  <p class="blurb">The Company's sealed instructions said: go up a river, far enough inland that Spanish ships can't surprise you; pick a spot you can defend; and don't take land the Indigenous people are already using. On April 26, 1607, the ships reached <strong>Cape Henry</strong>. For two and a half weeks they explored the river, weighing their choices.</p>
+  <div class="task"><span class="n">2</span><div><strong>Be the captain.</strong> Click the three places the colonists considered. Weigh each one, then see what they decided and what it cost them.</div></div>
+  <div class="va-atlas">
+    <div>
+      <div class="va-stage"><svg id="map-where"></svg></div>
+      <div class="sites" style="margin-top:12px">
+        <button class="va-btn" data-site="place-cape-henry">🌅 Cape Henry</button>
+        <button class="va-btn" data-site="place-point-comfort">🏰 Point Comfort</button>
+        <button class="va-btn" data-site="place-jamestown">🏝️ Jamestown Island</button>
+      </div>
+    </div>
+    <div class="va-side">
+      <div class="verdict" id="verdict"><h4>Weigh a site</h4><p style="font-size:14px;color:var(--ink2)">Pick a place on the map or with the buttons. The instructions from London are the judge.</p></div>
+      <div id="card-where"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 3. SURVIVE ═══════ -->
+<section class="chapter" id="survive">
+  <div class="kicker">Section 3 · Hardships and changes · VS.3d, VS.3e</div>
+  <h2 class="title">How Jamestown almost <em>died</em>, and didn't.</h2>
+  <p class="blurb">Most of the first colonists were gentlemen who had never farmed, and workers who came for gold, not corn. They drank bad river water, got sick in the summer heat, and fought each other. Within nine months two out of three were dead. Each disaster forced a <strong>change</strong>, and each change is a reason the colony survived.</p>
+  <div class="task"><span class="n">3</span><div><strong>Walk the timeline</strong>, 1606 to 1624, by clicking the dots. Then, below it, match each hardship to the change that fixed it.</div></div>
+  <div class="va-atlas">
+    <div><div class="va-stage" style="padding:6px 14px"><div id="timeline"></div></div></div>
+    <div class="va-side"><div id="card-time"><div class="va-empty">Click a dot on the timeline.</div></div></div>
+  </div>
+  <div class="fixgame" id="fixgame"></div>
+</section>
+
+<!-- ═══════ 4. POWHATAN ═══════ -->
+<section class="chapter" id="powhatan">
+  <div class="kicker">Section 4 · The Powhatan and the English · VS.3d</div>
+  <h2 class="title">Neighbors, traders, <em>rivals</em>.</h2>
+  <p class="blurb">The colonists landed in the middle of Chief <strong>Powhatan's</strong> chiefdom, about 15,000 people in thirty tribes. At first the Powhatan traded corn for copper, beads, and tools, and taught the English what grew here. <strong>Pocahontas</strong> carried food and messages. But the English kept taking land, and the friendship wore thin. We know this story mostly from the English side; the Powhatan never wrote theirs down.</p>
+  <div class="task"><span class="n">4</span><div><strong>Meet the people.</strong> Click a name to read their story and see where they lived.</div></div>
+  <div class="people" id="people"></div>
+  <div class="va-atlas">
+    <div class="va-stage"><svg id="map-pow"></svg></div>
+    <div class="va-side"><div id="card-pow"><div class="va-empty">Pick a person above.</div></div></div>
+  </div>
+</section>
+
+<!-- ═══════ 5. 1619 ═══════ -->
+<section class="chapter" id="year1619">
+  <div class="kicker">Section 5 · Three arrivals · VS.3f, VS.3g</div>
+  <h2 class="title">1619: the year that changed <em>everything</em>.</h2>
+  <p class="blurb">Twelve years after the landing, three things happened in about twelve months that shaped Virginia and America for centuries: the colonists met to make their <strong>own laws</strong>; the first <strong>Africans</strong> were brought here against their will; and shiploads of <strong>English women</strong> arrived to make the colony a home.</p>
+  <div class="task"><span class="n">5</span><div><strong>Open each arrival.</strong> Then test yourself: who could be a burgess in 1619, and who couldn't?</div></div>
+  <div class="tiles">
+    <button class="tile" data-node="event-assembly-1619"><span class="ic">🏛️</span><b>The General Assembly</b><small>July 30, 1619 · the first elected lawmakers in English America</small></button>
+    <button class="tile" data-node="event-africans-1619"><span class="ic">⛓️</span><b>The first Africans</b><small>August 1619 · "20 and odd" people from Angola, landed at Point Comfort</small></button>
+    <button class="tile" data-node="event-women-1620"><span class="ic">👒</span><b>Women arrive</b><small>1620 · families make a colony permanent</small></button>
+  </div>
+  <div class="va-atlas">
+    <div>
+      <div id="card-1619"><div class="va-empty">Open an arrival above.</div></div>
+    </div>
+    <div class="va-side">
+      <div class="side-box">
+        <div class="panel-title">Who could be a burgess in 1619?</div>
+        <p style="margin-bottom:10px">Only <strong>free English men who owned land</strong> could vote or serve. Decide for each person.</p>
+        <div class="burgess" id="burgess"></div>
+        <div class="va-feedback" id="burgess-fb" style="margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 6. ORDER ═══════ -->
+<section class="chapter" id="order">
+  <div class="kicker">Section 6 · Put it in order</div>
+  <h2 class="title">Tell the story <em>in order</em>.</h2>
+  <p class="blurb">Six events, all mixed up. Click them in the order they happened, from first to last.</p>
+  <div class="order-chips" id="order-chips"></div>
+  <div class="order-line" id="order-line"></div>
+  <div class="va-feedback" id="order-fb" style="margin-top:10px"></div>
+  <div style="margin-top:10px"><button class="va-btn" id="order-reset">↺ Shuffle again</button></div>
+</section>
+
+<div class="teacher">
+  <div class="teacher-card">
+    <div style="font-size:36px">🍎</div>
+    <div>
+      <h3>For teachers</h3>
+      <p>This chapter covers <span class="std">VS.3a</span> reasons for English colonization and <span class="std">VS.3c</span> the 1606 charter (Section 1), <span class="std">VS.3b</span> economic and geographic influences on the site (Section 2), <span class="std">VS.3d</span> interactions with the Powhatan (Sections 3–4), <span class="std">VS.3e</span> hardships and the changes that ensured survival (Section 3 timeline and matching game), <span class="std">VS.3f</span> the arrival of Africans and women (Section 5), and <span class="std">VS.3g</span> the General Assembly of 1619 (Section 5). The Africans of 1619 are described as free people of Ndongo, forcibly transported, with the later race-based laws named plainly, per the school's guidance. John Smith's rescue by Pocahontas is presented as Smith's account, which historians question.</p>
+    </div>
+  </div>
+</div>
+
+<div class="nextup">
+  <div class="nextup-card">
+    <div>
+      <h3>Next · Chapter 4</h3>
+      <div class="big">🌾 Life in the Colony</div>
+      <p>Who lived in Virginia, how they farmed, traded, and worshipped, the laws that created race-based slavery, and why the capital moved to Williamsburg.</p>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <a class="chip" href="first-peoples.html">← Chapter 2</a>
+      <a class="chip" href="../index.html">All chapters</a>
+      <span class="chip" style="opacity:.6">Chapter 4 · coming soon</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>REDS Hall of Discovery · Virginia Explorer · Chapter 3: Jamestown</div>
+  <div>Made with <span class="heart">♥</span> for the students of Redeemer Episcopal Day School</div>
+</footer>
+<button class="sound-toggle" id="soundToggle" aria-label="Turn sound off">🔊</button>
+
+<script src="../shared/va-map.js"></script>
+<script src="../shared/va-core.js"></script>
+<script src="../content/geography.js"></script>
+<script src="../content/first-peoples.js"></script>
+<script src="../content/jamestown.js"></script>
+<script>
+VA.bindSoundToggle(document.getElementById('soundToggle'));
+const $ = id => document.getElementById(id);
+const showCard = (node, el, map, dim = true) => { if (!node) return; VA.renderCard(el, node, { onRelated: r => route(r) }); if (map) { const ref = VA.refFor(node); if (ref && ref.kind !== 'layer') map.highlight(ref, { dim }); } };
+const homes = {};
+function route(n) {
+  if (!n) return;
+  if (n.type === 'event') return homes.time(n);
+  if (n.type === 'person') return homes.pow(n);
+  if (['place-jamestown', 'place-cape-henry', 'place-point-comfort'].includes(n.id)) return homes.where(n);
+  if (n.type === 'org' || n.type === 'document' || n.type === 'idea') return homes.why(n);
+  showCard(n, $('card-why'), null);
+}
+/* Tidewater-only window for this chapter's maps */
+const TIDEWATER = { minLon: -77.6, maxLon: -75.6, minLat: 36.6, maxLat: 37.9 };
+function zoomTidewater(map) { const a = VA_MAP.project(TIDEWATER.minLon, TIDEWATER.maxLat), b = VA_MAP.project(TIDEWATER.maxLon, TIDEWATER.minLat); map.svg.setAttribute('viewBox', `${a.x.toFixed(1)} ${a.y.toFixed(1)} ${(b.x - a.x).toFixed(1)} ${(b.y - a.y).toFixed(1)}`); map.svg.classList.add('va-zoomed'); }
+
+/* ═══════ 1. WHY ═══════ */
+(() => {
+  const opened = new Set();
+  document.querySelectorAll('.reason').forEach(b => b.addEventListener('click', () => {
+    b.classList.toggle('open'); b.querySelector('.seal').textContent = b.classList.contains('open') ? '✓' : '';
+    if (b.classList.contains('open')) opened.add(b.dataset.r); VA.sfx.click();
+    if (opened.size === 4) { $('sign-btn').disabled = false; VA.toast('All four reasons revealed. The charter is ready to sign.', 'good'); }
+  }));
+  $('sign-btn').addEventListener('click', () => {
+    $('sealed').innerHTML = '<span class="sealed">SEALED · 10 APRIL 1606</span>'; $('sign-btn').disabled = true; VA.sfx.win(); VA.confetti({ colors: ['#8E2A2A', '#B8892E', '#2B3A67', '#EFE3C8'] });
+    showCard(VA.get('document-charter-1606'), $('card-why'), null);
+  });
+  homes.why = n => { showCard(n, $('card-why'), null); $('why').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 2. WHERE ═══════ */
+(() => {
+  const pins = ['place-cape-henry', 'place-point-comfort', 'place-jamestown', 'place-werowocomoco'].map(VA.get);
+  const map = VA.mountMap($('map-where'), { interactive: ['pin', 'river'], layers: { county: false, minorRivers: true, regions: true }, pins, labels: { regions: false, water: true, states: false }, onSelect: (ref, node) => pick(node) });
+  zoomTidewater(map);
+  // voyage route: Cape Henry → Point Comfort → up the James → Jamestown
+  const route = [[-76.01, 36.93], [-76.18, 36.98], [-76.31, 37.01], [-76.45, 37.06], [-76.58, 37.14], [-76.70, 37.19], [-76.78, 37.21]];
+  const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  p.setAttribute('d', 'M' + route.map(([lo, la]) => { const q = VA_MAP.project(lo, la); return q.x.toFixed(1) + ' ' + q.y.toFixed(1); }).join(' L')); p.setAttribute('class', 'voyage'); map.svg.appendChild(p);
+  const V = {
+    'place-cape-henry': { name: 'Cape Henry', good: ['Right on the ocean: easy to reach', 'Fresh water nearby'], bad: ['Any Spanish ship sailing by could see and attack you', 'Local warriors attacked the landing party on day one', 'The instructions said: not on the coast'], verdict: 'Rejected. Too exposed. They raised a cross, explored, and moved on.' },
+    'place-point-comfort': { name: 'Point Comfort', good: ['Deep, sheltered water, "good comfort" for ships', 'Commands the mouth of the James'], bad: ['Still close to the sea and to Spanish eyes', 'Kecoughtan people lived right there', 'Open to the wind and waves'], verdict: 'Not chosen for the fort, but they built a lookout here later. In 1619 the first Africans were landed here.' },
+    'place-jamestown': { name: 'Jamestown Island', good: ['Deep water right at the bank: ships could tie to trees', '60 miles upriver, hidden from the Spanish', 'An island, easy to defend on three sides', 'No Powhatan town on it (they used it for hunting)'], bad: ['Low, marshy, and swarming with mosquitoes', 'River water turned salty and foul every summer', 'Little good farmland on the island'], verdict: 'CHOSEN, May 14, 1607. Safe from Spain, easy to defend, and unhealthy. Disease from bad water killed more colonists than any enemy.' },
+  };
+  function pick(node) {
+    if (!node) return;
+    showCard(node, $('card-where'), map);
+    const v = V[node.id]; if (!v) return;
+    $('verdict').innerHTML = `<h4>${v.name}: weigh it</h4><div class="pros"><div class="good"><b>👍 For</b><ul>${v.good.map(x => `<li>${x}</li>`).join('')}</ul></div><div class="bad"><b>👎 Against</b><ul>${v.bad.map(x => `<li>${x}</li>`).join('')}</ul></div></div><p style="margin-top:10px;font-size:14px"><strong>${v.verdict}</strong></p>`;
+    document.querySelectorAll('[data-site]').forEach(b => b.classList.toggle('active', b.dataset.site === node.id));
+    if (node.id === 'place-jamestown') VA.sfx.win(); else VA.sfx.click();
+  }
+  document.querySelectorAll('[data-site]').forEach(b => b.addEventListener('click', () => pick(VA.get(b.dataset.site))));
+  homes.where = n => { pick(n); $('where').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 3. SURVIVE — timeline + match the fix ═══════ */
+(() => {
+  const events = VA.find(n => n.type === 'event' && n.year >= 1606 && n.year <= 1624);
+  const tl = VA.renderTimeline($('timeline'), events, { from: 1605, to: 1625, onPick: n => showCard(n, $('card-time'), null) });
+  homes.time = n => { tl.select(n.id); $('survive').scrollIntoView({ behavior: 'smooth' }); };
+  const GAME = [
+    { h: '🍞 Hunger: nobody wants to farm', choices: ['Dig for more gold', 'John Smith\'s rule: no work, no food', 'Wait for ships from England'], right: 1, why: 'Smith made everyone plant, build, and fish. Traded with the Powhatan for corn.' },
+    { h: '🤒 Sickness from bad river water', choices: ['Drink more river water', 'Dig wells and spread out to healthier land', 'Build a bigger fort'], right: 1, why: 'Wells and new settlements away from the swampy island cut the summer deaths.' },
+    { h: '💸 The Company is losing money', choices: ['Tobacco, a crop England will pay for', 'Sell the island', 'Look for silver again'], right: 0, why: 'John Rolfe\'s tobacco (1612) was the first thing Virginia could sell at a profit.' },
+    { h: '😴 Colonists work slowly for the Company', choices: ['Punish them harder', 'Let colonists own their own land', 'Send them home'], right: 1, why: 'Around 1616 colonists could own land. People work hard for what is theirs.' },
+    { h: '🏕️ It feels like a camp, not a home', choices: ['Build a church', 'Bring English women so families can grow', 'Raise the flag higher'], right: 1, why: 'From 1620 women arrived, families formed, and Jamestown became permanent.' },
+  ];
+  let solved = 0;
+  $('fixgame').innerHTML = GAME.map((g, i) => `<div class="hardship" data-i="${i}"><h4>${g.h}</h4><div class="choices">${g.choices.map((c, k) => `<button class="choice" data-k="${k}">${c}</button>`).join('')}</div><div class="why"></div></div>`).join('');
+  $('fixgame').querySelectorAll('.hardship').forEach(h => {
+    const g = GAME[+h.dataset.i];
+    h.querySelectorAll('.choice').forEach(b => b.addEventListener('click', () => {
+      if (h.classList.contains('solved')) return;
+      const k = +b.dataset.k;
+      if (k === g.right) { b.classList.add('good'); h.classList.add('solved'); h.querySelector('.why').textContent = '✅ ' + g.why; VA.sfx.snap(); if (++solved === GAME.length) { VA.confetti({ colors: ['#8E2A2A', '#B8892E', '#2B3A67'] }); VA.toast('Five hardships, five changes. That is how a colony survives.', 'good', 3600); } }
+      else { b.classList.add('bad'); h.querySelector('.why').textContent = '❌ That didn\'t fix it. Try another.'; VA.sfx.nope(); }
+    }));
+  });
+})();
+
+/* ═══════ 4. POWHATAN ═══════ */
+(() => {
+  const people = ['person-powhatan', 'person-pocahontas', 'person-john-smith', 'person-john-rolfe', 'person-christopher-newport'].map(VA.get);
+  $('people').innerHTML = people.map(p => `<button class="va-chip" data-p="${p.id}">${p.emoji} ${p.name}</button>`).join('');
+  const pins = ['place-werowocomoco', 'place-jamestown', 'place-point-comfort'].map(VA.get);
+  const map = VA.mountMap($('map-pow'), { interactive: ['pin'], layers: { county: false, minorRivers: true }, pins, labels: { regions: false, water: true, states: false }, onSelect: (ref, node) => showCard(node, $('card-pow'), map) });
+  zoomTidewater(map);
+  const HOME = { 'person-powhatan': 'place-werowocomoco', 'person-pocahontas': 'place-werowocomoco', 'person-john-smith': 'place-jamestown', 'person-john-rolfe': 'place-jamestown', 'person-christopher-newport': 'place-point-comfort' };
+  function pick(p) { showCard(p, $('card-pow'), null); map.highlight({ kind: 'pin', id: HOME[p.id] }); document.querySelectorAll('[data-p]').forEach(b => b.classList.toggle('active', b.dataset.p === p.id)); }
+  document.querySelectorAll('[data-p]').forEach(b => b.addEventListener('click', () => { pick(VA.get(b.dataset.p)); VA.sfx.click(); }));
+  homes.pow = n => { pick(n); $('powhatan').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 5. 1619 ═══════ */
+(() => {
+  document.querySelectorAll('.tile').forEach(t => t.addEventListener('click', () => { document.querySelectorAll('.tile').forEach(x => x.classList.toggle('active', x === t)); showCard(VA.get(t.dataset.node), $('card-1619'), null); VA.sfx.click(); }));
+  const PEOPLE = [
+    { who: 'A free English man who owns a tobacco farm', yes: true, why: 'Free, English, male, landowner: yes.' },
+    { who: 'An English woman who runs a household', yes: false, why: 'Women could not vote or serve until 1920.' },
+    { who: 'An indentured servant, still working off his passage', yes: false, why: 'Servants owned no land and could not vote until their term ended.' },
+    { who: 'One of the Africans landed at Point Comfort', yes: false, why: 'Africans, enslaved or not, were shut out of the Assembly.' },
+    { who: 'A Pamunkey man from Powhatan\'s chiefdom', yes: false, why: 'Indigenous people were not part of the colony\'s government.' },
+    { who: 'A free English carpenter who bought 50 acres', yes: true, why: 'Free, English, male, and a landowner: yes.' },
+  ];
+  let done = 0, right = 0;
+  $('burgess').innerHTML = PEOPLE.map((p, i) => `<div class="person" data-i="${i}"><b>${p.who}</b><div class="yn"><button data-a="1">Could serve</button><button data-a="0">Could not</button></div><div class="ans"></div></div>`).join('');
+  $('burgess').querySelectorAll('.person').forEach(el => { const p = PEOPLE[+el.dataset.i]; el.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    if (el.classList.contains('right') || el.classList.contains('wrong')) return;
+    const a = b.dataset.a === '1'; b.classList.add('pick'); const ok = a === p.yes; el.classList.add(ok ? 'right' : 'wrong'); el.querySelector('.ans').textContent = (ok ? '✅ ' : '❌ ') + p.why; done++; if (ok) right++; ok ? VA.sfx.snap() : VA.sfx.nope();
+    if (done === PEOPLE.length) { const fb = $('burgess-fb'); fb.className = 'va-feedback good'; fb.innerHTML = `<b>${right} of ${PEOPLE.length}.</b> In 1619 only a small group could take part. It took 300 years for the vote to reach everyone else.`; if (right === PEOPLE.length) VA.confetti({ colors: ['#8E2A2A', '#B8892E', '#2B3A67'] }); }
+  })); });
+})();
+
+/* ═══════ 6. ORDER ═══════ */
+(() => {
+  const IDS = ['event-charter-1606', 'event-landing-1607', 'event-starving-time', 'event-tobacco-1612', 'event-assembly-1619', 'event-royal-1624'];
+  let order = [], next = 0;
+  function build() {
+    next = 0; order = VA.shuffle(IDS.slice()); $('order-fb').className = 'va-feedback'; $('order-fb').textContent = '';
+    $('order-chips').innerHTML = order.map(id => `<button class="order-chip" data-id="${id}">${VA.get(id).emoji} ${VA.get(id).short}</button>`).join('');
+    $('order-line').innerHTML = IDS.map((_, i) => `<span class="slot" data-slot="${i}">${i + 1}</span>`).join('');
+    $('order-chips').querySelectorAll('.order-chip').forEach(b => b.addEventListener('click', () => {
+      if (b.classList.contains('placed')) return;
+      const id = b.dataset.id;
+      if (id === IDS[next]) { b.classList.add('placed'); const s = $('order-line').querySelector(`[data-slot="${next}"]`); s.classList.add('filled'); s.textContent = `${next + 1}. ${VA.get(id).short} (${VA.get(id).year})`; next++; VA.sfx.snap();
+        if (next === IDS.length) { $('order-fb').className = 'va-feedback good'; $('order-fb').innerHTML = '🏆 <b>In order!</b> Charter, landing, Starving Time, tobacco, General Assembly, royal colony.'; VA.confetti({ colors: ['#8E2A2A', '#B8892E', '#2B3A67'] }); } }
+      else { VA.sfx.nope(); $('order-fb').className = 'va-feedback bad'; $('order-fb').innerHTML = `❌ Not yet. <b>${VA.get(id).short}</b> was ${VA.get(id).year}. What came before it?`; }
+    }));
+  }
+  $('order-reset').addEventListener('click', () => { build(); VA.sfx.click(); });
+  build();
+})();
+</script>
+</body>
+</html>

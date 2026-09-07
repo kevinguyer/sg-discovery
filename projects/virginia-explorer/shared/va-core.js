@@ -186,7 +186,7 @@ window.VA = (() => {
 
   /* ───────────────────────── 3. CARDS & INDEX ──────────────────────── */
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const TYPE_LABEL = { region: 'Region', water: 'Water', state: 'Neighbor', place: 'Place', person: 'Person', event: 'Event', tribe: 'Nation', era: 'Era' };
+  const TYPE_LABEL = { region: 'Region', water: 'Water', state: 'Neighbor', place: 'Place', person: 'Person', event: 'Event', tribe: 'Nation', era: 'Era', org: 'Organization', idea: 'Idea', document: 'Document' };
   function renderCard(container, node, { teacher = false, onRelated = null, onShow = null } = {}) {
     if (!node) { container.innerHTML = ''; return; }
     const img = node.image
@@ -218,6 +218,29 @@ window.VA = (() => {
       <ul class="va-index">${items.map(n => `<li><button class="va-index-item" data-id="${esc(n.id)}"><span class="va-index-emoji">${esc(n.emoji || '•')}</span><span><b>${esc(n.name)}</b>${n.tagline ? `<small>${esc(n.tagline)}</small>` : ''}</span></button></li>`).join('')}</ul>`).join('');
     container.querySelectorAll('[data-id]').forEach(b => b.addEventListener('click', () => onPick && onPick(get(b.dataset.id))));
   }
+  /**
+   * VA.renderTimeline(container, events, { onPick, from, to })
+   * Horizontal timeline. Events are nodes with a numeric `year` (and optional `month` 1–12, `label`).
+   * Dots alternate above/below the track; clicking a dot calls onPick(node) and marks it active.
+   */
+  function renderTimeline(container, events, { onPick, from, to } = {}) {
+    const evs = events.filter(e => typeof e.year === 'number').sort((a, b) => (a.year + (a.month || 1) / 12) - (b.year + (b.month || 1) / 12));
+    if (!evs.length) { container.innerHTML = ''; return; }
+    const y0 = from ?? Math.floor(evs[0].year / 5) * 5, y1 = to ?? Math.ceil((evs[evs.length - 1].year + 1) / 5) * 5;
+    const pos = e => ((e.year + ((e.month || 1) - 1) / 12) - y0) / (y1 - y0) * 100;
+    const ticks = []; for (let y = y0; y <= y1; y += 5) ticks.push(y);
+    container.innerHTML = `<div class="va-timeline" role="list">
+      <div class="va-tl-track"></div>
+      ${ticks.map(y => `<div class="va-tl-tick" style="left:${(y - y0) / (y1 - y0) * 100}%"><span>${y}</span></div>`).join('')}
+      ${evs.map((e, i) => `<button class="va-tl-dot ${i % 2 ? 'below' : 'above'}" role="listitem" style="left:${pos(e).toFixed(2)}%" data-id="${esc(e.id)}" title="${esc(e.name)}"><i></i><span>${esc(e.label || e.emoji || '')} ${esc(e.short || e.name)}<small>${e.year}</small></span></button>`).join('')}
+    </div>`;
+    container.querySelectorAll('.va-tl-dot').forEach(b => b.addEventListener('click', () => {
+      container.querySelectorAll('.va-tl-dot').forEach(x => x.classList.toggle('active', x === b));
+      if (onPick) onPick(get(b.dataset.id));
+    }));
+    return { select(id) { const b = container.querySelector(`[data-id="${id}"]`); if (b) b.click(); } };
+  }
+
   /* ref for a node: where it lives on the map */
   function refFor(node) {
     if (!node) return null;
@@ -297,5 +320,5 @@ window.VA = (() => {
   };
   function bindSoundToggle(btn) { if (!btn) return; btn.addEventListener('click', () => { sfx.setEnabled(!sfx.enabled); btn.textContent = sfx.enabled ? '🔊' : '🔇'; btn.setAttribute('aria-label', sfx.enabled ? 'Turn sound off' : 'Turn sound on'); if (sfx.enabled) sfx.click(); }); }
 
-  return { nodes, add, get, find, byStandard, mountMap, renderCard, renderIndex, refFor, quiz, shuffle, toast, confetti, sfx, bindSoundToggle, reduceMotion, esc, REGION_ORDER, NEIGHBORS };
+  return { nodes, add, get, find, byStandard, mountMap, renderCard, renderIndex, renderTimeline, refFor, quiz, shuffle, toast, confetti, sfx, bindSoundToggle, reduceMotion, esc, REGION_ORDER, NEIGHBORS };
 })();

@@ -52,6 +52,12 @@ svg.va-map{width:100%; height:auto; display:block; background:var(--va-sea, #E6F
 .va-fly-dot{fill:#fff; stroke:var(--va-red, #B3261E); stroke-width:3}
 .va-fly-trail{fill:none; stroke:var(--va-red, #B3261E); stroke-width:4; stroke-linecap:round; opacity:.8}
 .va-inert{pointer-events:none}
+/* zoomed maps (a page sets a tighter viewBox and adds .va-zoomed): keep strokes in screen pixels, shrink text and pins */
+.va-map.va-zoomed path, .va-map.va-zoomed circle{vector-effect:non-scaling-stroke}
+.va-map.va-zoomed .va-label{font-size:3.6px; stroke-width:1px} .va-map.va-zoomed .va-label-water{font-size:3.2px}
+.va-map.va-zoomed .va-pin-dot{r:1.6} .va-map.va-zoomed .va-pin.va-hit:hover .va-pin-dot, .va-map.va-zoomed .va-pin.va-lit .va-pin-dot{r:2.2}
+.va-map.va-zoomed .va-pin-label{font-size:3.4px; stroke-width:1px; transform:translate(-4px,2px)}
+.va-map.va-zoomed .va-fly-dot{r:2.5}
 /* overlays (language groups etc.) */
 .va-overlay{fill:var(--va-overlay, rgba(179,38,30,.35)); stroke:#fff; stroke-width:1.2; stroke-dasharray:5 3; transition:filter .15s, opacity .2s}
 .va-overlay.va-hit:hover, .va-overlay.va-hover{filter:brightness(1.15)}
@@ -127,6 +133,20 @@ svg.va-map{width:100%; height:auto; display:block; background:var(--va-sea, #E6F
 .va-drag{font-family:var(--font-display, ui-rounded, system-ui, sans-serif); font-weight:700; font-size:14px; padding:9px 14px; border-radius:999px; background:var(--va-blue, #1F3A5F); color:#fff; cursor:grab; user-select:none; touch-action:none; box-shadow:0 6px 16px rgba(0,0,0,.18)}
 .va-drag.placed{background:#2F8F5B; cursor:default; opacity:.9}
 .va-drag.dragging{position:fixed; z-index:500; cursor:grabbing; transform:translate(-50%,-50%) scale(1.05); pointer-events:none}
+
+/* ---------- timeline ---------- */
+.va-timeline{position:relative; height:190px; margin:10px 0 6px; overflow-x:auto; overflow-y:hidden}
+.va-tl-track{position:absolute; left:0; right:0; top:50%; height:4px; background:var(--va-line, #D8D3C6); border-radius:2px}
+.va-tl-tick{position:absolute; top:50%; width:1px; height:14px; margin-top:-7px; background:var(--va-ink-2, #4E5A68); opacity:.5}
+.va-tl-tick span{position:absolute; top:16px; left:-14px; font-family:var(--font-mono, ui-monospace, monospace); font-size:10.5px; color:var(--va-ink-2, #4E5A68); opacity:.9}
+.va-tl-dot{position:absolute; top:50%; width:150px; margin-left:-75px; background:none; border:0; cursor:pointer; padding:0; font:inherit; color:var(--va-ink, #1B2430); text-align:center}
+.va-tl-dot i{position:absolute; left:50%; top:0; width:14px; height:14px; margin:-7px 0 0 -7px; border-radius:999px; background:var(--va-card, #fff); border:3px solid var(--va-blue, #1F3A5F); transition:transform .15s}
+.va-tl-dot span{position:absolute; left:0; right:0; font-family:var(--font-display, ui-rounded, system-ui, sans-serif); font-size:12px; line-height:1.15; font-weight:700}
+.va-tl-dot span small{display:block; font-family:var(--font-mono, ui-monospace, monospace); font-size:10.5px; font-weight:400; color:var(--va-ink-2, #4E5A68)}
+.va-tl-dot.above span{bottom:14px} .va-tl-dot.below span{top:16px}
+.va-tl-dot:hover i, .va-tl-dot.active i{transform:scale(1.35); background:var(--va-red, #B3261E); border-color:var(--va-red, #B3261E)}
+.va-tl-dot.active span{color:var(--va-red, #B3261E)}
+.va-tl-dot:focus-visible{outline:2px solid var(--va-red, #B3261E); outline-offset:2px; border-radius:6px}
 
 /* ---------- toast ---------- */
 .va-toast{position:fixed; left:50%; top:18px; transform:translate(-50%,-160%); z-index:400; padding:12px 22px; border-radius:999px; background:var(--va-ink, #1B2430); color:#fff; box-shadow:0 12px 40px rgba(0,0,0,.35); font-family:var(--font-display, ui-rounded, system-ui, sans-serif); font-size:15px; font-weight:700; transition:transform .32s cubic-bezier(.4,.2,.2,1); pointer-events:none; max-width:min(92vw,560px); text-align:center}

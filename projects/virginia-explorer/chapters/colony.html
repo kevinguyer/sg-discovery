@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Life in the Colony · Virginia Explorer · REDS Hall of Discovery</title>
+<link rel="stylesheet" href="../shared/va.css"/>
+<style>
+  /* ═══════ CHAPTER 4 — "the ledger": buttermilk paper ruled like an account book, Williamsburg blue, brick, walnut ═══════ */
+  :root{
+    --milk:#F3E9D2; --milk2:#E8DCC0; --milk3:#FBF5E8; --walnut:#3A2E24; --walnut2:#5C4A3A; --wb-blue:#4A6C8C; --wb-blue2:#2F4A63; --brick:#8C3B2E; --tobacco:#8A6A3A; --sage:#7C8C6A;
+    --va-paper:#F3E9D2; --va-card:#FBF5E8; --va-ink:#3A2E24; --va-ink-2:#5C4A3A; --va-line:#CDBD9A; --va-blue:#2F4A63; --va-red:#8C3B2E;
+    --va-sea:#D8E1E3; --va-water:#9DB4B0; --va-water-deep:#4A6C8C; --va-neighbor:#E6DCC2; --va-neighbor-hover:#D8CBA8; --va-far:#ECE3CC;
+    --va-r-coastal:#B9C6A6; --va-r-piedmont:#DCC79A; --va-r-blueridge:#94A886; --va-r-valley:#B7BFB2; --va-r-plateau:#C2A98B;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+    --font-serif: Georgia, 'Times New Roman', serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body); background:var(--milk); color:var(--walnut); min-height:100vh; -webkit-font-smoothing:antialiased; line-height:1.5}
+  /* ledger rules: faint horizontal lines and one red margin line */
+  body::before{content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.55;
+    background:repeating-linear-gradient(180deg, transparent 0 27px, rgba(74,108,140,.12) 27px 28px), linear-gradient(90deg, transparent 0 72px, rgba(140,59,46,.25) 72px 73px, transparent 73px)}
+  a{color:inherit; text-decoration:none}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  button{font:inherit}
+  .va-label{stroke:var(--milk)} .va-label-water{fill:var(--wb-blue2); stroke:var(--milk)} .va-pin-label{stroke:var(--milk)} .va-outline{stroke:var(--walnut)} .va-state,.va-region{stroke:var(--milk)}
+  .va-card{box-shadow:0 10px 30px rgba(58,46,36,.14)} .va-card-title{font-family:var(--font-serif); font-weight:700}
+
+  .topbar{position:sticky; top:0; z-index:20; background:var(--walnut); color:var(--milk); border-bottom:3px solid var(--brick)}
+  .topbar-inner{max-width:1280px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px}
+  .brand-group{display:flex; align-items:center; gap:14px}
+  .back{display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:999px; background:rgba(243,233,210,.12); border:1px solid rgba(243,233,210,.3); font-family:var(--font-display); font-size:13px; transition:transform .15s}
+  .back:hover{transform:translateX(-3px)}
+  .brand{display:flex; align-items:center; gap:12px}
+  .brand .logo{width:42px; height:42px}
+  .brand .eyebrow{font-family:var(--font-mono); font-size:10px; letter-spacing:.22em; text-transform:uppercase; opacity:.8}
+  .brand .wordmark{font-family:var(--font-display); font-weight:800; font-size:18px; line-height:1.1}
+  .brand .wordmark .unit{color:#E9C46A; font-weight:600}
+  .chapter-nav{display:flex; gap:6px; flex-wrap:wrap}
+  .chapter-nav a{font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; padding:6px 10px; border-radius:6px; color:var(--milk2); border:1px solid transparent; opacity:.9}
+  .chapter-nav a:hover{border-color:rgba(243,233,210,.35)}
+  @media (max-width:900px){ .chapter-nav{display:none} }
+
+  .hero{position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:54px 24px 24px; display:grid; grid-template-columns:1.1fr 1fr; gap:30px; align-items:center}
+  @media (max-width:900px){ .hero{grid-template-columns:1fr} }
+  .hero .eyebrow{font-family:var(--font-mono); font-size:12px; letter-spacing:.3em; text-transform:uppercase; color:var(--brick); margin-bottom:12px}
+  .hero h1{font-family:var(--font-serif); font-weight:700; font-size:clamp(44px, 6.8vw, 92px); line-height:.95; margin-bottom:16px; color:var(--walnut)}
+  .hero h1 em{font-style:italic; color:var(--wb-blue)}
+  .hero .tag{font-size:clamp(17px,1.8vw,21px); line-height:1.6; max-width:56ch; color:var(--walnut2)}
+  .hero .tag strong{color:var(--walnut)}
+  .signboard{justify-self:center; width:min(100%, 400px)}
+  .signboard svg{width:100%; height:auto; filter:drop-shadow(0 14px 24px rgba(58,46,36,.25))}
+
+  section.chapter{position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:48px 24px 12px; scroll-margin-top:70px}
+  .kicker{font-family:var(--font-mono); font-size:12px; letter-spacing:.26em; text-transform:uppercase; color:var(--brick); margin-bottom:8px}
+  h2.title{font-family:var(--font-serif); font-weight:700; font-size:clamp(28px, 3.6vw, 44px); margin-bottom:12px; color:var(--walnut)}
+  h2.title em{font-style:italic; color:var(--wb-blue)}
+  p.blurb{font-size:17px; line-height:1.65; max-width:78ch; color:var(--walnut); margin-bottom:20px}
+  p.blurb strong{color:var(--wb-blue2)}
+  .task{display:flex; gap:12px; align-items:flex-start; padding:12px 16px; border-radius:12px; background:rgba(74,108,140,.10); border:1px solid rgba(74,108,140,.35); font-size:14.5px; line-height:1.5; margin-bottom:14px}
+  .task .n{flex:0 0 28px; height:28px; border-radius:999px; background:var(--wb-blue2); color:#fff; display:grid; place-items:center; font-family:var(--font-display); font-weight:800}
+  .panel-title{font-family:var(--font-display); font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--walnut2); margin-bottom:8px}
+  .side-box{background:var(--milk3); border:1px solid var(--va-line); border-radius:14px; padding:14px 16px}
+  .side-box p{font-size:14px; line-height:1.55; color:var(--walnut2)}
+
+  /* tobacco chart */
+  .chart{background:var(--milk3); border:1px solid var(--va-line); border-radius:14px; padding:18px 20px}
+  .chart .bars{display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:end; height:220px; margin:14px 0 6px}
+  .bar{display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%}
+  .bar .fill{width:70%; border-radius:8px 8px 0 0; transition:height .35s ease; min-height:4px}
+  .bar.tob .fill{background:var(--tobacco)} .bar.ens .fill{background:var(--brick)}
+  .bar .val{font-family:var(--font-display); font-weight:800; font-size:20px; margin-bottom:6px; font-variant-numeric:tabular-nums}
+  .bar .lab{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--walnut2); margin-top:8px; text-align:center}
+  .yearline{display:flex; align-items:center; gap:14px; margin-top:10px}
+  .yearline input{flex:1; accent-color:var(--brick)}
+  .yearline .yr{font-family:var(--font-serif); font-size:34px; font-weight:700; color:var(--wb-blue2); width:96px; text-align:center; font-variant-numeric:tabular-nums}
+  .chart .note{font-size:14px; color:var(--walnut2); margin-top:10px; line-height:1.5; min-height:40px}
+
+  /* cultures */
+  .cultures{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px}
+  .cultures .va-chip{font-size:14px; padding:8px 14px}
+  .cultures .va-chip.active{background:var(--wb-blue2); color:#fff; border-color:transparent}
+
+  /* labor sorter */
+  .sorter{display:grid; gap:8px; margin-top:6px}
+  .stmt{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; background:var(--milk3); border:1px solid var(--va-line); border-radius:12px; padding:10px 12px; font-size:14.5px}
+  @media (max-width:700px){ .stmt{grid-template-columns:1fr} }
+  .stmt .btns{display:flex; gap:6px}
+  .stmt .btns button{font:inherit; font-size:12.5px; font-weight:700; padding:7px 10px; border-radius:8px; border:1px solid var(--va-line); background:#fff; cursor:pointer}
+  .stmt .btns button.pick{outline:2px solid var(--wb-blue2)}
+  .stmt.right{border-color:#3F784A; background:rgba(63,120,74,.10)} .stmt.wrong{border-color:var(--brick); background:rgba(140,59,46,.08)}
+  .stmt .exp{grid-column:1 / -1; font-size:13px; color:var(--walnut2)} .stmt .exp:empty{display:none}
+  .trade{background:var(--milk3); border:1px solid var(--va-line); border-radius:14px; padding:14px 16px}
+  .trade svg{width:100%; height:auto; display:block}
+
+  /* capital */
+  .reasons{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px}
+  @media (max-width:800px){ .reasons{grid-template-columns:1fr 1fr} }
+  .reason{font:inherit; text-align:left; padding:12px 14px; border-radius:12px; border:1px solid var(--va-line); background:var(--milk3); cursor:pointer; font-size:14px; line-height:1.4; color:var(--walnut)}
+  .reason:hover{border-color:var(--wb-blue)} .reason.on{border-color:var(--wb-blue2); background:rgba(74,108,140,.12)}
+  .reason.good{border-color:#3F784A; background:rgba(63,120,74,.14)} .reason.bad{border-color:var(--brick); background:rgba(140,59,46,.10); text-decoration:line-through; opacity:.75}
+
+  /* store */
+  .store{display:grid; grid-template-columns:1.2fr 1fr; gap:16px}
+  @media (max-width:900px){ .store{grid-template-columns:1fr} }
+  .shelf{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+  .item{font:inherit; text-align:left; background:var(--milk3); border:1px solid var(--va-line); border-radius:14px; padding:14px; cursor:pointer; color:var(--walnut); transition:transform .15s}
+  .item:hover{transform:translateY(-3px)} .item.active{border-color:var(--wb-blue2); background:#fff}
+  .item .ic{font-size:30px; display:block} .item b{font-family:var(--font-display); display:block; margin-top:4px} .item small{color:var(--walnut2); font-family:var(--font-mono); font-size:12px}
+  .pay{display:grid; gap:8px; margin-top:10px}
+  .pay button{font:inherit; text-align:left; padding:10px 12px; border-radius:10px; border:1px solid var(--va-line); background:#fff; cursor:pointer; font-size:14px}
+  .pay button:hover{border-color:var(--wb-blue)}
+  .pay button b{font-family:var(--font-display)} .pay button small{display:block; color:var(--walnut2); font-size:12.5px}
+  .ledger{background:var(--walnut); color:var(--milk); border-radius:14px; padding:14px 16px; font-family:var(--font-mono); font-size:13px; line-height:1.7}
+  .ledger b{color:#E9C46A}
+  .ledger .row{display:flex; justify-content:space-between; gap:10px; border-bottom:1px dashed rgba(243,233,210,.25)}
+  .store-note{margin-top:10px; font-size:14px; line-height:1.5; color:var(--walnut2); min-height:40px}
+
+  .teacher{max-width:1280px; margin:40px auto 0; padding:0 24px}
+  .teacher-card{border:1px dashed var(--va-line); border-radius:14px; padding:20px 22px; background:var(--milk3); display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start}
+  .teacher-card h3{font-size:16px; margin-bottom:6px; color:var(--wb-blue2)}
+  .teacher-card p{font-size:13.5px; line-height:1.55; color:var(--walnut2); max-width:80ch}
+  .teacher-card .std{font-family:var(--font-mono); font-size:11px; padding:2px 7px; border-radius:4px; background:rgba(140,59,46,.1); color:var(--brick)}
+  .nextup{max-width:1280px; margin:40px auto 0; padding:0 24px}
+  .nextup-card{border-radius:18px; padding:30px 32px; background:linear-gradient(145deg, #2F4A63, #8C3B2E 60%, #E9C46A); color:#fff; display:flex; flex-wrap:wrap; gap:18px; align-items:center; justify-content:space-between}
+  .nextup-card h3{font-size:13px; letter-spacing:.24em; text-transform:uppercase; opacity:.85}
+  .nextup-card .big{font-family:var(--font-display); font-size:clamp(24px,3.2vw,36px); font-weight:800; margin:6px 0 8px}
+  .nextup-card p{max-width:560px; font-size:14.5px; line-height:1.55}
+  .chip{display:inline-flex; align-items:center; gap:8px; padding:11px 16px; border-radius:999px; font-family:var(--font-display); font-weight:700; font-size:14px; background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.35); color:#fff}
+  .chip.active{background:#fff; color:#2F4A63}
+  footer{position:relative; z-index:1; max-width:1280px; margin:36px auto 0; padding:24px; border-top:1px solid var(--va-line); display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:13px; color:var(--walnut2)}
+  footer .heart{color:var(--brick)}
+  .sound-toggle{position:fixed; right:18px; bottom:18px; z-index:50; width:46px; height:46px; border-radius:999px; border:1px solid var(--va-line); background:var(--milk3); font-size:20px; cursor:pointer; box-shadow:0 8px 24px rgba(58,46,36,.2)}
+  @media (max-width:640px){ .topbar-inner{padding:10px 14px} section.chapter{padding:36px 14px 8px} }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand-group">
+      <a class="back" href="../index.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 5l-7 7 7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        All chapters
+      </a>
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="60" height="60" rx="14" fill="#F3E9D2"/>
+          <path d="M14 46 L14 26 L32 14 L50 26 L50 46 Z" fill="#8C3B2E"/><rect x="27" y="32" width="10" height="14" fill="#F3E9D2"/><path d="M12 26 L32 12 L52 26" stroke="#3A2E24" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <div class="eyebrow">REDS Hall of Discovery · Virginia Explorer</div>
+          <div class="wordmark">Life in the Colony <span class="unit">· Chapter 4</span></div>
+        </div>
+      </div>
+    </div>
+    <nav class="chapter-nav" aria-label="Sections">
+      <a href="#tobacco">1 Tobacco</a><a href="#people">2 Who lived here</a><a href="#labor">3 Servants &amp; slaves</a><a href="#laws">4 The laws</a><a href="#capital">5 Williamsburg</a><a href="#store">6 The store</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">Chapter 4 · Life in the Virginia colony · VS.4</div>
+    <h1>Life in the <em>Colony</em></h1>
+    <p class="tag">By 1700 Jamestown's swampy fort had become a colony of <strong>60,000 people</strong> strung along the rivers. Almost everything about it, who lived where, who worked for whom, what counted as money, even where the capital sat, came back to one plant: <strong>tobacco</strong>.</p>
+  </div>
+  <div class="signboard" aria-hidden="true">
+    <svg viewBox="0 0 400 300">
+      <rect x="190" y="90" width="10" height="200" fill="#3A2E24"/>
+      <rect x="40" y="30" width="320" height="130" rx="10" fill="#2F4A63" stroke="#3A2E24" stroke-width="6"/>
+      <text x="200" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#F3E9D2" letter-spacing="2">VIRGINIA</text>
+      <text x="200" y="112" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="18" fill="#E9C46A">Tobacco · Taken in Trade</text>
+      <text x="200" y="140" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#F3E9D2" letter-spacing="3">EST. 1607 · CAPITAL WILLIAMSBURG 1699</text>
+      <path d="M120 200 q20 -60 60 -20 q20 -50 50 -10 q30 -40 50 10" stroke="#8A6A3A" stroke-width="10" fill="none" stroke-linecap="round" opacity=".9"/>
+      <path d="M120 200 q20 -60 60 -20 q20 -50 50 -10 q30 -40 50 10" stroke="#5C4A3A" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════ 1. TOBACCO ═══════ -->
+<section class="chapter" id="tobacco">
+  <div class="kicker">Section 1 · Agriculture · VS.4a</div>
+  <h2 class="title">A colony made of <em>tobacco</em>.</h2>
+  <p class="blurb">Tobacco made Virginia rich and made Virginia what it was. It grew best on fresh river-bottom land, so planters spread up every river and kept moving west when the soil wore out. It needed months of hand labor, so planters wanted workers, more every year. First they used <strong>indentured servants</strong>. Then, more and more, they bought <strong>enslaved Africans</strong>. Slide the year and watch the two numbers grow together.</p>
+  <div class="task"><span class="n">1</span><div><strong>Slide the years</strong> from 1620 to 1770. Tobacco shipped to England is on the left; the number of enslaved people in Virginia is on the right.</div></div>
+  <div class="chart">
+    <div class="bars">
+      <div class="bar tob"><div class="val" id="c-tob">—</div><div class="fill" id="f-tob"></div><div class="lab">Tobacco shipped<br>(millions of pounds a year)</div></div>
+      <div class="bar ens"><div class="val" id="c-ens">—</div><div class="fill" id="f-ens"></div><div class="lab">Enslaved people<br>in Virginia</div></div>
+    </div>
+    <div class="yearline"><span class="yr" id="c-year">1620</span><input type="range" id="c-slider" min="0" max="7" value="0" step="1" aria-label="Year"></div>
+    <div class="note" id="c-note"></div>
+  </div>
+</section>
+
+<!-- ═══════ 2. WHO LIVED HERE ═══════ -->
+<section class="chapter" id="people">
+  <div class="kicker">Section 2 · Cultures of the colony · VS.4b</div>
+  <h2 class="title">Who lived here, and what they <em>brought</em>.</h2>
+  <p class="blurb">Colonial Virginia was never just English. It was English planters and their churches, Scots-Irish and German farmers pouring down the Valley with fiddles and big barns, Africans whose skills, music, and foods became Virginia's, and the Indigenous nations whose corn, canoes, and place names the newcomers borrowed. Each group settled in a different part of the land, and each left its mark.</p>
+  <div class="task"><span class="n">2</span><div><strong>Pick a people.</strong> The map shows where they mostly lived; the card shows their beliefs, customs, and buildings.</div></div>
+  <div class="cultures" id="cultures"></div>
+  <div class="va-atlas">
+    <div class="va-stage"><svg id="map-people"></svg></div>
+    <div class="va-side"><div id="card-people"><div class="va-empty">Choose a group above.</div></div></div>
+  </div>
+</section>
+
+<!-- ═══════ 3. LABOR ═══════ -->
+<section class="chapter" id="labor">
+  <div class="kicker">Section 3 · Indentured servants and enslaved people · VS.4c</div>
+  <h2 class="title">Two kinds of forced work, <em>not</em> the same.</h2>
+  <p class="blurb">For its first fifty years the colony ran mostly on <strong>indentured servants</strong>, people who worked for a set number of years to pay for their passage. After about 1680 it ran more and more on <strong>enslaved people</strong>, captured in Africa, carried across the Atlantic, and sold. Both worked without pay. Only one system ever ended for the person inside it.</p>
+  <div class="task"><span class="n">3</span><div><strong>Sort the statements.</strong> Does each one describe an indentured servant, an enslaved person, or both? Then trace how the trade in people worked.</div></div>
+  <div class="va-atlas">
+    <div>
+      <div class="sorter" id="sorter"></div>
+      <div class="va-feedback" id="sorter-fb" style="margin-top:10px"></div>
+    </div>
+    <div class="va-side">
+      <div class="trade">
+        <div class="panel-title">How the trade worked</div>
+        <svg viewBox="0 0 320 210" role="img" aria-label="Diagram of the Atlantic trade: goods from Europe to Africa, captives from Africa to the colonies, tobacco from the colonies to Europe">
+          <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3A2E24"/></marker></defs>
+          <circle cx="250" cy="40" r="30" fill="#2F4A63"/><text x="250" y="45" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Europe</text>
+          <circle cx="250" cy="165" r="30" fill="#8A6A3A"/><text x="250" y="170" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Africa</text>
+          <circle cx="60" cy="100" r="30" fill="#8C3B2E"/><text x="60" y="97" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Virginia</text><text x="60" y="110" text-anchor="middle" fill="#fff" font-size="10">colonies</text>
+          <path d="M250 72 L250 133" stroke="#3A2E24" stroke-width="2" marker-end="url(#ar)"/><text x="262" y="106" font-size="11" fill="#3A2E24">① cloth, guns, rum</text>
+          <path d="M222 178 L90 118" stroke="#3A2E24" stroke-width="2" marker-end="url(#ar)"/><text x="120" y="172" font-size="11" fill="#3A2E24">② captive people</text><text x="120" y="185" font-size="10" fill="#5C4A3A">the Middle Passage</text>
+          <path d="M88 84 L218 46" stroke="#3A2E24" stroke-width="2" marker-end="url(#ar)"/><text x="110" y="52" font-size="11" fill="#3A2E24">③ tobacco, sugar</text>
+        </svg>
+        <p style="font-size:13.5px; line-height:1.5; color:var(--walnut2); margin-top:8px">European ships carried goods to Africa, traded them for people who had been captured, carried those people to the colonies and sold them, then carried tobacco and sugar home. Every side of the triangle made money for someone in Europe. The people in the middle were the price.</p>
+      </div>
+      <div id="card-labor"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 4. THE LAWS ═══════ -->
+<section class="chapter" id="laws">
+  <div class="kicker">Section 4 · Race-based enslavement · VS.4d</div>
+  <h2 class="title">How slavery was written into <em>law</em>.</h2>
+  <p class="blurb">In 1619 there was no law about slavery in Virginia. Some of the first Africans worked a term and went free, like servants. Over the next 86 years, the General Assembly passed law after law that treated Africans differently, until slavery was lifelong, passed from mother to child, and tied to race. These are the laws. Read them as a series of <strong>choices</strong> Virginia made.</p>
+  <div class="task"><span class="n">4</span><div><strong>Click each law</strong> on the timeline, from 1640 to 1705, and notice what each one closed off.</div></div>
+  <div class="va-atlas">
+    <div><div class="va-stage" style="padding:6px 14px"><div id="law-timeline"></div></div></div>
+    <div class="va-side"><div id="card-laws"><div class="va-empty">Click a law on the timeline.</div></div></div>
+  </div>
+</section>
+
+<!-- ═══════ 5. CAPITAL ═══════ -->
+<section class="chapter" id="capital">
+  <div class="kicker">Section 5 · Relocating the capital · VS.4e</div>
+  <h2 class="title">Goodbye Jamestown, hello <em>Williamsburg</em>.</h2>
+  <p class="blurb">In 1699, after 92 years, Virginia gave up on Jamestown and moved its government seven miles inland to a small town called Middle Plantation, renamed <strong>Williamsburg</strong> for the king. It was a decision, and decisions have reasons.</p>
+  <div class="task"><span class="n">5</span><div><strong>Be the Assembly.</strong> Six reasons are on the table, but only three are real. Choose the three, then check.</div></div>
+  <div class="va-atlas">
+    <div>
+      <div class="reasons" id="reasons"></div>
+      <button class="va-btn primary" id="reasons-check">Check my three</button>
+      <div class="va-feedback" id="reasons-fb" style="margin-top:10px"></div>
+    </div>
+    <div class="va-side">
+      <div class="va-stage"><svg id="map-capital"></svg></div>
+      <div id="card-capital"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 6. THE STORE ═══════ -->
+<section class="chapter" id="store">
+  <div class="kicker">Section 6 · Exchanging goods and services · VS.4f</div>
+  <h2 class="title">Welcome to the <em>country store</em>.</h2>
+  <p class="blurb">There were almost no coins in colonial Virginia. So how did anyone buy anything? Three ways: pay in <strong>tobacco</strong>, <strong>barter</strong> one thing for another, or buy on <strong>credit</strong> and settle up after the harvest. You have this year's crop, 400 pounds of tobacco, and a deerskin. Go shopping.</p>
+  <div class="task"><span class="n">6</span><div><strong>Buy each item</strong> a different way. Watch the ledger. Then think: how is this like, and unlike, a debit card?</div></div>
+  <div class="store">
+    <div>
+      <div class="shelf" id="shelf"></div>
+      <div class="pay" id="pay"></div>
+      <div class="store-note" id="store-note">Pick something from the shelf.</div>
+    </div>
+    <div class="va-side">
+      <div class="ledger" id="ledger"></div>
+      <div id="card-store"></div>
+    </div>
+  </div>
+</section>
+
+<div class="teacher">
+  <div class="teacher-card">
+    <div style="font-size:36px">🍎</div>
+    <div>
+      <h3>For teachers</h3>
+      <p>This chapter covers <span class="std">VS.4a</span> the importance and influence of agriculture (Section 1), <span class="std">VS.4b</span> how the colony reflected Indigenous, European (English, Scots-Irish, German), and African cultures (Section 2), <span class="std">VS.4c</span> indentured servants versus enslaved people and how Europeans traded for, transported, and sold Africans (Section 3), <span class="std">VS.4d</span> the laws that established race-based enslavement, 1640 to 1705 (Section 4), <span class="std">VS.4e</span> the move of the capital to Williamsburg for water, health, and fire (Section 5), and <span class="std">VS.4f</span> money, barter, and credit (Section 6). Chart figures in Section 1 are rounded from standard historical estimates. Enslavement is presented factually and without graphic detail, per school guidance; the laws are framed as choices the Assembly made.</p>
+    </div>
+  </div>
+</div>
+
+<div class="nextup">
+  <div class="nextup-card">
+    <div>
+      <h3>Next · Chapter 5</h3>
+      <div class="big">📜 Virginia Declares</div>
+      <p>Why the colonists broke with Britain, the Virginians who led the way, the documents that inspired a nation, and the last battle at Yorktown.</p>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <a class="chip" href="jamestown.html">← Chapter 3</a>
+      <a class="chip" href="../index.html">All chapters</a>
+      <span class="chip" style="opacity:.6">Chapter 5 · coming soon</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>REDS Hall of Discovery · Virginia Explorer · Chapter 4: Life in the Colony</div>
+  <div>Made with <span class="heart">♥</span> for the students of Redeemer Episcopal Day School</div>
+</footer>
+<button class="sound-toggle" id="soundToggle" aria-label="Turn sound off">🔊</button>
+
+<script src="../shared/va-map.js"></script>
+<script src="../shared/va-core.js"></script>
+<script src="../content/geography.js"></script>
+<script src="../content/first-peoples.js"></script>
+<script src="../content/jamestown.js"></script>
+<script src="../content/colony.js"></script>
+<script>
+VA.bindSoundToggle(document.getElementById('soundToggle'));
+const $ = id => document.getElementById(id);
+const COLORS = ['#2F4A63', '#8C3B2E', '#E9C46A', '#8A6A3A', '#7C8C6A'];
+const homes = {};
+function route(n) {
+  if (!n) return;
+  if (n.type === 'culture') return homes.people(n);
+  if (n.type === 'law') return homes.laws(n);
+  if (['idea-indenture', 'idea-enslavement'].includes(n.id)) return homes.labor(n);
+  if (['idea-tobacco-money', 'idea-barter', 'idea-credit'].includes(n.id)) return homes.store(n);
+  if (['place-williamsburg', 'event-capital-1699', 'event-college-1693', 'place-jamestown'].includes(n.id)) return homes.capital(n);
+  VA.renderCard($('card-labor'), n, { onRelated: route });
+}
+const card = (node, el) => VA.renderCard(el, node, { onRelated: route });
+
+/* ═══════ 1. TOBACCO CHART ═══════ */
+(() => {
+  const D = [ // year, tobacco (millions of lb shipped, rounded), enslaved people (rounded), note
+    [1620, 0.1, 30, 'A few tons of tobacco, a few dozen Africans. Almost every worker is an indentured servant.'],
+    [1640, 1.3, 150, 'Tobacco is the colony\'s money. Farms creep up every river. Servants still do most of the work.'],
+    [1660, 7, 900, 'Fewer English people are willing to come as servants. Planters begin buying enslaved Africans.'],
+    [1680, 20, 3000, 'The turn: the colony passes laws making slavery lifelong and hereditary. Enslaved labor becomes the plan.'],
+    [1700, 35, 16000, 'One in four Virginians is enslaved. Big planters own the river land; the Slave Codes come in 1705.'],
+    [1720, 45, 27000, 'Tobacco ships crowd the rivers. Planters push into the Piedmont for fresh soil.'],
+    [1750, 70, 100000, 'Four in ten Virginians are enslaved. Tobacco is the biggest export in all the colonies.'],
+    [1770, 100, 187000, 'On the eve of the Revolution: 100 million pounds a year, and nearly 190,000 people held in bondage.'],
+  ];
+  const s = $('c-slider');
+  function show() {
+    const [y, t, e, note] = D[+s.value];
+    $('c-year').textContent = y; $('c-tob').textContent = t >= 1 ? t + 'M' : (t * 1000) + 'K'; $('c-ens').textContent = e.toLocaleString();
+    $('f-tob').style.height = Math.max(2, t / 100 * 100) + '%'; $('f-ens').style.height = Math.max(2, e / 187000 * 100) + '%';
+    $('c-note').textContent = note;
+  }
+  s.addEventListener('input', () => { show(); VA.sfx.click(); }); show();
+})();
+
+/* ═══════ 2. CULTURES ═══════ */
+(() => {
+  const cultures = ['culture-english', 'culture-scots-irish', 'culture-german', 'culture-african', 'culture-indigenous'].map(VA.get);
+  const AREAS = { 'culture-english': ['coastal', 'piedmont'], 'culture-scots-irish': ['valley'], 'culture-german': ['valley'], 'culture-african': ['coastal', 'piedmont'], 'culture-indigenous': [] };
+  const pins = ['tribe-pamunkey', 'tribe-mattaponi', 'place-williamsburg'].map(VA.get);
+  const map = VA.mountMap($('map-people'), { interactive: ['region', 'pin'], layers: { county: false, minorRivers: false, pins: false }, pins, labels: { regions: true, water: false, states: false },
+    onSelect: (ref, node) => { const c = cultures.find(c => AREAS[c.id].includes(ref.id)); if (c) pick(c); } });
+  $('cultures').innerHTML = cultures.map(c => `<button class="va-chip" data-c="${c.id}">${c.emoji} ${c.name}</button>`).join('');
+  function pick(c) {
+    card(c, $('card-people'));
+    map.clearHighlight(); map.svg.classList.add('va-dim');
+    for (const r of AREAS[c.id]) map.refs.region[r].classList.add('va-lit');
+    map.setLayer('pins', c.id === 'culture-indigenous');
+    if (c.id === 'culture-indigenous') { map.refs.pin['tribe-pamunkey'].classList.add('va-lit'); map.refs.pin['tribe-mattaponi'].classList.add('va-lit'); }
+    document.querySelectorAll('[data-c]').forEach(b => b.classList.toggle('active', b.dataset.c === c.id));
+  }
+  document.querySelectorAll('[data-c]').forEach(b => b.addEventListener('click', () => { pick(VA.get(b.dataset.c)); VA.sfx.click(); }));
+  homes.people = n => { pick(n); $('people').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 3. LABOR SORTER ═══════ */
+(() => {
+  const S = [
+    ['Signed a contract to work for four to seven years', 'I', 'Servants signed an indenture with an end date.'],
+    ['Worked long days without pay', 'B', 'Both systems were forced labor without wages.'],
+    ['Was captured in Africa and carried across the Atlantic', 'E', 'The Middle Passage was the route into slavery.'],
+    ['Was freed at the end of the term, with tools or land', 'I', 'Freedom dues marked the end of an indenture.'],
+    ['Children were born into the same condition', 'E', 'After 1662, enslaved status passed from mother to child.'],
+    ['Could be punished by the master', 'B', 'Both could be punished; enslaved people had far fewer protections.'],
+    ['Was usually a poor young person from England, Ireland, or Scotland', 'I', 'Most servants were British or Irish.'],
+    ['Was bought and sold as property for life', 'E', 'By 1705 the law called enslaved people property.'],
+  ];
+  const L = { I: 'Indentured servant', E: 'Enslaved person', B: 'Both' };
+  let done = 0, right = 0;
+  $('sorter').innerHTML = VA.shuffle(S.map((x, i) => i)).map(i => `<div class="stmt" data-i="${i}"><span>${S[i][0]}</span><span class="btns"><button data-a="I">Indentured</button><button data-a="E">Enslaved</button><button data-a="B">Both</button></span><span class="exp"></span></div>`).join('');
+  $('sorter').querySelectorAll('.stmt').forEach(el => { const s = S[+el.dataset.i]; el.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    if (el.classList.contains('right') || el.classList.contains('wrong')) return;
+    b.classList.add('pick'); const ok = b.dataset.a === s[1]; el.classList.add(ok ? 'right' : 'wrong'); el.querySelector('.exp').textContent = (ok ? '✅ ' : `❌ ${L[s[1]]}. `) + s[2]; done++; if (ok) right++; ok ? VA.sfx.snap() : VA.sfx.nope();
+    if (done === S.length) { const fb = $('sorter-fb'); fb.className = 'va-feedback good'; fb.innerHTML = `<b>${right} of ${S.length}.</b> The difference that mattered most: an indenture ended. Enslavement did not, and it passed to children.`; if (right >= S.length - 1) VA.confetti({ colors: COLORS }); }
+  })); });
+  card(VA.get('idea-enslavement'), $('card-labor'));
+  homes.labor = n => { card(n, $('card-labor')); $('labor').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 4. LAWS TIMELINE ═══════ */
+(() => {
+  const laws = [VA.get('event-africans-1619'), ...VA.find(n => n.type === 'law')];
+  const tl = VA.renderTimeline($('law-timeline'), laws, { from: 1615, to: 1710, onPick: n => card(n, $('card-laws')) });
+  homes.laws = n => { tl.select(n.id); $('laws').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 5. CAPITAL ═══════ */
+(() => {
+  const R = [
+    ['Jamestown\'s water was bad and often made people sick', true], ['Middle Plantation was closer to England', false], ['The statehouse at Jamestown had burned down in 1698', true],
+    ['Williamsburg had a gold mine', false], ['Jamestown\'s low, marshy ground was unhealthy, especially in summer', true], ['The Powhatan asked the English to move', false],
+  ];
+  const picked = new Set();
+  $('reasons').innerHTML = VA.shuffle(R.map((x, i) => i)).map(i => `<button class="reason" data-i="${i}">${R[i][0]}</button>`).join('');
+  $('reasons').querySelectorAll('.reason').forEach(b => b.addEventListener('click', () => { if (b.classList.contains('good') || b.classList.contains('bad')) return; const i = +b.dataset.i; if (picked.has(i)) { picked.delete(i); b.classList.remove('on'); } else if (picked.size < 3) { picked.add(i); b.classList.add('on'); } else VA.toast('Only three. Unpick one first.', 'info'); }));
+  $('reasons-check').addEventListener('click', () => {
+    if (picked.size < 3) { VA.toast('Pick three reasons first.', 'info'); return; }
+    let right = 0;
+    $('reasons').querySelectorAll('.reason').forEach(b => { const i = +b.dataset.i; if (picked.has(i)) { b.classList.add(R[i][1] ? 'good' : 'bad'); if (R[i][1]) right++; } else if (R[i][1]) b.classList.add('good'); });
+    const fb = $('reasons-fb'); fb.className = right === 3 ? 'va-feedback good' : 'va-feedback bad';
+    fb.innerHTML = right === 3 ? '🏆 <b>All three.</b> Bad water, unhealthy ground, and a fire. So in 1699 the Assembly moved to high, dry Middle Plantation and named it Williamsburg.' : `<b>${right} of 3.</b> The real reasons are marked green: contaminated water, unhealthy living conditions, and the fire of 1698.`;
+    if (right === 3) { VA.confetti({ colors: COLORS }); VA.sfx.win(); } else VA.sfx.nope();
+    card(VA.get('event-capital-1699'), $('card-capital'));
+  });
+  const pins = ['place-jamestown', 'place-williamsburg', 'place-point-comfort'].map(VA.get);
+  const map = VA.mountMap($('map-capital'), { interactive: ['pin'], layers: { county: false, minorRivers: true }, pins, labels: { regions: false, water: true, states: false }, onSelect: (ref, node) => card(node, $('card-capital')) });
+  const a = VA_MAP.project(-77.3, 37.6), b = VA_MAP.project(-76.0, 36.85);
+  map.svg.setAttribute('viewBox', `${a.x.toFixed(1)} ${a.y.toFixed(1)} ${(b.x - a.x).toFixed(1)} ${(b.y - a.y).toFixed(1)}`); map.svg.classList.add('va-zoomed');
+  card(VA.get('place-williamsburg'), $('card-capital')); map.highlight({ kind: 'pin', id: 'place-williamsburg' });
+  homes.capital = n => { card(n, $('card-capital')); const ref = VA.refFor(n); if (ref && ref.kind === 'pin' && map.refs.pin[ref.id]) map.highlight(ref); $('capital').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 6. THE STORE ═══════ */
+(() => {
+  const ITEMS = [
+    { id: 'cloth', ic: '🧵', name: 'Bolt of English cloth', price: 120 },
+    { id: 'hoe', ic: '⚒️', name: 'Iron hoe', price: 40 },
+    { id: 'sugar', ic: '🍬', name: 'Loaf of sugar', price: 60 },
+    { id: 'knife', ic: '🔪', name: 'Steel knife', price: 25 },
+  ];
+  const state = { tobacco: 400, deerskin: true, debt: 0, bought: [], sel: null };
+  const note = $('store-note');
+  function ledger() {
+    $('ledger').innerHTML = `<div class="row"><span>Tobacco on hand</span><b>${state.tobacco} lb</b></div><div class="row"><span>Deerskin</span><b>${state.deerskin ? '1' : 'traded'}</b></div><div class="row"><span>Owed to the merchant</span><b>${state.debt} lb</b></div>${state.bought.map(b => `<div class="row"><span>${b.ic} ${b.name}</span><span>${b.how}</span></div>`).join('')}`;
+  }
+  $('shelf').innerHTML = ITEMS.map(i => `<button class="item" data-id="${i.id}"><span class="ic">${i.ic}</span><b>${i.name}</b><small>${i.price} lb of tobacco</small></button>`).join('');
+  function select(id) {
+    state.sel = ITEMS.find(i => i.id === id);
+    document.querySelectorAll('.item').forEach(b => b.classList.toggle('active', b.dataset.id === id));
+    const it = state.sel;
+    $('pay').innerHTML = `
+      <button data-how="tobacco"><b>🍂 Pay in tobacco</b><small>Hand over ${it.price} lb of this year's crop (you have ${state.tobacco} lb).</small></button>
+      <button data-how="barter"><b>🔄 Barter the deerskin</b><small>Trade your deerskin straight across, if the storekeeper wants it.</small></button>
+      <button data-how="credit"><b>📒 Buy on credit</b><small>Take it now; the storekeeper writes ${it.price} lb in the ledger. Pay at harvest.</small></button>`;
+    $('pay').querySelectorAll('button').forEach(b => b.addEventListener('click', () => buy(b.dataset.how)));
+    note.textContent = `${it.name}: ${it.price} pounds of tobacco. How will you pay?`;
+  }
+  function buy(how) {
+    const it = state.sel; if (!it) return;
+    if (how === 'tobacco') { if (state.tobacco < it.price) { note.textContent = 'Not enough tobacco left. Try barter or credit.'; VA.sfx.nope(); return; } state.tobacco -= it.price; done(it, 'paid in tobacco', 'Tobacco was Virginia\'s money. The storekeeper will ship those leaves to England.'); card(VA.get('idea-tobacco-money'), $('card-store')); }
+    else if (how === 'barter') { if (!state.deerskin) { note.textContent = 'You already traded the deerskin.'; VA.sfx.nope(); return; } if (it.price > 60) { note.textContent = 'The storekeeper shakes his head: one deerskin isn\'t worth that much. Barter only works when both sides agree the trade is fair.'; VA.sfx.nope(); return; } state.deerskin = false; done(it, 'bartered a deerskin', 'Goods for goods, no money at all. It worked because the storekeeper wanted the skin.'); card(VA.get('idea-barter'), $('card-store')); }
+    else { state.debt += it.price; done(it, 'on credit', `You owe ${state.debt} lb now. Most planters lived this way, buying all year and paying at harvest, and hoping the crop came in.`); card(VA.get('idea-credit'), $('card-store')); }
+  }
+  function done(it, how, msg) {
+    state.bought.push({ ...it, how }); ledger(); note.textContent = `✅ ${it.name}, ${how}. ${msg}`; VA.sfx.snap();
+    document.querySelector(`.item[data-id="${it.id}"]`).disabled = true; document.querySelector(`.item[data-id="${it.id}"]`).style.opacity = .5; $('pay').innerHTML = ''; state.sel = null;
+    const hows = new Set(state.bought.map(b => b.how));
+    if (hows.size === 3) { VA.confetti({ colors: COLORS }); VA.toast('Tobacco, barter, and credit: all three ways Virginians paid. A debit card is closest to tobacco notes; a credit card is the merchant\'s ledger.', 'good', 5200); }
+  }
+  document.querySelectorAll('.item').forEach(b => b.addEventListener('click', () => { if (!b.disabled) { select(b.dataset.id); VA.sfx.click(); } }));
+  ledger(); card(VA.get('idea-tobacco-money'), $('card-store'));
+  homes.store = n => { card(n, $('card-store')); $('store').scrollIntoView({ behavior: 'smooth' }); };
+})();
+</script>
+</body>
+</html>

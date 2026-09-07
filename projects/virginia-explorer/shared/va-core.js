@@ -186,7 +186,7 @@ window.VA = (() => {
 
   /* ───────────────────────── 3. CARDS & INDEX ──────────────────────── */
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const TYPE_LABEL = { region: 'Region', water: 'Water', state: 'Neighbor', place: 'Place', person: 'Person', event: 'Event', tribe: 'Nation', era: 'Era', org: 'Organization', idea: 'Idea', document: 'Document' };
+  const TYPE_LABEL = { region: 'Region', water: 'Water', state: 'Neighbor', place: 'Place', person: 'Person', event: 'Event', tribe: 'Nation', era: 'Era', org: 'Organization', idea: 'Idea', document: 'Document', culture: 'Culture', law: 'Law' };
   function renderCard(container, node, { teacher = false, onRelated = null, onShow = null } = {}) {
     if (!node) { container.innerHTML = ''; return; }
     const img = node.image

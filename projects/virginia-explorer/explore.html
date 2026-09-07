@@ -92,6 +92,7 @@
 <script src="content/geography.js"></script>
 <script src="content/first-peoples.js"></script>
 <script src="content/jamestown.js"></script>
+<script src="content/colony.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
@@ -100,8 +101,8 @@
     ['VS.2a', 'Archaeology and Werowocomoco'], ['VS.2b', 'Algonquian, Siouan, and Iroquoian language groups'], ['VS.2c', 'Diversity among Indigenous nations'], ['VS.2d', 'Indigenous people and their environment c. 1600'], ['VS.2e', 'Indigenous people leading to the present day'],
     ['VS.3', 'Jamestown: causes and effects'], ['VS.4', 'Life in the Virginia colony'], ['VS.5', 'Virginia in the American Revolution'], ['VS.6', 'The new nation and Virginians'], ['VS.7', 'The Civil War and Virginia'], ['VS.8', 'Reconstruction'], ['VS.9', 'Railroads, industry, cities'], ['VS.10', 'World War I and II'], ['VS.11', 'The Civil Rights Movement in Virginia'], ['VS.12', 'Mother of Presidents'], ['VS.13', 'Virginia in the global economy'],
   ];
-  const groups = { places: n => ['place', 'region', 'water', 'state', 'tribe'].includes(n.type), people: n => n.type === 'person', events: n => n.type === 'event' };
-  const groupName = { region: 'Regions', water: 'Water', state: 'Neighbors', place: 'Places', tribe: 'Nations', person: 'People', event: 'Events' };
+  const groups = { places: n => ['place', 'region', 'water', 'state', 'tribe'].includes(n.type), people: n => n.type === 'person', events: n => ['event', 'law', 'idea', 'org', 'document', 'culture'].includes(n.type) };
+  const groupName = { region: 'Regions', water: 'Water', state: 'Neighbors', place: 'Places', tribe: 'Nations', person: 'People', event: 'Events', law: 'Laws', idea: 'Ideas', org: 'Organizations', document: 'Documents', culture: 'Cultures' };
   let tab = 'places';
   const map = VA.mountMap($('map'), { interactive: ['region', 'river', 'state', 'water', 'pin'], layers: { county: true, minorRivers: false, fallLine: false }, labels: { regions: false, water: false, states: true },
     onSelect: (ref, node) => { if (node) pick(node); } });

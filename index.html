@@ -164,14 +164,27 @@
   }
   .exhibits .tagline{opacity:.78; font-size:17px; max-width:640px; margin: 0 auto}
 
-  /* 6-column grid so each card spans 2 cols → row 1 has 3, row 2 has 2 (centered) */
-  .grid{
-    display:grid; grid-template-columns: repeat(6, 1fr); gap:26px;
+  /* ---------- Wings (one per discipline) ---------- */
+  .wing-nav{display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:22px}
+  .wing-nav a{
+    display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:999px;
+    font-family:var(--font-display); font-size:14px; font-weight:700;
+    background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18);
+    transition:transform .15s ease, background .15s ease;
   }
-  .grid > .card{ grid-column: span 2; }
+  .wing-nav a:hover{transform:translateY(-2px); background:rgba(255,255,255,.14)}
+  .wing-nav a.dim{opacity:.55}
+  .wing{margin-top:54px; scroll-margin-top:24px}
+  .wing-hdr{display:flex; align-items:center; gap:16px; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid rgba(255,255,255,.1)}
+  .wing-hdr .wing-emoji{font-size:34px; line-height:1}
+  .wing-hdr h3{font-family:var(--font-display); font-size:24px; letter-spacing:0; text-transform:none; color:var(--cream); margin:0}
+  .wing-hdr p{font-family:var(--font-mono); font-size:12px; opacity:.7; margin-top:2px; letter-spacing:.06em}
+  .wing-hdr .wing-tag{margin-left:auto; font-family:var(--font-display); font-size:11px; letter-spacing:.2em; text-transform:uppercase; padding:6px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.18); opacity:.8}
+  .grid{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap:26px;
+  }
   @media (max-width: 980px){
     .grid{ grid-template-columns: repeat(2, 1fr); }
-    .grid > .card{ grid-column: span 1; }
   }
   @media (max-width: 560px){
     .grid{ grid-template-columns: 1fr; }
@@ -211,9 +224,8 @@
   .card.life   { background: linear-gradient(145deg, #3D0066, #FF6B9D 55%, #FFCA3A); }
   .card.matter { background: linear-gradient(145deg, #3D0099, #00C2C2 55%, #FFE66D); }
   .card.slicer { background: linear-gradient(145deg, #2B0F3A, #FF6B35 55%, #C6FF4D); }
-  /* 7 cards: centre the lone card on the last row */
-  .grid > .card:nth-child(7){ grid-column: 3 / span 2; }
-  @media (max-width: 980px){ .grid > .card:nth-child(7){ grid-column: auto; } }
+  .card.virginia { background: linear-gradient(145deg, #0F2A4F, #B3261E 58%, #F4E9D8); }
+  .card.language { background: linear-gradient(145deg, #1B1B2F, #4B4E8A 55%, #C9C6FF); }
 
   .card .bg-mark{position:absolute; right:-30px; bottom:-30px; font-size:230px; opacity:.14; pointer-events:none; line-height:1}
 
@@ -290,7 +302,7 @@
         <div class="wordmark">REDS Hall of Discovery</div>
       </div>
     </div>
-    <div class="class-pill"><span class="dot"></span>Mrs. Guyer's 5th Grade Class</div>
+    <div class="class-pill"><span class="dot"></span>Redeemer Episcopal Day School</div>
   </header>
 
   <!-- Hero -->
@@ -299,7 +311,7 @@
     <h1>REDS Hall<span class="of">of</span>Discovery</h1>
     <p class="tag">
       Step inside a museum you can click through. Every exhibit is a set of playful, full-color,
-      <strong>actually-interactive</strong> science <em>and</em> math experiences — built for Mrs. Guyer's 5th Grade Class at Redeemer Episcopal Day School. 🔬📐✨
+      <strong>actually-interactive</strong> science, math, <em>and</em> social studies experiences — built for the students of Redeemer Episcopal Day School. 🔬📐✨
     </p>
     <div class="cta-row">
       <a class="btn primary" href="#exhibits">
@@ -318,113 +330,167 @@
       <p>
         This is <strong>your</strong> museum. Every exhibit is a working lab — click anything, drag anything, poke anything.
         Wander the <strong>Waves</strong> wing to ride sound and light, or step into <strong>Shape Explorer</strong> to forge polygons with your hands.
-        Over time, Mrs. Guyer (and whichever curious humans she pulls in to help) will fill these halls with new wonders across science <em>and</em> math.
+        Over time, REDS teachers (and whichever curious humans they pull in to help) will fill these halls with new wonders across science, math, social studies, and more.
       </p>
       <div class="signature">— The REDS Hall of Discovery crew ♥</div>
     </div>
   </section>
 
-  <!-- Exhibits -->
+  <!-- Exhibits: one wing per discipline -->
   <section class="exhibits" id="exhibits">
     <div class="hdr">
       <h3>The Exhibits</h3>
-      <h2>Rooms of wonder &mdash; open and on the way.</h2>
-      <p class="tagline">Seven themed exhibits — three open, four on the way. Each is a self-contained, interactive experience.</p>
+      <h2>Three wings. Rooms of wonder &mdash; open and on the way.</h2>
+      <p class="tagline">Every exhibit is a self-contained, interactive experience. Pick a wing, then pick a room.</p>
+      <nav class="wing-nav" aria-label="Wings">
+        <a href="#wing-science">🔬 Science</a>
+        <a href="#wing-math">📐 Math</a>
+        <a href="#wing-social">🗺️ Social Studies</a>
+        <a href="#wing-language" class="dim">✏️ Language Arts</a>
+      </nav>
     </div>
 
-    <div class="grid">
-
-      <!-- Investigating Waves — LIVE -->
-      <a class="card waves" href="projects/investigating-waves/index.html">
-        <span class="badge">Exhibit 01 · Open</span>
-        <div class="bg-mark">🌊</div>
-        <div>
-          <div class="kicker">Water · Light · Sound · Energy · Codes</div>
-          <h4>Investigating Waves</h4>
-          <p>The whole universe is wiggling. Drop pebbles in ponds, split rainbows with prisms, pop popcorn with microwaves, and tap Morse code on a real telegraph key.</p>
-          <div class="units-line">5 units · 16+ interactive labs</div>
-        </div>
-        <div class="foot"><span>Enter the exhibit</span><span class="arrow">→</span></div>
-      </a>
-
-      <!-- Shape Explorer — LIVE -->
-      <a class="card shapes" href="projects/shape-explorer/index.html">
-        <span class="badge">Exhibit 02 · Open</span>
-        <div class="bg-mark">📐</div>
-        <div>
-          <div class="kicker">Polygons · Triangles · Quadrilaterals · Geometry</div>
-          <h4>Shape Explorer</h4>
-          <p>Drag corners, forge polygons from 3 to 24 sides, and watch the quadrilateral family tree light up live. Geometry you can grab with your hands.</p>
-          <div class="units-line">Interactive labs · drag-to-build</div>
-        </div>
-        <div class="foot"><span>Enter the exhibit</span><span class="arrow">→</span></div>
-      </a>
-
-      <!-- Shape Slicer — LIVE -->
-      <a class="card slicer" href="projects/shape-slicer/index.html">
-        <span class="badge">Exhibit 03 · Open</span>
-        <div class="bg-mark">✂️</div>
-        <div>
-          <div class="kicker">Cut · Slide · Spin · Area</div>
-          <h4>Shape Slicer</h4>
-          <p>Slice a parallelogram into a rectangle, spin a triangle into its twin, and crack composite-shape cases as an Area Detective. Five units of scissors-first geometry.</p>
-          <div class="units-line">5 units · 15 interactive labs · grades 5–6</div>
-        </div>
-        <div class="foot"><span>Enter the exhibit</span><span class="arrow">→</span></div>
-      </a>
-
-      <!-- Cosmos -->
-      <div class="card cosmos soon" onclick="alert('Investigating the Cosmos is on the way! 🌌')">
-        <span class="badge">Exhibit 04 · Coming soon</span>
-        <div class="bg-mark">🌌</div>
-        <div>
-          <div class="kicker">Stars · Planets · Black holes</div>
-          <h4>Investigating the Cosmos</h4>
-          <p>Zoom from the moon to the edge of the universe. Launch rockets, bend light with gravity, and ride photons across the Milky Way.</p>
-          <div class="units-line">Coming soon · ✨</div>
-        </div>
-        <div class="foot"><span>In the works</span><span class="arrow">✨</span></div>
+    <!-- ===== Science wing ===== -->
+    <div class="wing" id="wing-science">
+      <div class="wing-hdr">
+        <span class="wing-emoji">🔬</span>
+        <div><h3>Science Wing</h3><p>1 exhibit open · 4 on the way</p></div>
+        <span class="wing-tag">Grades 4–6</span>
       </div>
-
-      <!-- Earth -->
-      <div class="card earth soon" onclick="alert('Investigating Planet Earth is on the way! 🌍')">
-        <span class="badge">Exhibit 05 · Coming soon</span>
-        <div class="bg-mark">🌍</div>
-        <div>
-          <div class="kicker">Volcanoes · Weather · Oceans · Tectonics</div>
-          <h4>Investigating Planet Earth</h4>
-          <p>Crack open our home planet. Build mountains, brew storms, trigger earthquakes, and steer hurricanes.</p>
-          <div class="units-line">Coming soon · ✨</div>
+      <div class="grid">
+        <a class="card waves" href="projects/investigating-waves/index.html">
+          <span class="badge">Science · Open</span>
+          <div class="bg-mark">🌊</div>
+          <div>
+            <div class="kicker">Water · Light · Sound · Energy · Codes</div>
+            <h4>Investigating Waves</h4>
+            <p>The whole universe is wiggling. Drop pebbles in ponds, split rainbows with prisms, pop popcorn with microwaves, and tap Morse code on a real telegraph key.</p>
+            <div class="units-line">5 units · 16+ interactive labs</div>
+          </div>
+          <div class="foot"><span>Enter the exhibit</span><span class="arrow">→</span></div>
+        </a>
+        <div class="card cosmos soon" onclick="alert('Investigating the Cosmos is on the way! 🌌')">
+          <span class="badge">Science · Coming soon</span>
+          <div class="bg-mark">🌌</div>
+          <div>
+            <div class="kicker">Stars · Planets · Black holes</div>
+            <h4>Investigating the Cosmos</h4>
+            <p>Zoom from the moon to the edge of the universe. Launch rockets, bend light with gravity, and ride photons across the Milky Way.</p>
+            <div class="units-line">Coming soon · ✨</div>
+          </div>
+          <div class="foot"><span>In the works</span><span class="arrow">✨</span></div>
         </div>
-        <div class="foot"><span>In the works</span><span class="arrow">✨</span></div>
-      </div>
-
-      <!-- Life -->
-      <div class="card life soon" onclick="alert('Investigating Life is on the way! 🧬')">
-        <span class="badge">Exhibit 06 · Coming soon</span>
-        <div class="bg-mark">🧬</div>
-        <div>
-          <div class="kicker">Cells · DNA · Ecosystems · Evolution</div>
-          <h4>Investigating Life</h4>
-          <p>Zoom into a cell, decode a strand of DNA, and watch creatures evolve in a pond across millions of years.</p>
-          <div class="units-line">Coming soon · ✨</div>
+        <div class="card earth soon" onclick="alert('Investigating Planet Earth is on the way! 🌍')">
+          <span class="badge">Science · Coming soon</span>
+          <div class="bg-mark">🌍</div>
+          <div>
+            <div class="kicker">Volcanoes · Weather · Oceans · Tectonics</div>
+            <h4>Investigating Planet Earth</h4>
+            <p>Crack open our home planet. Build mountains, brew storms, trigger earthquakes, and steer hurricanes.</p>
+            <div class="units-line">Coming soon · ✨</div>
+          </div>
+          <div class="foot"><span>In the works</span><span class="arrow">✨</span></div>
         </div>
-        <div class="foot"><span>In the works</span><span class="arrow">✨</span></div>
-      </div>
-
-      <!-- Matter -->
-      <div class="card matter soon" onclick="alert('Investigating Matter is on the way! ⚗️')">
-        <span class="badge">Exhibit 07 · Coming soon</span>
-        <div class="bg-mark">⚗️</div>
-        <div>
-          <div class="kicker">Atoms · Molecules · States · Reactions</div>
-          <h4>Investigating Matter</h4>
-          <p>Meet the tiny Lego bricks of everything. Combine atoms, freeze liquids, and mix safe virtual chemicals to see reactions fizz and glow.</p>
-          <div class="units-line">Coming soon · ✨</div>
+        <div class="card life soon" onclick="alert('Investigating Life is on the way! 🧬')">
+          <span class="badge">Science · Coming soon</span>
+          <div class="bg-mark">🧬</div>
+          <div>
+            <div class="kicker">Cells · DNA · Ecosystems · Evolution</div>
+            <h4>Investigating Life</h4>
+            <p>Zoom into a cell, decode a strand of DNA, and watch creatures evolve in a pond across millions of years.</p>
+            <div class="units-line">Coming soon · ✨</div>
+          </div>
+          <div class="foot"><span>In the works</span><span class="arrow">✨</span></div>
         </div>
-        <div class="foot"><span>In the works</span><span class="arrow">✨</span></div>
+        <div class="card matter soon" onclick="alert('Investigating Matter is on the way! ⚗️')">
+          <span class="badge">Science · Coming soon</span>
+          <div class="bg-mark">⚗️</div>
+          <div>
+            <div class="kicker">Atoms · Molecules · States · Reactions</div>
+            <h4>Investigating Matter</h4>
+            <p>Meet the tiny Lego bricks of everything. Combine atoms, freeze liquids, and mix safe virtual chemicals to see reactions fizz and glow.</p>
+            <div class="units-line">Coming soon · ✨</div>
+          </div>
+          <div class="foot"><span>In the works</span><span class="arrow">✨</span></div>
+        </div>
       </div>
+    </div>
 
+    <!-- ===== Math wing ===== -->
+    <div class="wing" id="wing-math">
+      <div class="wing-hdr">
+        <span class="wing-emoji">📐</span>
+        <div><h3>Math Wing</h3><p>2 exhibits open</p></div>
+        <span class="wing-tag">Grades 5–6</span>
+      </div>
+      <div class="grid">
+        <a class="card shapes" href="projects/shape-explorer/index.html">
+          <span class="badge">Math · Open</span>
+          <div class="bg-mark">📐</div>
+          <div>
+            <div class="kicker">Polygons · Triangles · Quadrilaterals · Geometry</div>
+            <h4>Shape Explorer</h4>
+            <p>Drag corners, forge polygons from 3 to 24 sides, and watch the quadrilateral family tree light up live. Geometry you can grab with your hands.</p>
+            <div class="units-line">Interactive labs · drag-to-build</div>
+          </div>
+          <div class="foot"><span>Enter the exhibit</span><span class="arrow">→</span></div>
+        </a>
+        <a class="card slicer" href="projects/shape-slicer/index.html">
+          <span class="badge">Math · Open</span>
+          <div class="bg-mark">✂️</div>
+          <div>
+            <div class="kicker">Cut · Slide · Spin · Area</div>
+            <h4>Shape Slicer</h4>
+            <p>Slice a parallelogram into a rectangle, spin a triangle into its twin, and crack composite-shape cases as an Area Detective. Five units of scissors-first geometry.</p>
+            <div class="units-line">5 units · 15 interactive labs · grades 5–6</div>
+          </div>
+          <div class="foot"><span>Enter the exhibit</span><span class="arrow">→</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ===== Social Studies wing ===== -->
+    <div class="wing" id="wing-social">
+      <div class="wing-hdr">
+        <span class="wing-emoji">🗺️</span>
+        <div><h3>Social Studies Wing</h3><p>1 exhibit in the works</p></div>
+        <span class="wing-tag">Grades 4–5</span>
+      </div>
+      <div class="grid">
+        <div class="card virginia soon" onclick="alert('Virginia Explorer is being built right now! 🗺️')">
+          <span class="badge">Social Studies · In the works</span>
+          <div class="bg-mark">🗺️</div>
+          <div>
+            <div class="kicker">Regions · Rivers · People · History</div>
+            <h4>Virginia Explorer</h4>
+            <p>A map you can click through. Find the five regions and four rivers, meet the first Virginians, walk Jamestown, and follow the story to today &mdash; every place pinned where it really is.</p>
+            <div class="units-line">Virginia Studies · 11 chapters planned</div>
+          </div>
+          <div class="foot"><span>Being built</span><span class="arrow">🛠️</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Language Arts wing (placeholder) ===== -->
+    <div class="wing" id="wing-language">
+      <div class="wing-hdr">
+        <span class="wing-emoji">✏️</span>
+        <div><h3>Language Arts Wing</h3><p>on the drawing board</p></div>
+        <span class="wing-tag">Later</span>
+      </div>
+      <div class="grid">
+        <div class="card language soon" onclick="alert('The Language Arts wing is still on the drawing board. ✏️')">
+          <span class="badge">Language Arts · Someday</span>
+          <div class="bg-mark">✏️</div>
+          <div>
+            <div class="kicker">Grammar · Writing · Words</div>
+            <h4>Word Workshop</h4>
+            <p>A future room for grammar practice and wordplay. Nothing here yet &mdash; but the door is on the map.</p>
+            <div class="units-line">Idea stage · ✨</div>
+          </div>
+          <div class="foot"><span>Someday</span><span class="arrow">✨</span></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -448,7 +514,7 @@
       <span class="school">REDEEMER EPISCOPAL DAY SCHOOL</span>
       <div style="margin-top:4px">REDS Hall of Discovery · a living museum of ideas</div>
     </div>
-    <div>Made with <span class="heart">♥</span> for Mrs. Guyer's 5th Grade Class</div>
+    <div>Made with <span class="heart">♥</span> for Redeemer Episcopal Day School</div>
   </footer>
 </div>
 

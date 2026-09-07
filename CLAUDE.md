@@ -19,24 +19,36 @@ internet, so:
 ## 2. Layout
 
 ```
-index.html                         the hub ("REDS Hall of Discovery"): one card per exhibit
+index.html                         the hub: one WING per discipline (Science, Math, Social Studies, Language Arts), cards inside
+docs/                              planning documents that travel with the repo (PRDs, decisions)
 projects/
-  investigating-waves/
+  investigating-waves/             Science wing
     index.html                     exhibit landing page (hero + unit cards)
     units/*.html                   one page per unit
-  shape-explorer/
+  shape-explorer/                  Math wing
     index.html                     single-page exhibit with a sticky tab bar (no units folder)
-  shape-slicer/
+  shape-slicer/                    Math wing
     index.html                     exhibit landing page
     units/*.html                   five units
     shared/slicer-core.js          geometry + draggable/sliceable board engine (window.SlicerCore)
     shared/slicer.css              toast, tool buttons, readouts, answer rows
     README.md                      engine API + unit anatomy
+  virginia-explorer/               Social Studies wing (in progress; see docs/PRD-virginia-explorer.md)
+    map-preview.html               review page for the generated map
+    shared/va-map.js               GENERATED map data (window.VA_MAP) — never hand-edit
+    tools/build-map.py             regenerates va-map.js from public-domain GIS data
+    tools/SOURCES.md               where the data comes from and how to re-run the build
 .claude/launch.json                `python -m http.server 8765` for the Claude Code browser preview
+expansionResources/                local-only planning material (gitignored; private transcript + source docs)
 ```
 
-Two exhibit shapes exist. Use the **multi-unit** shape (waves, slicer) when the topic has 3+ distinct
-lessons; use the **single-page tabbed** shape (shape-explorer) for a compact topic.
+Three exhibit shapes exist:
+- **Multi-unit lab** (waves, slicer): landing page + `units/`, one page per lesson. Use when the topic has 3+ distinct lessons.
+- **Single-page tabbed lab** (shape-explorer): one page, sticky tab bar. Use for a compact topic.
+- **Reference atlas** (virginia-explorer): a map is the spine; content is *data* (`content/*.js` assigning globals,
+  because `fetch()` of JSON fails on `file://`), rendered into detail cards reachable from the map *or* from
+  index pages (people / places / events / timeline). Images live in `assets/img/` with `assets/CREDITS.md`
+  (public domain only, ≤ 200 KB, ≤ 1200 px). Every content node carries the standard IDs it serves.
 
 ## 3. Links, names, and hub registration
 
@@ -50,11 +62,16 @@ lessons; use the **single-page tabbed** shape (shape-explorer) for a compact top
 
 To register a new exhibit on the hub (`index.html`):
 1. Add a `.card.<slug>{ background: linear-gradient(145deg, …) }` rule near the other card themes.
-2. Replace a "coming soon" placeholder `<div class="card … soon">` with an
-   `<a class="card <slug>" href="projects/<slug>/index.html">`, keeping the `.badge`, `.bg-mark`
-   emoji, `.kicker`, `h4`, `p`, `.units-line`, and `.foot` structure. Renumber the badges.
-3. The grid is 6 columns with each card spanning 2; the `nth-child(7)` rule centers a lone
-   seventh card. Adjust if the count changes.
+2. Put the card inside the right **wing** (`#wing-science`, `#wing-math`, `#wing-social`, `#wing-language`),
+   as an `<a class="card <slug>" href="projects/<slug>/index.html">` (or a `<div class="card … soon">`
+   placeholder with an `onclick` alert while it is unbuilt). Keep the `.badge` ("Wing · Open" / "Wing · Coming soon"),
+   `.bg-mark` emoji, `.kicker`, `h4`, `p`, `.units-line`, and `.foot` structure.
+3. Update the wing header's count line ("2 exhibits open"). The grid inside each wing is a plain 3-column grid.
+4. A new discipline = a new `.wing` block plus a link in the `.wing-nav` strip.
+
+**Branding rule (decided 2026-09-06):** the whole Hall is branded for Redeemer Episcopal Day School.
+No page names a teacher or a grade in its branding. Grade ranges belong in wing tags, exhibit cards, and
+teacher panels. Footers read "Made with ♥ for the students of Redeemer Episcopal Day School".
 
 ## 4. Design language
 
@@ -127,7 +144,11 @@ slicer units: 01 `#FF4D3D` tomato/`#FFE08A` butter · 02 `#5AB8FF` sky/`#7CF5D9`
 
 ## 8. Owner context
 
-- Built for the owner's wife's classroom (5th grade class page, Shape Slicer targets 5th and 6th).
-- Standards Shape Slicer targets: 6.G.A.1 (area by composing/decomposing), 5.G.B.3–4 (classifying 2-D figures).
+- Built by Kevin Guyer for Sandra Guyer's school (Redeemer Episcopal Day School). Several teachers across
+  grades 4–6 use it, which is why branding is school-level, not teacher-level.
+- Standards: Shape Slicer targets 6.G.A.1 and 5.G.B.3–4. Virginia Explorer targets the 2023 Virginia
+  Studies SOL (VS.1–VS.13); the PRD and Sandra's decisions are in `docs/PRD-virginia-explorer.md`.
+- Virginia Explorer's map is generated, not drawn: `python projects/virginia-explorer/tools/build-map.py <gis-folder>`
+  with the datasets listed in `tools/SOURCES.md` (all public domain; downloads work from a normal network).
 - The owner works across multiple machines with no shared Claude memory; keep this file current when
   architecture or conventions change.

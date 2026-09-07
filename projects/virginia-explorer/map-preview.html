@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Virginia Explorer · Map preview · REDS Hall of Discovery</title>
+<style>
+  :root{
+    --paper:#F7F5EE; --ink:#1B2430; --ink-2:#4E5A68; --line:#D8D3C6;
+    --blue:#1F3A5F; --water:#7FB3D5; --water-deep:#3F7CA8; --cardinal:#B3261E;
+    --coastal:#8CC1A8; --piedmont:#E2C078; --blueridge:#5F8F6A; --valley:#A9B7CF; --plateau:#B08A66;
+    --neighbor:#EAE6DA; --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-body); background:var(--paper); color:var(--ink); min-height:100vh}
+  header{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 22px; border-bottom:1px solid var(--line); background:#fff}
+  header h1{font-family:var(--font-display); font-size:20px}
+  header h1 span{color:var(--cardinal)}
+  header .tag{font-family:var(--font-mono); font-size:12px; color:var(--ink-2)}
+  a.back{font-size:13px; color:var(--blue); text-decoration:none; padding:8px 12px; border:1px solid var(--line); border-radius:999px}
+  .wrap{display:grid; grid-template-columns:1fr 300px; gap:16px; padding:16px 22px; max-width:1400px; margin:0 auto}
+  @media (max-width:900px){ .wrap{grid-template-columns:1fr} }
+  .stage{background:#fff; border:1px solid var(--line); border-radius:12px; overflow:hidden; position:relative}
+  svg.map{width:100%; height:auto; display:block; background:#EAF3F8}
+  .side{display:flex; flex-direction:column; gap:12px}
+  .card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 16px}
+  .card h2{font-family:var(--font-display); font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2); margin-bottom:10px}
+  .card label{display:flex; align-items:center; gap:8px; font-size:14px; padding:4px 0; cursor:pointer}
+  .readout{font-family:var(--font-display); font-size:22px; min-height:30px}
+  .readout small{display:block; font-family:var(--font-body); font-size:13px; color:var(--ink-2); font-weight:400}
+  .legend{display:grid; grid-template-columns:1fr; gap:6px; font-size:13px}
+  .legend span{display:inline-flex; align-items:center; gap:8px}
+  .legend i{width:16px; height:12px; border-radius:3px; display:inline-block; border:1px solid rgba(0,0,0,.15)}
+  .sources{font-size:12px; color:var(--ink-2); line-height:1.5}
+  /* map styling */
+  .neighbor{fill:var(--neighbor); stroke:#fff; stroke-width:1.2}
+  .region{stroke:#fff; stroke-width:.8; cursor:pointer; transition:filter .15s}
+  .region:hover, .region.hot{filter:brightness(1.08) saturate(1.2)}
+  .region[data-region="coastal"]{fill:var(--coastal)} .region[data-region="piedmont"]{fill:var(--piedmont)}
+  .region[data-region="blueridge"]{fill:var(--blueridge)} .region[data-region="valley"]{fill:var(--valley)} .region[data-region="plateau"]{fill:var(--plateau)}
+  .va-outline{fill:none; stroke:var(--blue); stroke-width:1.6; pointer-events:none}
+  .river{fill:none; stroke:var(--water-deep); stroke-linecap:round; stroke-linejoin:round; pointer-events:stroke; cursor:pointer}
+  .river[data-rank="key"]{stroke-width:2.4} .river[data-rank="major"]{stroke-width:1.5} .river[data-rank="minor"]{stroke-width:.9; opacity:.85} .river[data-rank="context"]{stroke-width:.9; opacity:.5}
+  .river:hover, .river.hot{stroke:var(--cardinal)}
+  .lake{fill:var(--water); stroke:var(--water-deep); stroke-width:.6}
+  .lake[data-feature="Swamp or Marsh"]{fill:#9DBB9A; stroke:#5F8F6A; stroke-dasharray:3 2}
+  .county{fill:none; stroke:var(--cardinal); stroke-width:1.6; stroke-dasharray:4 3; pointer-events:none}
+  .label{font-family:var(--font-display); font-size:13px; fill:var(--ink); paint-order:stroke; stroke:#fff; stroke-width:3px; stroke-linejoin:round; pointer-events:none; text-anchor:middle}
+  .label.state{font-size:15px; letter-spacing:.12em; fill:var(--ink-2)}
+  .label.water{fill:var(--blue); font-style:italic; font-size:12px}
+  .pin{fill:var(--cardinal); stroke:#fff; stroke-width:1.5}
+  .pin-label{font-family:var(--font-body); font-size:10.5px; fill:var(--ink); paint-order:stroke; stroke:#fff; stroke-width:3px; pointer-events:none}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Virginia Explorer · <span>map preview</span></h1>
+    <div class="tag">generated from USGS + Census data · for Sandra's review · not the final design</div>
+  </div>
+  <a class="back" href="../../index.html">← Hall of Discovery</a>
+</header>
+
+<div class="wrap">
+  <div class="stage"><svg class="map" id="map" role="img" aria-label="Map of Virginia showing its five regions, rivers, and bordering states"></svg></div>
+  <aside class="side">
+    <div class="card"><h2>Hover or tap</h2><div class="readout" id="readout">Hover a region or river<small>Regions and rivers are clickable</small></div></div>
+    <div class="card">
+      <h2>Layers</h2>
+      <label><input type="checkbox" data-layer="regions" checked> Five regions (USGS provinces)</label>
+      <label><input type="checkbox" data-layer="rivers" checked> Rivers</label>
+      <label><input type="checkbox" data-layer="minor"> Smaller rivers &amp; neighbors' rivers</label>
+      <label><input type="checkbox" data-layer="water" checked> Lakes &amp; the Dismal Swamp</label>
+      <label><input type="checkbox" data-layer="neighbors" checked> Bordering states</label>
+      <label><input type="checkbox" data-layer="county" checked> Chesterfield County</label>
+      <label><input type="checkbox" data-layer="labels" checked> Labels</label>
+      <label><input type="checkbox" data-layer="pins"> Sample places (by latitude/longitude)</label>
+    </div>
+    <div class="card">
+      <h2>Legend</h2>
+      <div class="legend">
+        <span><i style="background:var(--coastal)"></i>Coastal Plain (Tidewater)</span>
+        <span><i style="background:var(--piedmont)"></i>Piedmont</span>
+        <span><i style="background:var(--blueridge)"></i>Blue Ridge Mountains</span>
+        <span><i style="background:var(--valley)"></i>Valley and Ridge</span>
+        <span><i style="background:var(--plateau)"></i>Appalachian Plateau</span>
+        <span><i style="background:var(--water-deep)"></i>Rivers named in the standards (thick)</span>
+        <span><i style="background:#9DBB9A;border-style:dashed"></i>Great Dismal Swamp</span>
+        <span><i style="border:2px dashed var(--cardinal)"></i>Chesterfield County</span>
+      </div>
+    </div>
+    <div class="card"><h2>Sources</h2><div class="sources" id="sources"></div></div>
+  </aside>
+</div>
+
+<script src="shared/va-map.js"></script>
+<script>
+(() => {
+  const M = window.VA_MAP;
+  const svg = document.getElementById('map');
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs = {}, parent = svg) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+  svg.setAttribute('viewBox', M.viewBox.join(' '));
+  const readout = document.getElementById('readout');
+  const say = (t, sub) => { readout.innerHTML = t + (sub ? `<small>${sub}</small>` : ''); };
+
+  // clip everything inside Virginia to the state outline
+  const defs = el('defs');
+  const clip = el('clipPath', { id: 'clip-va' }, defs);
+  el('path', { d: M.states.VA.d }, clip);
+
+  // layers (order = draw order)
+  const L = {};
+  for (const name of ['neighbors', 'regions', 'water', 'rivers', 'county', 'outline', 'labels', 'pins']) L[name] = el('g', { id: 'layer-' + name });
+
+  // bordering states
+  for (const [code, s] of Object.entries(M.states)) {
+    if (code === 'VA') continue;
+    const p = el('path', { d: s.d, class: 'neighbor' }, L.neighbors);
+    p.addEventListener('mouseenter', () => say(s.name, 'borders Virginia' ));
+  }
+  // regions, clipped to Virginia
+  const regionsG = el('g', { 'clip-path': 'url(#clip-va)' }, L.regions);
+  const facts = { coastal: 'Flat, low land along the Chesapeake Bay and the Atlantic. Includes the Eastern Shore.', piedmont: 'Rolling hills between the Fall Line and the Blue Ridge. Richmond sits on the Fall Line.', blueridge: 'Old, rounded mountains; the source of many rivers.', valley: 'The Shenandoah Valley and the long ridges beside it.', plateau: 'Rugged, coal-rich high land in the far southwest.' };
+  for (const [id, r] of Object.entries(M.regions)) {
+    const p = el('path', { d: r.d, class: 'region', 'data-region': id, tabindex: 0, role: 'button', 'aria-label': r.name }, regionsG);
+    const show = () => say(r.name, facts[id] + ' · USGS: ' + r.usgs);
+    p.addEventListener('mouseenter', show); p.addEventListener('focus', show); p.addEventListener('click', show);
+  }
+  // water
+  for (const w of M.lakes) {
+    const p = el('path', { d: w.d, class: 'lake', 'data-feature': w.feature }, L.water);
+    p.addEventListener('mouseenter', () => say(w.name, w.feature));
+  }
+  // rivers
+  for (const r of M.rivers) {
+    const p = el('path', { d: r.d, class: 'river', 'data-rank': r.rank, 'data-id': r.id }, L.rivers);
+    if (r.rank === 'minor' || r.rank === 'context') p.classList.add('minor-river');
+    const show = () => say(r.name, (r.rank === 'key' ? 'Named in VS.1c' : r.rank === 'context' ? 'Outside Virginia' : 'Virginia river') + (r.synthetic ? ' · centerline placed by coordinate' : ''));
+    p.addEventListener('mouseenter', show); p.addEventListener('click', show);
+  }
+  // county
+  for (const c of Object.values(M.counties)) el('path', { d: c.d, class: 'county' }, L.county);
+  // Virginia outline on top
+  el('path', { d: M.states.VA.d, class: 'va-outline' }, L.outline);
+
+  // labels
+  const text = (x, y, t, cls) => { const e = el('text', { x, y, class: 'label ' + (cls || '') }, L.labels); e.textContent = t; return e; };
+  const P = (lon, lat) => M.project(lon, lat);
+  const regionLabels = { coastal: [-76.55, 37.75], piedmont: [-78.55, 37.45], blueridge: [-79.45, 37.95], valley: [-80.65, 37.25], plateau: [-82.35, 37.05] };
+  for (const [id, ll] of Object.entries(regionLabels)) { const q = P(...ll); text(q.x, q.y, M.regions[id].name); }
+  for (const [code, s] of Object.entries(M.states)) { if (code === 'VA' || !s.label || ['NJ', 'DE', 'OH', 'PA', 'DC'].includes(code)) continue; text(s.label[0], s.label[1], s.name.toUpperCase(), 'state'); }
+  const waterLabels = [['Chesapeake Bay', -76.05, 37.55], ['Atlantic Ocean', -75.35, 36.95], ['James River', -78.0, 37.62], ['Potomac River', -77.25, 38.42], ['Rappahannock River', -77.2, 37.98], ['York River', -76.62, 37.32], ['Eastern Shore', -75.75, 37.68], ['Great Dismal Swamp', -76.45, 36.52]];
+  for (const [t, lon, lat] of waterLabels) { const q = P(lon, lat); text(q.x, q.y, t, 'water'); }
+  const chesterfield = M.counties.chesterfield; if (chesterfield && chesterfield.label) text(chesterfield.label[0], chesterfield.label[1] + 14, 'Chesterfield County · you are here', 'water');
+
+  // sample pins from latitude/longitude (content nodes will carry these)
+  const pins = [['Richmond', 37.5407, -77.4360], ['Jamestown', 37.2098, -76.7794], ['Williamsburg', 37.2707, -76.7075], ['Yorktown', 37.2388, -76.5097], ['Werowocomoco', 37.4133, -76.6467], ['Mount Vernon', 38.7080, -77.0863], ['Monticello', 38.0086, -78.4532], ['Appomattox', 37.3774, -78.7960], ['Harpers Ferry', 39.3254, -77.7389], ['Cumberland Gap', 36.6037, -83.6753], ['Roanoke', 37.2710, -79.9414], ['Norfolk', 36.8508, -76.2859]];
+  for (const [name, lat, lon] of pins) { const q = P(lon, lat); el('circle', { cx: q.x, cy: q.y, r: 4, class: 'pin' }, L.pins); const t = el('text', { x: q.x + 6, y: q.y - 5, class: 'pin-label' }, L.pins); t.textContent = name; }
+
+  // layer toggles
+  document.querySelectorAll('[data-layer]').forEach(cb => {
+    const apply = () => {
+      const on = cb.checked, name = cb.dataset.layer;
+      if (name === 'minor') document.querySelectorAll('.minor-river').forEach(p => p.classList.toggle('hidden', !on));
+      else L[name].classList.toggle('hidden', !on);
+    };
+    cb.addEventListener('change', apply); apply();
+  });
+  document.getElementById('sources').innerHTML = Object.entries(M.sources).map(([k, v]) => `<div><b>${k}:</b> ${v}</div>`).join('');
+})();
+</script>
+</body>
+</html>

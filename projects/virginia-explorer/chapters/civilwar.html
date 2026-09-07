@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>A House Divided · Virginia Explorer · REDS Hall of Discovery</title>
+<link rel="stylesheet" href="../shared/va.css"/>
+<style>
+  /* ═══════ CHAPTER 7 — "a house divided": the page itself is split, Union blue-gray on the left, butternut gray on the right; brass and tintype frames ═══════ */
+  :root{
+    --union:#2F3E4E; --union2:#3B4C5F; --butternut:#5C5A52; --butternut2:#6B695F; --cream:#F1E9DA; --cream2:#CFC6B4; --brass:#C9A24D; --blood:#A8321F; --tint:#1E1E1E;
+    --va-paper:#3F4A52; --va-card:#F1E9DA; --va-ink:#1E1E1E; --va-ink-2:#4E4A44; --va-line:#B9AE95; --va-blue:#2F3E4E; --va-red:#A8321F;
+    --va-sea:#2A3640; --va-water:#4A6474; --va-water-deep:#9DBCCB; --va-neighbor:#4D5860; --va-neighbor-hover:#5E6A73; --va-far:#454F57;
+    --va-r-coastal:#6E8F7E; --va-r-piedmont:#B09A61; --va-r-blueridge:#5A7A5E; --va-r-valley:#7C8A98; --va-r-plateau:#8A6E55;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+    --font-serif: Georgia, 'Times New Roman', serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body); color:var(--cream); min-height:100vh; -webkit-font-smoothing:antialiased; line-height:1.5;
+    background:linear-gradient(100deg, var(--union) 0 49.7%, var(--brass) 49.7% 50.3%, var(--butternut) 50.3% 100%); background-attachment:fixed}
+  /* tintype scratches */
+  body::before{content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.08; background:repeating-linear-gradient(170deg, transparent 0 18px, #F1E9DA 18px 19px)}
+  a{color:inherit; text-decoration:none}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  button{font:inherit}
+  .va-label{fill:var(--cream); stroke:#2A3640} .va-label-water{fill:#BFD6E2; stroke:#2A3640} .va-label-state{fill:#C8CDD1; stroke:#2A3640} .va-pin-label{fill:var(--cream); stroke:#2A3640}
+  .va-outline{stroke:var(--cream)} .va-state,.va-region{stroke:#2A3640}
+  .va-card{border:6px solid var(--tint); border-radius:4px; box-shadow:0 12px 30px rgba(0,0,0,.4)} .va-card-title{font-family:var(--font-serif); font-weight:700}
+  .va-stage{background:rgba(30,30,30,.55); border-color:rgba(241,233,218,.2); border-radius:4px}
+  .side-box{background:rgba(30,30,30,.5); border:1px solid rgba(241,233,218,.2); border-radius:4px; padding:14px 16px; color:var(--cream)} .side-box p{color:var(--cream2); font-size:14px; line-height:1.55}
+  .panel-title{font-family:var(--font-mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--brass); margin-bottom:8px}
+  .va-empty{background:rgba(30,30,30,.4); border-color:rgba(241,233,218,.25); color:var(--cream2); border-radius:4px}
+  .va-btn{border-radius:4px; background:rgba(241,233,218,.1); color:var(--cream); border-color:rgba(241,233,218,.3)} .va-btn.active{background:var(--brass); color:#1E1E1E; border-color:transparent} .va-btn.primary{background:var(--brass); color:#1E1E1E}
+  .va-chip{border-radius:4px; background:rgba(241,233,218,.1); color:var(--cream); border-color:rgba(241,233,218,.3)} .va-chip.active{background:var(--brass); color:#1E1E1E; border-color:transparent}
+  .va-card .va-chip{background:#fff; color:var(--tint); border-color:var(--va-line)}
+  .va-feedback{border-radius:4px; color:var(--cream); background:rgba(30,30,30,.45); border-left-color:var(--brass)} .va-feedback.good{background:rgba(76,120,90,.35); border-left-color:#7FB58F} .va-feedback.bad{background:rgba(168,50,31,.3); border-left-color:var(--blood)}
+  .va-timeline .va-tl-dot{color:var(--cream)} .va-tl-dot span small{color:var(--cream2)} .va-tl-dot i{background:#1E1E1E; border-color:var(--cream)} .va-tl-tick span{color:var(--cream2)} .va-tl-track{background:rgba(241,233,218,.3)} .va-tl-dot.active span{color:var(--brass)} .va-tl-dot:hover i,.va-tl-dot.active i{background:var(--brass); border-color:var(--brass)}
+
+  .topbar{position:sticky; top:0; z-index:20; background:rgba(30,30,30,.92); backdrop-filter:blur(12px); border-bottom:2px solid var(--brass)}
+  .topbar-inner{max-width:1280px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px}
+  .brand-group{display:flex; align-items:center; gap:14px}
+  .back{display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:4px; background:rgba(241,233,218,.08); border:1px solid rgba(241,233,218,.3); font-family:var(--font-display); font-size:13px; transition:transform .15s}
+  .back:hover{transform:translateX(-3px)}
+  .brand{display:flex; align-items:center; gap:12px}
+  .brand .logo{width:42px; height:42px}
+  .brand .eyebrow{font-family:var(--font-mono); font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--cream2)}
+  .brand .wordmark{font-family:var(--font-serif); font-weight:700; font-size:18px; line-height:1.1}
+  .brand .wordmark .unit{color:var(--brass); font-weight:400; font-style:italic}
+  .chapter-nav{display:flex; gap:6px; flex-wrap:wrap}
+  .chapter-nav a{font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; padding:6px 10px; border-radius:4px; color:var(--cream2); border:1px solid transparent}
+  .chapter-nav a:hover{border-color:rgba(241,233,218,.35)}
+  @media (max-width:900px){ .chapter-nav{display:none} }
+
+  .hero{position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:56px 24px 28px; text-align:center}
+  .hero .eyebrow{font-family:var(--font-mono); font-size:12px; letter-spacing:.32em; text-transform:uppercase; color:var(--brass); margin-bottom:14px}
+  .hero h1{font-family:var(--font-serif); font-weight:700; font-size:clamp(46px, 7.5vw, 104px); line-height:.95; margin-bottom:8px; color:var(--cream); text-shadow:0 6px 30px rgba(0,0,0,.5)}
+  .hero h1 em{font-style:italic; color:var(--brass)}
+  .hero .dateline{font-family:var(--font-mono); font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--cream2); margin:8px 0 18px}
+  .hero .tag{font-family:var(--font-serif); font-size:clamp(17px,1.9vw,22px); line-height:1.6; max-width:64ch; margin:0 auto; color:var(--cream)}
+  .hero .tag strong{color:var(--brass)}
+  .hero .sides{display:flex; justify-content:center; gap:40px; margin-top:22px; font-family:var(--font-mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--cream2)}
+
+  section.chapter{position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:48px 24px 12px; scroll-margin-top:70px}
+  .kicker{font-family:var(--font-mono); font-size:12px; letter-spacing:.26em; text-transform:uppercase; color:var(--brass); margin-bottom:8px}
+  h2.title{font-family:var(--font-serif); font-weight:700; font-size:clamp(28px, 3.6vw, 44px); margin-bottom:12px; color:var(--cream)}
+  h2.title em{font-style:italic; color:var(--brass)}
+  p.blurb{font-size:17px; line-height:1.65; max-width:78ch; color:var(--cream2); margin-bottom:20px}
+  p.blurb strong{color:var(--cream)}
+  .task{display:flex; gap:12px; align-items:flex-start; padding:12px 16px; border-radius:4px; background:rgba(201,162,77,.14); border:1px solid rgba(201,162,77,.5); font-size:14.5px; line-height:1.5; margin-bottom:14px; color:var(--cream)}
+  .task .n{flex:0 0 28px; height:28px; border-radius:4px; background:var(--brass); color:#1E1E1E; display:grid; place-items:center; font-family:var(--font-serif); font-weight:700}
+
+  /* north/south sorter */
+  .ns{display:grid; gap:8px}
+  .stmt{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; background:rgba(30,30,30,.5); border:1px solid rgba(241,233,218,.2); border-radius:4px; padding:10px 12px; font-size:14.5px}
+  @media (max-width:700px){ .stmt{grid-template-columns:1fr} }
+  .stmt .btns{display:flex; gap:6px} .stmt .btns button{font:inherit; font-size:12.5px; font-weight:700; padding:7px 12px; border-radius:4px; border:1px solid rgba(241,233,218,.3); background:rgba(241,233,218,.08); color:var(--cream); cursor:pointer}
+  .stmt .btns button[data-a="N"].pick{background:var(--union2)} .stmt .btns button[data-a="S"].pick{background:var(--butternut2)}
+  .stmt.right{border-color:#7FB58F} .stmt.wrong{border-color:var(--blood)}
+  .stmt .exp{grid-column:1 / -1; font-size:13px; color:var(--cream2)} .stmt .exp:empty{display:none}
+  /* abolition */
+  .people{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px}
+  .escape{stroke:var(--brass); stroke-width:2.2; fill:none; stroke-dasharray:6 5; stroke-linecap:round; opacity:.9}
+  /* secession */
+  .order-chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px}
+  .order-chip{font:inherit; font-family:var(--font-display); font-weight:700; font-size:13.5px; padding:9px 13px; border-radius:4px; border:1px solid rgba(241,233,218,.3); background:rgba(30,30,30,.5); cursor:pointer; color:var(--cream)}
+  .order-chip:hover{border-color:var(--brass)} .order-chip.placed{background:var(--brass); color:#1E1E1E; border-color:transparent; cursor:default}
+  .order-line{display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-height:48px; padding:10px; border-radius:4px; border:1px dashed rgba(241,233,218,.35); background:rgba(30,30,30,.3)}
+  .order-line .slot{font-family:var(--font-mono); font-size:12px; padding:8px 12px; border-radius:4px; background:rgba(30,30,30,.5); border:1px solid rgba(241,233,218,.25); color:var(--cream2)}
+  .order-line .slot.filled{background:var(--brass); color:#1E1E1E; border-color:transparent; font-family:var(--font-display); font-size:13px}
+  .yr-toggle{display:flex; gap:8px; margin-bottom:10px}
+  .va-state.wv-as-va{fill:#6E8F7E}
+  /* battles */
+  .yearline{display:flex; align-items:center; gap:14px; margin-bottom:10px}
+  .yearline input{flex:1; accent-color:var(--brass)}
+  .yearline .yr{font-family:var(--font-serif); font-size:34px; font-weight:700; color:var(--brass); width:96px; text-align:center}
+  .dist{stroke:var(--brass); stroke-width:1.5; stroke-dasharray:4 4; fill:none}
+  .dist-label{font-family:ui-monospace, monospace; font-size:11px; fill:var(--brass); text-anchor:middle; paint-order:stroke; stroke:#2A3640; stroke-width:3px}
+  .battle-list{display:grid; gap:6px}
+  .bl{font:inherit; text-align:left; display:grid; grid-template-columns:auto 1fr; gap:10px; align-items:center; padding:8px 10px; border-radius:4px; border:1px solid rgba(241,233,218,.2); background:rgba(30,30,30,.45); color:var(--cream); cursor:pointer; font-size:13.5px}
+  .bl:hover{border-color:var(--brass)} .bl.active{border-color:var(--brass); background:rgba(201,162,77,.14)}
+  .bl small{font-family:var(--font-mono); font-size:11px; color:var(--cream2)} .bl.hidden{display:none}
+  /* people grid */
+  .roster{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px}
+  @media (max-width:900px){ .roster{grid-template-columns:repeat(2,1fr)} }
+  .rc{font:inherit; text-align:left; background:rgba(30,30,30,.5); border:1px solid rgba(241,233,218,.2); border-radius:4px; padding:10px 12px; color:var(--cream); cursor:pointer; transition:transform .15s}
+  .rc:hover{transform:translateY(-2px)} .rc.active{border-color:var(--brass); background:rgba(201,162,77,.14)}
+  .rc .ic{font-size:22px} .rc b{display:block; font-family:var(--font-display); font-size:14px; margin-top:2px} .rc small{display:block; font-family:var(--font-mono); font-size:10.5px; color:var(--cream2); letter-spacing:.06em; text-transform:uppercase; margin-top:3px}
+  .rc.u small{color:#9DBCCB} .rc.c small{color:#D9CBA0}
+  /* end stepper */
+  .steps{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px}
+  .steps button{font:inherit; font-family:var(--font-mono); font-size:12px; letter-spacing:.06em; padding:8px 12px; border-radius:4px; border:1px solid rgba(241,233,218,.3); background:rgba(30,30,30,.5); cursor:pointer; color:var(--cream)}
+  .steps button.on{background:var(--brass); color:#1E1E1E} .steps button.done{border-color:#7FB58F}
+  .step-text{font-family:var(--font-serif); font-size:17px; line-height:1.55; min-height:60px; background:rgba(30,30,30,.5); border:1px solid rgba(241,233,218,.2); border-radius:4px; padding:12px 14px; color:var(--cream)}
+  .step-text b{color:var(--brass)}
+  .mk{font-size:6px; text-anchor:middle; paint-order:stroke; stroke:#2A3640; stroke-width:2px}
+  .mk-label{font-family:ui-monospace, monospace; font-size:3px; fill:var(--cream); text-anchor:middle; paint-order:stroke; stroke:#2A3640; stroke-width:1px}
+  .retreat{stroke:var(--blood); stroke-width:1.5; fill:none; stroke-dasharray:2 1.5; vector-effect:non-scaling-stroke}
+
+  .teacher{max-width:1280px; margin:40px auto 0; padding:0 24px}
+  .teacher-card{border:1px dashed rgba(241,233,218,.35); border-radius:4px; padding:20px 22px; background:rgba(30,30,30,.45); display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start}
+  .teacher-card h3{font-size:16px; margin-bottom:6px; color:var(--brass)}
+  .teacher-card p{font-size:13.5px; line-height:1.55; color:var(--cream2); max-width:80ch}
+  .teacher-card .std{font-family:var(--font-mono); font-size:11px; padding:2px 7px; border-radius:4px; background:rgba(201,162,77,.2); color:var(--brass)}
+  .nextup{max-width:1280px; margin:40px auto 0; padding:0 24px}
+  .nextup-card{border-radius:4px; padding:30px 32px; background:linear-gradient(145deg, #3A2A1E, #8A5A3A 60%, #D9C7A5); color:#fff; display:flex; flex-wrap:wrap; gap:18px; align-items:center; justify-content:space-between}
+  .nextup-card h3{font-size:13px; letter-spacing:.24em; text-transform:uppercase; opacity:.85}
+  .nextup-card .big{font-family:var(--font-display); font-size:clamp(24px,3.2vw,36px); font-weight:800; margin:6px 0 8px}
+  .nextup-card p{max-width:560px; font-size:14.5px; line-height:1.55}
+  .chip{display:inline-flex; align-items:center; gap:8px; padding:11px 16px; border-radius:4px; font-family:var(--font-display); font-weight:700; font-size:14px; background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.35); color:#fff}
+  .chip.active{background:#fff; color:#3A2A1E}
+  footer{position:relative; z-index:1; max-width:1280px; margin:36px auto 0; padding:24px; border-top:1px solid rgba(241,233,218,.2); display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:13px; color:var(--cream2)}
+  footer .heart{color:var(--blood)}
+  .sound-toggle{position:fixed; right:18px; bottom:18px; z-index:50; width:46px; height:46px; border-radius:4px; border:1px solid rgba(241,233,218,.3); background:rgba(30,30,30,.9); color:#fff; font-size:20px; cursor:pointer}
+  @media (max-width:640px){ .topbar-inner{padding:10px 14px} section.chapter{padding:36px 14px 8px} }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand-group">
+      <a class="back" href="../index.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 5l-7 7 7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        All chapters
+      </a>
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="30" height="60" fill="#2F3E4E"/><rect x="32" y="2" width="30" height="60" fill="#5C5A52"/>
+          <path d="M32 6 L32 58" stroke="#C9A24D" stroke-width="3"/><path d="M14 40 L24 22 L32 40 L40 22 L50 40" stroke="#F1E9DA" stroke-width="3" fill="none" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <div class="eyebrow">REDS Hall of Discovery · Virginia Explorer</div>
+          <div class="wordmark">A House Divided <span class="unit">· Chapter 7</span></div>
+        </div>
+      </div>
+    </div>
+    <nav class="chapter-nav" aria-label="Sections">
+      <a href="#divide">1 The divide</a><a href="#abolition">2 Abolition</a><a href="#secession">3 Secession</a><a href="#battles">4 Battles</a><a href="#people">5 People</a><a href="#end">6 The end</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Chapter 7 · Virginia and the Civil War · VS.7</div>
+  <h1>A House <em>Divided</em></h1>
+  <div class="dateline">Harpers Ferry · Richmond · Manassas · Fort Monroe · Appomattox · 1859 – 1865</div>
+  <p class="tag">Two capitals, one hundred miles apart. A state that argued with itself, voted no, then voted yes, and split in two. More battles than any other state, fought on the same rivers and ridges you learned in Chapter 1. And at the center of all of it, the question the founders had left unanswered: <strong>could a nation be half free and half enslaved?</strong></p>
+  <div class="sides"><span>◀ Union</span><span>Confederacy ▶</span></div>
+</section>
+
+<!-- ═══════ 1. THE DIVIDE ═══════ -->
+<section class="chapter" id="divide">
+  <div class="kicker">Section 1 · The cause of the war · VS.7b</div>
+  <h2 class="title">Two ways of living, one <em>question</em>.</h2>
+  <p class="blurb">By 1860 North and South had grown into different worlds: factories and cities against plantations and fields, free workers against four million enslaved people. People argued about tariffs, railroads, states' rights, and who got to settle the West. Every one of those arguments was really about <strong>slavery</strong>, and whether it would spread or end.</p>
+  <div class="task"><span class="n">1</span><div><strong>Sort the statements.</strong> Which side does each describe in 1860, North or South?</div></div>
+  <div class="va-atlas">
+    <div><div class="ns" id="ns"></div><div class="va-feedback" id="ns-fb" style="margin-top:10px"></div></div>
+    <div class="va-side"><div id="card-divide"></div></div>
+  </div>
+</section>
+
+<!-- ═══════ 2. ABOLITION ═══════ -->
+<section class="chapter" id="abolition">
+  <div class="kicker">Section 2 · Abolitionists and the Underground Railroad · VS.7a, VS.7c</div>
+  <h2 class="title">The people who refused to <em>wait</em>.</h2>
+  <p class="blurb"><strong>Abolition</strong> means officially ending something. Abolitionists wanted slavery ended, and they used every method: speeches, newspapers, lawsuits, secret escape routes, and in one case, a raid on a government armory. <strong>Harriet Tubman</strong> guided people north through the dark. <strong>John Brown</strong> tried to start a war at <strong>Harpers Ferry</strong>. After Nat Turner, Tubman, and Brown, the South decided the North would never leave slavery alone.</p>
+  <div class="task"><span class="n">2</span><div><strong>Meet the abolitionists</strong> and trace the escape routes out of Virginia on the map: by ship from Norfolk, across the Potomac, and through the swamp.</div></div>
+  <div class="people" id="abol-chips"></div>
+  <div class="va-atlas">
+    <div class="va-stage"><svg id="map-abol"></svg></div>
+    <div class="va-side"><div id="card-abol"><div class="va-empty">Pick a name above, or click a pin.</div></div></div>
+  </div>
+</section>
+
+<!-- ═══════ 3. SECESSION ═══════ -->
+<section class="chapter" id="secession">
+  <div class="kicker">Section 3 · Secession and West Virginia · VS.7d</div>
+  <h2 class="title">Virginia votes no, then <em>yes</em>, then splits.</h2>
+  <p class="blurb">When Lincoln won, seven Deep South states left the Union at once. Virginia hesitated for five months. Its convention voted <strong>against</strong> secession in early April 1861. Then came Fort Sumter and Lincoln's call for troops, and Virginia would not fight its neighbors: on <strong>April 17</strong> it voted to leave. The western counties beyond the mountains refused to go along, and in 1863 they became a new state, <strong>West Virginia</strong>.</p>
+  <div class="task"><span class="n">3</span><div><strong>Put the events in order</strong>, then flip the map between 1861 and 1863 to watch the state split.</div></div>
+  <div class="order-chips" id="order-chips"></div>
+  <div class="order-line" id="order-line"></div>
+  <div class="va-feedback" id="order-fb" style="margin:10px 0 16px"></div>
+  <div class="yr-toggle"><button class="va-btn active" data-yr="1861">Virginia, April 1861</button><button class="va-btn" data-yr="1863">June 20, 1863: West Virginia</button></div>
+  <div class="va-atlas">
+    <div class="va-stage"><svg id="map-split"></svg></div>
+    <div class="va-side"><div id="card-split"></div></div>
+  </div>
+</section>
+
+<!-- ═══════ 4. BATTLES ═══════ -->
+<section class="chapter" id="battles">
+  <div class="kicker">Section 4 · Battles in Virginia · VS.7e</div>
+  <h2 class="title">Why the war came <em>here</em>.</h2>
+  <p class="blurb">Washington and Richmond were only about <strong>100 miles</strong> apart. For four years each side tried to reach the other's capital, so the fighting stayed in the country between them: the Rappahannock crossings, the railroad junction at Manassas, the swamps east of Richmond, the trenches at Petersburg. <strong>More battles were fought in Virginia than in any other state.</strong></p>
+  <div class="task"><span class="n">4</span><div><strong>Slide the years</strong> to watch the battles appear, and click any pin or name to read what happened there.</div></div>
+  <div class="yearline"><span class="yr" id="b-year">1861</span><input type="range" id="b-slider" min="1861" max="1865" value="1861" step="1" aria-label="Year"></div>
+  <div class="va-atlas">
+    <div class="va-stage"><svg id="map-battles"></svg></div>
+    <div class="va-side">
+      <div class="side-box"><div class="panel-title">Battles so far</div><div class="battle-list" id="battle-list"></div></div>
+      <div id="card-battles"><div class="va-empty">Click a battle.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 5. PEOPLE ═══════ -->
+<section class="chapter" id="people">
+  <div class="kicker">Section 5 · Leaders and lives · VS.7f, VS.7g</div>
+  <h2 class="title">Generals, spies, soldiers, and three men in a <em>rowboat</em>.</h2>
+  <p class="blurb">Virginians led both sides. Lee and Jackson commanded for the Confederacy; Winfield Scott, born near Petersburg, stayed with the Union and drew up the plan that won. Two Black Virginians, born enslaved, earned the <strong>Medal of Honor</strong>. A rich woman in Richmond ran a spy ring, and a formerly enslaved woman spied inside the Confederate president's own house. And in May 1861, three enslaved men rowed to Fort Monroe and started the end of slavery.</p>
+  <div class="task"><span class="n">5</span><div><strong>Open each card.</strong> Blue labels served the Union, gray the Confederacy.</div></div>
+  <div class="roster" id="roster"></div>
+  <div class="va-atlas" style="grid-template-columns:1fr">
+    <div id="card-people"><div class="va-empty">Pick a person above.</div></div>
+  </div>
+</section>
+
+<!-- ═══════ 6. THE END ═══════ -->
+<section class="chapter" id="end">
+  <div class="kicker">Section 6 · Appomattox · VS.7e</div>
+  <h2 class="title">Nine days in <em>April</em>.</h2>
+  <p class="blurb">After nine months in the trenches at Petersburg, the last railroad into Richmond was cut. What followed took nine days: the capital abandoned and burning, Lee's hungry army marching west, and a meeting in a farmhouse parlor at Appomattox Court House. The war that began in Virginia ended there.</p>
+  <div class="task"><span class="n">6</span><div><strong>Follow the last nine days</strong> on the map. Then read what the Emancipation Proclamation had already set in motion.</div></div>
+  <div class="steps" id="steps"><button data-s="0">1 · Petersburg falls</button><button data-s="1">2 · Richmond burns</button><button data-s="2">3 · The retreat</button><button data-s="3">4 · Appomattox</button></div>
+  <div class="va-atlas">
+    <div><div class="va-stage"><svg id="map-end"></svg></div><div class="step-text" id="step-text" style="margin-top:12px">Press step 1.</div></div>
+    <div class="va-side"><div id="card-end"></div></div>
+  </div>
+</section>
+
+<div class="teacher">
+  <div class="teacher-card">
+    <div style="font-size:36px">🍎</div>
+    <div>
+      <h3>For teachers</h3>
+      <p>This chapter covers <span class="std">VS.7a</span> John Brown and Harpers Ferry (Section 2), <span class="std">VS.7b</span> slavery as the cause of the war and the secondary factors (Section 1), <span class="std">VS.7c</span> the Underground Railroad and Harriet Tubman, including routes through Virginia (Section 2), <span class="std">VS.7d</span> Virginia's divided secession, the Ordinance of April 17, 1861, and the creation of West Virginia (Section 3), <span class="std">VS.7e</span> the major battles on Virginia soil, the proximity of the capitals, and Appomattox (Sections 4, 6), <span class="std">VS.7f</span> Jackson, Lee, Carney, Scott, and Beaty (Section 5), and <span class="std">VS.7g</span> Van Lew, Bowser, the Fort Monroe contrabands and Confiscation Acts, Indigenous contributions, and Clara Barton (Section 5). Battle descriptions avoid graphic detail; casualty figures are given only in totals.</p>
+    </div>
+  </div>
+</div>
+
+<div class="nextup">
+  <div class="nextup-card">
+    <div>
+      <h3>Next · Chapter 8</h3>
+      <div class="big">🚂 Rebuilding and Rails</div>
+      <p>Three amendments, Freedmen's schools, John Mercer Langston goes to Congress, and then Jim Crow. Meanwhile the railroads come, and Virginia's cities grow.</p>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <a class="chip" href="growth.html">← Chapter 6</a>
+      <a class="chip" href="../index.html">All chapters</a>
+      <span class="chip" style="opacity:.6">Chapter 8 · coming soon</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>REDS Hall of Discovery · Virginia Explorer · Chapter 7: A House Divided</div>
+  <div>Made with <span class="heart">♥</span> for the students of Redeemer Episcopal Day School</div>
+</footer>
+<button class="sound-toggle" id="soundToggle" aria-label="Turn sound off">🔊</button>
+
+<script src="../shared/va-map.js"></script>
+<script src="../shared/va-core.js"></script>
+<script src="../content/geography.js"></script>
+<script src="../content/first-peoples.js"></script>
+<script src="../content/jamestown.js"></script>
+<script src="../content/colony.js"></script>
+<script src="../content/revolution.js"></script>
+<script src="../content/growth.js"></script>
+<script src="../content/civilwar.js"></script>
+<script>
+VA.bindSoundToggle(document.getElementById('soundToggle'));
+const $ = id => document.getElementById(id);
+const COLORS = ['#C9A24D', '#2F3E4E', '#F1E9DA', '#A8321F'];
+const NS = 'http://www.w3.org/2000/svg';
+const svgEl = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+const pathFrom = coords => 'M' + coords.map(([lo, la]) => { const p = VA_MAP.project(lo, la); return p.x.toFixed(1) + ' ' + p.y.toFixed(1); }).join(' L');
+const zoom = (map, minLon, maxLon, minLat, maxLat) => { const a = VA_MAP.project(minLon, maxLat), b = VA_MAP.project(maxLon, minLat); map.svg.setAttribute('viewBox', `${a.x.toFixed(1)} ${a.y.toFixed(1)} ${(b.x - a.x).toFixed(1)} ${(b.y - a.y).toFixed(1)}`); map.svg.classList.add('va-zoomed'); };
+const homes = {};
+function route(n) {
+  if (!n) return;
+  if (['idea-north-south', 'idea-fugitive-slave-act', 'event-lincoln-1860'].includes(n.id)) return homes.divide(n);
+  if (['person-john-brown', 'person-harriet-tubman', 'idea-underground-railroad', 'place-harpers-ferry', 'event-brown-raid-1859'].includes(n.id)) return homes.abol(n);
+  if (['document-ordinance-1861', 'event-richmond-capital-1861', 'event-west-virginia-1863', 'place-dc', 'place-wheeling', 'state-wv'].includes(n.id)) return homes.split(n);
+  if (n.type === 'event' && n.lat != null && n.year >= 1861) return homes.battles(n);
+  if (n.type === 'person' || n.type === 'culture' || n.id === 'idea-anaconda-plan' || n.id === 'document-emancipation-1863') return homes.people(n);
+  if (['place-appomattox', 'place-richmond', 'place-petersburg'].includes(n.id)) return homes.end(n);
+  VA.renderCard($('card-people'), n, { onRelated: route });
+}
+const card = (node, el) => VA.renderCard(el, node, { onRelated: route });
+
+/* ═══════ 1. NORTH / SOUTH SORTER ═══════ */
+(() => {
+  const S = [['Most people work on farms growing cotton or tobacco', 'S'], ['Factories, mills, and railroads everywhere', 'N'], ['About four million people are enslaved', 'S'], ['Big, fast-growing cities like New York and Philadelphia', 'N'], ['Wants new western territories open to slavery', 'S'], ['Wants new western territories to be free', 'N'], ['Sells raw cotton to England and buys manufactured goods', 'S'], ['Most workers are paid wages and can leave a job', 'N']];
+  let done = 0, right = 0;
+  $('ns').innerHTML = VA.shuffle(S.map((x, i) => i)).map(i => `<div class="stmt" data-i="${i}"><span>${S[i][0]}</span><span class="btns"><button data-a="N">North</button><button data-a="S">South</button></span><span class="exp"></span></div>`).join('');
+  $('ns').querySelectorAll('.stmt').forEach(el => { const s = S[+el.dataset.i]; el.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    if (el.classList.contains('right') || el.classList.contains('wrong')) return;
+    b.classList.add('pick'); const ok = b.dataset.a === s[1]; el.classList.add(ok ? 'right' : 'wrong'); el.querySelector('.exp').textContent = ok ? '✅' : `❌ That describes the ${s[1] === 'N' ? 'North' : 'South'}.`; done++; if (ok) right++; ok ? VA.sfx.snap() : VA.sfx.nope();
+    if (done === S.length) { const fb = $('ns-fb'); fb.className = 'va-feedback good'; fb.innerHTML = `<b>${right} of ${S.length}.</b> Different economies, different cities, different laws, and underneath every difference, slavery.`; if (right >= S.length - 1) VA.confetti({ colors: COLORS }); }
+  })); });
+  card(VA.get('idea-north-south'), $('card-divide'));
+  homes.divide = n => { card(n, $('card-divide')); $('divide').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 2. ABOLITION ═══════ */
+(() => {
+  const ids = ['person-harriet-tubman', 'person-john-brown', 'idea-underground-railroad', 'idea-fugitive-slave-act', 'place-harpers-ferry'];
+  $('abol-chips').innerHTML = ids.map(id => { const n = VA.get(id); return `<button class="va-chip" data-n="${id}">${n.emoji} ${n.name}</button>`; }).join('');
+  const pins = ['place-harpers-ferry', 'place-norfolk', 'place-alexandria', 'place-richmond', 'place-point-comfort'].map(VA.get);
+  const map = VA.mountMap($('map-abol'), { interactive: ['pin', 'water'], layers: { county: false, minorRivers: false }, pins, labels: { regions: false, water: true, states: true }, onSelect: (ref, node) => pick(node) });
+  const g = svgEl('g', {}, map.svg);
+  for (const r of [[[-76.29, 36.85], [-76.0, 36.95], [-75.6, 37.3], [-75.3, 37.9], [-75.1, 38.4]], [[-77.05, 38.80], [-77.05, 38.95], [-77.1, 39.2], [-77.3, 39.5], [-77.4, 39.9]], [[-76.5, 36.6], [-76.35, 36.5], [-76.0, 36.3]]]) svgEl('path', { d: pathFrom(r), class: 'escape' }, g);
+  function pick(n) { card(n, $('card-abol')); document.querySelectorAll('[data-n]').forEach(b => b.classList.toggle('active', b.dataset.n === n.id)); const ref = VA.refFor(n); if (ref && map.refs[ref.kind] && map.refs[ref.kind][ref.id]) map.highlight(ref); else map.clearHighlight(); }
+  document.querySelectorAll('[data-n]').forEach(b => b.addEventListener('click', () => { pick(VA.get(b.dataset.n)); VA.sfx.click(); }));
+  homes.abol = n => { pick(n); $('abolition').scrollIntoView({ behavior: 'smooth' }); };
+  pick(VA.get('person-harriet-tubman'));
+})();
+
+/* ═══════ 3. SECESSION ═══════ */
+(() => {
+  const EV = [['Lincoln is elected president', 'Nov 1860'], ['Seven Deep South states secede', 'Dec 1860 – Feb 1861'], ['Virginia\'s convention votes NO', 'Apr 4, 1861'], ['Confederates fire on Fort Sumter', 'Apr 12, 1861'], ['Virginia votes YES: the Ordinance of Secession', 'Apr 17, 1861'], ['West Virginia becomes a state', 'Jun 20, 1863']];
+  let next = 0;
+  function build() {
+    next = 0; $('order-fb').className = 'va-feedback'; $('order-fb').textContent = '';
+    $('order-chips').innerHTML = VA.shuffle(EV.map((e, i) => i)).map(i => `<button class="order-chip" data-i="${i}">${EV[i][0]}</button>`).join('');
+    $('order-line').innerHTML = EV.map((e, i) => `<span class="slot" data-slot="${i}">${i + 1}</span>`).join('');
+    $('order-chips').querySelectorAll('.order-chip').forEach(b => b.addEventListener('click', () => {
+      if (b.classList.contains('placed')) return; const i = +b.dataset.i;
+      if (i === next) { b.classList.add('placed'); const s = $('order-line').querySelector(`[data-slot="${next}"]`); s.classList.add('filled'); s.textContent = `${next + 1}. ${EV[i][0]} (${EV[i][1]})`; next++; VA.sfx.snap(); if (next === EV.length) { $('order-fb').className = 'va-feedback good'; $('order-fb').innerHTML = '🏆 <b>In order.</b> No, then yes, then split in two.'; VA.confetti({ colors: COLORS }); } }
+      else { VA.sfx.nope(); $('order-fb').className = 'va-feedback bad'; $('order-fb').innerHTML = `❌ <b>${EV[i][0]}</b> was ${EV[i][1]}. What came before it?`; }
+    }));
+  }
+  build();
+  const pins = ['place-richmond', 'place-wheeling', 'place-dc'].map(VA.get);
+  const map = VA.mountMap($('map-split'), { interactive: ['pin', 'state'], layers: { county: false, minorRivers: false, regions: true }, pins, labels: { regions: false, water: false, states: true }, onSelect: (ref, node) => card(node, $('card-split')) });
+  const wv = map.refs.state.WV;
+  function year(y) {
+    document.querySelectorAll('[data-yr]').forEach(b => b.classList.toggle('active', b.dataset.yr === y));
+    if (y === '1861') { wv.classList.add('wv-as-va'); wv.classList.remove('va-lit'); map.svg.classList.remove('va-dim'); card(VA.get('document-ordinance-1861'), $('card-split')); }
+    else { wv.classList.remove('wv-as-va'); map.highlight({ kind: 'state', id: 'WV' }); card(VA.get('event-west-virginia-1863'), $('card-split')); }
+    VA.sfx.click();
+  }
+  document.querySelectorAll('[data-yr]').forEach(b => b.addEventListener('click', () => year(b.dataset.yr)));
+  year('1861');
+  homes.split = n => { card(n, $('card-split')); if (n.id === 'event-west-virginia-1863' || n.id === 'state-wv') year('1863'); $('secession').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 4. BATTLES ═══════ */
+(() => {
+  const battles = VA.find(n => n.type === 'event' && n.lat != null && n.year >= 1861 && n.year <= 1865).sort((a, b) => (a.year + (a.month || 1) / 12) - (b.year + (b.month || 1) / 12));
+  const map = VA.mountMap($('map-battles'), { interactive: ['pin'], layers: { county: true, minorRivers: false, pins: true }, pins: [VA.get('place-dc'), VA.get('place-richmond')], labels: { regions: false, water: true, states: true }, onSelect: (ref, node) => pick(node) });
+  zoom(map, -80.2, -75.6, 36.5, 39.6);
+  // distance line DC–Richmond
+  const a = VA_MAP.project(-77.0365, 38.8977), b = VA_MAP.project(-77.4360, 37.5407);
+  svgEl('path', { d: `M${a.x} ${a.y} L${b.x} ${b.y}`, class: 'dist' }, map.svg);
+  const dl = svgEl('text', { x: (a.x + b.x) / 2 + 16, y: (a.y + b.y) / 2, class: 'dist-label', 'font-size': '4' }, map.svg); dl.textContent = '≈ 100 miles';
+  for (const ev of battles) { const p = map.pin(Object.assign({}, ev, { name: ev.short })); p.dataset.year = ev.year; p.dataset.pin = ev.id; map.refs.pin[ev.id] = p; }
+  $('battle-list').innerHTML = battles.map(ev => `<button class="bl" data-id="${ev.id}" data-year="${ev.year}"><span>${ev.emoji}</span><span>${ev.short}<br><small>${ev.month ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][ev.month - 1] + ' ' : ''}${ev.year}</small></span></button>`).join('');
+  function pick(n) { if (!n) return; card(n, $('card-battles')); document.querySelectorAll('.bl').forEach(b => b.classList.toggle('active', b.dataset.id === n.id)); if (map.refs.pin[n.id]) map.highlight({ kind: 'pin', id: n.id }); }
+  document.querySelectorAll('.bl').forEach(b => b.addEventListener('click', () => { pick(VA.get(b.dataset.id)); VA.sfx.click(); }));
+  const s = $('b-slider');
+  function show() { const y = +s.value; $('b-year').textContent = y; map.svg.querySelectorAll('.va-pin[data-year]').forEach(p => p.classList.toggle('va-hidden', +p.dataset.year > y)); document.querySelectorAll('.bl').forEach(b => b.classList.toggle('hidden', +b.dataset.year > y)); }
+  s.addEventListener('input', () => { show(); VA.sfx.click(); }); show();
+  homes.battles = n => { s.value = 1865; show(); pick(n); $('battles').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 5. PEOPLE ═══════ */
+(() => {
+  const R = [['person-lee', 'c', 'Confederate general'], ['person-jackson', 'c', 'Confederate general'], ['person-winfield-scott', 'u', 'Union general'], ['person-grant', 'u', 'Union general'], ['person-carney', 'u', 'Union soldier · Medal of Honor'], ['person-powhatan-beaty', 'u', 'Union soldier · Medal of Honor'], ['person-van-lew', 'u', 'Union spy'], ['person-mary-bowser', 'u', 'Union spy'], ['group-contrabands', 'u', 'Self-emancipated'], ['group-indigenous-civilwar', '', 'Both sides'], ['person-clara-barton', 'u', 'Nurse'], ['person-lincoln', 'u', 'U.S. president'], ['person-jefferson-davis', 'c', 'Confederate president'], ['idea-anaconda-plan', 'u', 'The plan'], ['document-emancipation-1863', 'u', 'Document'], ['person-harriet-tubman', 'u', 'Scout and nurse']];
+  $('roster').innerHTML = R.map(([id, side, role]) => { const n = VA.get(id); return `<button class="rc ${side}" data-id="${id}"><span class="ic">${n.emoji}</span><b>${n.name}</b><small>${role}</small></button>`; }).join('');
+  function pick(n) { card(n, $('card-people')); document.querySelectorAll('.rc').forEach(b => b.classList.toggle('active', b.dataset.id === n.id)); }
+  document.querySelectorAll('.rc').forEach(b => b.addEventListener('click', () => { pick(VA.get(b.dataset.id)); VA.sfx.click(); }));
+  homes.people = n => { pick(n); $('people').scrollIntoView({ behavior: 'smooth' }); };
+  pick(VA.get('group-contrabands'));
+})();
+
+/* ═══════ 6. THE END ═══════ */
+(() => {
+  const pins = ['place-richmond', 'place-appomattox', 'place-chesterfield'].map(VA.get);
+  const map = VA.mountMap($('map-end'), { interactive: ['pin'], layers: { county: true, minorRivers: true }, pins, labels: { regions: false, water: true, states: false }, onSelect: (ref, node) => card(node, $('card-end')) });
+  zoom(map, -79.4, -76.9, 36.9, 38.0);
+  const fx = svgEl('g', {}, map.svg);
+  const mark = (lon, lat, emoji, label) => { const p = VA_MAP.project(lon, lat); const t = svgEl('text', { x: p.x, y: p.y + 2, class: 'mk' }, fx); t.textContent = emoji; if (label) { const l = svgEl('text', { x: p.x, y: p.y + 6.5, class: 'mk-label' }, fx); l.textContent = label; } };
+  const STEPS = [
+    { t: '<b>April 1–2, 1865.</b> After nine months of siege, Grant breaks through the trenches at <b>Petersburg</b>, just south of Chesterfield County. The last railroad into Richmond is cut. Lee sends word to Richmond: the capital cannot be held.', draw: () => mark(-77.40, 37.23, '⚔️', 'Petersburg falls, Apr 2'), node: 'event-petersburg-1864' },
+    { t: '<b>April 2–3.</b> The Confederate government flees by train. Retreating soldiers burn the warehouses; the fire spreads through downtown Richmond. Union troops, many of them Black soldiers, march in the next morning and put out the flames. On April 4, Lincoln walks the streets, and freed people crowd around him.', draw: () => mark(-77.44, 37.54, '🔥', 'Richmond, Apr 3'), node: 'event-richmond-falls-1865' },
+    { t: '<b>April 3–8.</b> Lee\'s army marches west along the Appomattox River, hoping to find food and turn south to join another Confederate army. Grant\'s cavalry races ahead and blocks the road. The Confederates are hungry, exhausted, and surrounded.', draw: () => svgEl('path', { d: pathFrom([[-77.40, 37.23], [-77.9, 37.35], [-78.4, 37.35], [-78.75, 37.38]]), class: 'retreat' }, fx), node: 'person-lee' },
+    { t: '<b>April 9, 1865.</b> In Wilmer McLean\'s parlor at <b>Appomattox Court House</b>, Lee surrenders to Grant. The terms: give up your weapons, go home, keep your horses for spring planting. Grant orders his men not to celebrate. "The war is over," he says. "The rebels are our countrymen again."', draw: () => mark(-78.796, 37.377, '🏳️', 'Appomattox, Apr 9'), node: 'place-appomattox' },
+  ];
+  let next = 0;
+  document.querySelectorAll('#steps button').forEach(b => b.addEventListener('click', () => {
+    const s = +b.dataset.s; if (s > next) { VA.toast('One step at a time.', 'info'); return; }
+    if (s === next) { STEPS[s].draw(); next++; b.classList.add('done'); }
+    document.querySelectorAll('#steps button').forEach(x => x.classList.toggle('on', x === b));
+    $('step-text').innerHTML = STEPS[s].t; card(VA.get(STEPS[s].node), $('card-end')); VA.sfx.click();
+    if (s === 3 && next === 4) { VA.confetti({ colors: COLORS }); VA.sfx.win(); }
+  }));
+  card(VA.get('place-appomattox'), $('card-end'));
+  homes.end = n => { card(n, $('card-end')); $('end').scrollIntoView({ behavior: 'smooth' }); };
+})();
+</script>
+</body>
+</html>

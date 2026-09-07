@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Virginia Declares · Virginia Explorer · REDS Hall of Discovery</title>
+<link rel="stylesheet" href="../shared/va.css"/>
+<style>
+  /* ═══════ CHAPTER 5 — "the broadside": newsprint cream, printer's-black, liberty blue, a cardinal seal; wood-type headlines and thick rules ═══════ */
+  :root{
+    --news:#F4EFE2; --news2:#EAE3D1; --news3:#FBF8F1; --ink:#1A1A1A; --ink2:#4A4A4A; --liberty:#24405B; --cardinal:#A8321F; --ochre:#C9A227; --rule:#1A1A1A;
+    --va-paper:#F4EFE2; --va-card:#FBF8F1; --va-ink:#1A1A1A; --va-ink-2:#4A4A4A; --va-line:#CFC6B0; --va-blue:#24405B; --va-red:#A8321F;
+    --va-sea:#DDE4E6; --va-water:#A7BFC7; --va-water-deep:#4E6E80; --va-neighbor:#E8E1CE; --va-neighbor-hover:#DCD2B8; --va-far:#EEE8D8;
+    --va-r-coastal:#BCC8AE; --va-r-piedmont:#DCCDA0; --va-r-blueridge:#9CAD8F; --va-r-valley:#BFC3B6; --va-r-plateau:#C4AC90;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+    --font-serif: Georgia, 'Times New Roman', serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body); background:var(--news); color:var(--ink); min-height:100vh; -webkit-font-smoothing:antialiased; line-height:1.5}
+  /* newsprint texture: faint speckle */
+  body::before{content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.35;
+    background:radial-gradient(circle at 20% 30%, rgba(26,26,26,.05) 0 1px, transparent 2px), radial-gradient(circle at 70% 60%, rgba(26,26,26,.05) 0 1px, transparent 2px); background-size:7px 7px, 11px 11px}
+  a{color:inherit; text-decoration:none}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  button{font:inherit}
+  .va-label{stroke:var(--news)} .va-label-water{fill:var(--liberty); stroke:var(--news)} .va-pin-label{stroke:var(--news)} .va-outline{stroke:var(--ink)} .va-state,.va-region{stroke:var(--news)}
+  .va-card{box-shadow:none; border:2px solid var(--ink)} .va-card-title{font-family:var(--font-serif); font-weight:700; text-transform:uppercase; letter-spacing:.02em; font-size:20px}
+  .va-kind{background:var(--ink); color:var(--news)}
+
+  .topbar{position:sticky; top:0; z-index:20; background:var(--news); border-bottom:3px double var(--ink)}
+  .topbar-inner{max-width:1280px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px}
+  .brand-group{display:flex; align-items:center; gap:14px}
+  .back{display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:2px; background:var(--news3); border:1.5px solid var(--ink); font-family:var(--font-display); font-size:13px; transition:transform .15s}
+  .back:hover{transform:translateX(-3px)}
+  .brand{display:flex; align-items:center; gap:12px}
+  .brand .logo{width:42px; height:42px}
+  .brand .eyebrow{font-family:var(--font-mono); font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink2)}
+  .brand .wordmark{font-family:var(--font-serif); font-weight:700; font-size:18px; line-height:1.1; text-transform:uppercase; letter-spacing:.04em}
+  .brand .wordmark .unit{color:var(--cardinal); font-weight:400; text-transform:none; letter-spacing:0; font-style:italic}
+  .chapter-nav{display:flex; gap:6px; flex-wrap:wrap}
+  .chapter-nav a{font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; padding:6px 10px; border-radius:2px; color:var(--ink2); border:1px solid transparent}
+  .chapter-nav a:hover{border-color:var(--ink)}
+  @media (max-width:900px){ .chapter-nav{display:none} }
+
+  .hero{position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:44px 24px 22px; text-align:center}
+  .hero .rule{border:0; border-top:4px solid var(--rule); margin:0 0 6px} .hero .rule.thin{border-top-width:1px; margin-bottom:22px}
+  .hero .eyebrow{font-family:var(--font-mono); font-size:12px; letter-spacing:.34em; text-transform:uppercase; color:var(--cardinal); margin-bottom:14px}
+  .hero h1{font-family:var(--font-serif); font-weight:700; font-size:clamp(44px, 7.5vw, 104px); line-height:.92; text-transform:uppercase; letter-spacing:.01em; color:var(--ink); margin-bottom:6px}
+  .hero h1 em{font-style:italic; text-transform:none; color:var(--liberty); letter-spacing:0}
+  .hero .dateline{font-family:var(--font-mono); font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--ink2); margin:10px 0 18px}
+  .hero .tag{font-family:var(--font-serif); font-size:clamp(17px,1.9vw,22px); line-height:1.6; max-width:64ch; margin:0 auto; color:var(--ink)}
+  .hero .tag strong{color:var(--cardinal)}
+  .stamp76{position:absolute; right:6%; top:30px; transform:rotate(9deg); font-family:var(--font-serif); font-weight:700; font-size:22px; letter-spacing:.14em; color:var(--cardinal); border:3px solid var(--cardinal); padding:6px 12px; border-radius:6px; opacity:.85}
+  @media (max-width:700px){ .stamp76{display:none} }
+
+  section.chapter{position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:46px 24px 12px; scroll-margin-top:70px}
+  section.chapter::before{content:''; display:block; border-top:3px solid var(--rule); border-bottom:1px solid var(--rule); height:5px; margin-bottom:22px}
+  .kicker{font-family:var(--font-mono); font-size:12px; letter-spacing:.26em; text-transform:uppercase; color:var(--cardinal); margin-bottom:8px}
+  h2.title{font-family:var(--font-serif); font-weight:700; text-transform:uppercase; letter-spacing:.01em; font-size:clamp(26px, 3.4vw, 42px); margin-bottom:12px; color:var(--ink)}
+  h2.title em{font-style:italic; text-transform:none; color:var(--liberty)}
+  p.blurb{font-size:17px; line-height:1.65; max-width:78ch; color:var(--ink); margin-bottom:20px}
+  p.blurb strong{color:var(--liberty)}
+  .task{display:flex; gap:12px; align-items:flex-start; padding:12px 16px; border-radius:2px; background:var(--news3); border:1.5px solid var(--ink); font-size:14.5px; line-height:1.5; margin-bottom:14px}
+  .task .n{flex:0 0 28px; height:28px; border-radius:2px; background:var(--ink); color:var(--news); display:grid; place-items:center; font-family:var(--font-serif); font-weight:700}
+  .panel-title{font-family:var(--font-mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--ink2); margin-bottom:8px; border-bottom:1px solid var(--ink); padding-bottom:4px}
+  .side-box{background:var(--news3); border:1.5px solid var(--ink); border-radius:2px; padding:14px 16px}
+  .side-box p{font-size:14px; line-height:1.55; color:var(--ink2)}
+  .va-stage{border:1.5px solid var(--ink); border-radius:2px; box-shadow:none}
+  .va-btn{border-radius:2px; border-color:var(--ink)} .va-btn.active{background:var(--cardinal)} .va-btn.primary{background:var(--liberty)}
+  .va-chip{border-radius:2px} .va-feedback{border-radius:2px}
+
+  /* voices */
+  .voices{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+  @media (max-width:800px){ .voices{grid-template-columns:1fr} }
+  .voice{background:var(--news3); border:1.5px solid var(--ink); border-radius:2px; padding:12px 14px}
+  .voice q{font-family:var(--font-serif); font-style:italic; font-size:15.5px; line-height:1.5; display:block; margin-bottom:8px; quotes:'\201C' '\201D'}
+  .voice .who{font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink2)}
+  .voice .pick{display:flex; gap:6px; margin-top:8px; flex-wrap:wrap}
+  .voice .pick button{font:inherit; font-size:12.5px; font-weight:700; padding:6px 10px; border-radius:2px; border:1.5px solid var(--ink); background:#fff; cursor:pointer}
+  .voice .pick button.sel{background:var(--ink); color:var(--news)}
+  .voice.right{border-color:#2F7A45; background:rgba(47,122,69,.10)} .voice.wrong{border-color:var(--cardinal); background:rgba(168,50,31,.08)}
+  .voice .why{font-size:13px; color:var(--ink2); margin-top:6px} .voice .why:empty{display:none}
+
+  /* declaration matcher */
+  .match{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+  @media (max-width:800px){ .match{grid-template-columns:1fr} }
+  .col h4{font-family:var(--font-mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--ink2); margin-bottom:8px}
+  .mrow{display:grid; gap:8px}
+  .m{font:inherit; text-align:left; padding:11px 13px; border-radius:2px; border:1.5px solid var(--ink); background:var(--news3); cursor:pointer; font-size:14.5px; line-height:1.45; color:var(--ink)}
+  .m.phrase{font-family:var(--font-serif); font-style:italic}
+  .m.sel{background:var(--liberty); color:#fff} .m.done{background:rgba(47,122,69,.14); border-color:#2F7A45; cursor:default}
+  .m.shake{animation:sh .35s} @keyframes sh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+  /* people */
+  .people{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px}
+  .people .va-chip.active{background:var(--ink); color:var(--news); border-color:var(--ink)}
+
+  /* inspiration board */
+  .board{background:var(--news3); border:1.5px solid var(--ink); border-radius:2px; padding:10px}
+  .board svg{width:100%; height:auto; display:block}
+  .doc{cursor:pointer}
+  .doc rect{fill:#fff; stroke:var(--ink); stroke-width:1.5}
+  .doc.va rect{fill:#E9EEF3} .doc.us rect{fill:#FBEFEA}
+  .doc.active rect{stroke:var(--cardinal); stroke-width:3}
+  .doc text{font-family:Georgia, serif; font-size:12px; fill:var(--ink); pointer-events:none}
+  .doc text.t{font-weight:700; font-size:13px}
+  .doc text.d{font-size:10px; fill:var(--ink2); font-family:ui-monospace, monospace}
+  .link{stroke:var(--ink); stroke-width:1.2; fill:none; opacity:.25; transition:opacity .2s, stroke-width .2s}
+  .link.lit{stroke:var(--cardinal); stroke-width:3; opacity:1}
+  .quotes{display:grid; gap:8px; margin-top:10px}
+  .qpair{display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:center; background:var(--news3); border:1.5px solid var(--ink); border-radius:2px; padding:10px 12px; font-size:13.5px; line-height:1.45}
+  @media (max-width:700px){ .qpair{grid-template-columns:1fr} }
+  .qpair q{font-family:var(--font-serif); font-style:italic; quotes:'\201C' '\201D'} .qpair small{display:block; font-family:var(--font-mono); font-size:10.5px; color:var(--ink2); margin-top:4px}
+  .qpair .arrow{font-size:20px; color:var(--cardinal); text-align:center}
+
+  /* capitals */
+  .caps{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px}
+
+  /* yorktown stepper */
+  .steps{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px}
+  .steps button{font:inherit; font-family:var(--font-mono); font-size:12px; letter-spacing:.06em; padding:8px 12px; border-radius:2px; border:1.5px solid var(--ink); background:var(--news3); cursor:pointer; color:var(--ink)}
+  .steps button.on{background:var(--ink); color:var(--news)} .steps button.done{background:rgba(47,122,69,.14)}
+  .step-text{font-family:var(--font-serif); font-size:17px; line-height:1.5; min-height:60px; background:var(--news3); border:1.5px solid var(--ink); border-radius:2px; padding:12px 14px}
+  .step-text b{color:var(--cardinal)}
+  .mk{font-size:22px; text-anchor:middle; paint-order:stroke; stroke:var(--news); stroke-width:3px}
+  .mk-label{font-family:ui-monospace, monospace; font-size:3.4px; fill:var(--ink); text-anchor:middle; paint-order:stroke; stroke:var(--news); stroke-width:1px}
+  .march{stroke:var(--liberty); stroke-width:1.2; fill:none; stroke-dasharray:3 2; vector-effect:non-scaling-stroke}
+  .fleet{stroke:var(--cardinal); stroke-width:2; fill:none; vector-effect:non-scaling-stroke}
+
+  .teacher{max-width:1280px; margin:40px auto 0; padding:0 24px}
+  .teacher-card{border:1.5px dashed var(--ink); border-radius:2px; padding:20px 22px; background:var(--news3); display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start}
+  .teacher-card h3{font-size:16px; margin-bottom:6px; color:var(--liberty)}
+  .teacher-card p{font-size:13.5px; line-height:1.55; color:var(--ink2); max-width:80ch}
+  .teacher-card .std{font-family:var(--font-mono); font-size:11px; padding:2px 7px; border-radius:2px; background:rgba(168,50,31,.1); color:var(--cardinal)}
+  .nextup{max-width:1280px; margin:40px auto 0; padding:0 24px}
+  .nextup-card{border-radius:2px; padding:30px 32px; background:var(--ink); color:var(--news); display:flex; flex-wrap:wrap; gap:18px; align-items:center; justify-content:space-between}
+  .nextup-card h3{font-size:12px; letter-spacing:.24em; text-transform:uppercase; opacity:.8; font-family:var(--font-mono)}
+  .nextup-card .big{font-family:var(--font-serif); font-size:clamp(24px,3.2vw,36px); font-weight:700; margin:6px 0 8px; text-transform:uppercase}
+  .nextup-card p{max-width:560px; font-size:14.5px; line-height:1.55}
+  .chip{display:inline-flex; align-items:center; gap:8px; padding:11px 16px; border-radius:2px; font-family:var(--font-display); font-weight:700; font-size:14px; background:rgba(244,239,226,.12); border:1px solid rgba(244,239,226,.4); color:var(--news)}
+  .chip.active{background:var(--news); color:var(--ink)}
+  footer{position:relative; z-index:1; max-width:1280px; margin:36px auto 0; padding:24px; border-top:3px double var(--ink); display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:13px; color:var(--ink2); font-family:var(--font-mono)}
+  footer .heart{color:var(--cardinal)}
+  .sound-toggle{position:fixed; right:18px; bottom:18px; z-index:50; width:46px; height:46px; border-radius:2px; border:1.5px solid var(--ink); background:var(--news3); font-size:20px; cursor:pointer}
+  @media (max-width:640px){ .topbar-inner{padding:10px 14px} section.chapter{padding:36px 14px 8px} }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand-group">
+      <a class="back" href="../index.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 5l-7 7 7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        All chapters
+      </a>
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="60" height="60" rx="4" fill="#1A1A1A"/>
+          <path d="M18 46 Q34 44 46 18" stroke="#F4EFE2" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M44 14 L50 20 L46 24 Z" fill="#A8321F"/>
+          <text x="32" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="10" font-weight="700" fill="#C9A227">1776</text>
+        </svg>
+        <div>
+          <div class="eyebrow">REDS Hall of Discovery · Virginia Explorer</div>
+          <div class="wordmark">Virginia Declares <span class="unit">· Chapter 5</span></div>
+        </div>
+      </div>
+    </div>
+    <nav class="chapter-nav" aria-label="Sections">
+      <a href="#road">1 Road to war</a><a href="#declaration">2 The Declaration</a><a href="#virginians">3 Virginians</a><a href="#documents">4 Documents</a><a href="#capital">5 Richmond</a><a href="#yorktown">6 Yorktown</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="stamp76">1776</span>
+  <hr class="rule"><hr class="rule thin">
+  <div class="eyebrow">Chapter 5 · Virginia and the American Revolution · VS.5, VS.6a–c</div>
+  <h1>Virginia <em>Declares</em></h1>
+  <div class="dateline">Williamsburg · Richmond · Philadelphia · Yorktown · 1765 – 1791</div>
+  <p class="tag">The colony that Britain planted first became the colony that argued loudest, wrote the boldest words, sent the general, and hosted the last battle. When the new nation needed a plan for government and a list of rights, <strong>Virginians wrote those too</strong>. This is how a colony declared itself a free people, and then helped write what "free" meant.</p>
+</section>
+
+<!-- ═══════ 1. ROAD ═══════ -->
+<section class="chapter" id="road">
+  <div class="kicker">Section 1 · Why break with Britain? · VS.5a</div>
+  <h2 class="title">Eleven years from <em>taxes</em> to <em>independence</em>.</h2>
+  <p class="blurb">After the French and Indian War, Britain was broke and decided the colonies should pay. Parliament passed <strong>taxes</strong> that no colonist had voted for. Virginians said their charter of 1606 had promised them the rights of English people, and no English person could be taxed without a say. Britain answered with more taxes, closed ports, and troops. Step by step, argument turned into war. Not every Virginian agreed about it.</p>
+  <div class="task"><span class="n">1</span><div><strong>Walk the timeline</strong> from 1765 to 1776. Then read six Virginians' voices and decide: patriot, loyal to the king, or neutral?</div></div>
+  <div class="va-atlas">
+    <div><div class="va-stage" style="padding:6px 14px"><div id="road-timeline"></div></div></div>
+    <div class="va-side"><div id="card-road"><div class="va-empty">Click a dot on the timeline.</div></div></div>
+  </div>
+  <div style="margin-top:18px" class="panel-title">Six voices, 1775</div>
+  <div class="voices" id="voices"></div>
+  <div class="va-feedback" id="voices-fb" style="margin-top:10px"></div>
+</section>
+
+<!-- ═══════ 2. DECLARATION ═══════ -->
+<section class="chapter" id="declaration">
+  <div class="kicker">Section 2 · The Declaration of Independence · VS.5a</div>
+  <h2 class="title">What Jefferson <em>actually said</em>.</h2>
+  <p class="blurb">In June 1776 Congress asked a 33-year-old Virginian, <strong>Thomas Jefferson</strong>, to write the announcement. He had George Mason's Virginia Declaration of Rights, adopted two weeks earlier, on his desk. The result is short, and most of it is a list of complaints about the king. But the second paragraph is the part the world remembers.</p>
+  <div class="task"><span class="n">2</span><div><strong>Match the words to the meaning.</strong> Click a phrase from the Declaration, then click what it means in plain English.</div></div>
+  <div class="match">
+    <div class="col"><h4>Jefferson's words</h4><div class="mrow" id="phrases"></div></div>
+    <div class="col"><h4>In plain English</h4><div class="mrow" id="meanings"></div></div>
+  </div>
+  <div class="va-feedback" id="match-fb" style="margin-top:10px"></div>
+  <div style="margin-top:14px" id="card-decl"></div>
+</section>
+
+<!-- ═══════ 3. VIRGINIANS ═══════ -->
+<section class="chapter" id="virginians">
+  <div class="kicker">Section 3 · Contributions, leadership, experiences · VS.5b, VS.6a</div>
+  <h2 class="title">The <em>Virginians</em>.</h2>
+  <p class="blurb">Virginia sent the commander, the author, the pen, the voice, and the planner. It also sent thousands whose names are mostly lost: women who ran the farms, free and enslaved Black Virginians who chose a side for their own reasons, Indigenous people who mostly wanted the fight to go away, and one enslaved man who walked into the British camp as a spy.</p>
+  <div class="task"><span class="n">3</span><div><strong>Meet them.</strong> Click a name. Where there is a home, the map shows it.</div></div>
+  <div class="people" id="people"></div>
+  <div class="va-atlas">
+    <div class="va-stage"><svg id="map-people"></svg></div>
+    <div class="va-side"><div id="card-people"><div class="va-empty">Pick a person or a group above.</div></div></div>
+  </div>
+</section>
+
+<!-- ═══════ 4. DOCUMENTS ═══════ -->
+<section class="chapter" id="documents">
+  <div class="kicker">Section 4 · Founding documents · VS.6b, VS.6c</div>
+  <h2 class="title">Virginia's ideas became <em>America's</em> documents.</h2>
+  <p class="blurb">Three Virginia documents came first: Mason's <strong>Declaration of Rights</strong> and the <strong>Virginia Constitution</strong> in 1776, and Jefferson's <strong>Statute for Religious Freedom</strong> in 1786. Their ideas were copied, sometimes word for word, into the <strong>Declaration of Independence</strong>, the <strong>U.S. Constitution</strong>, and the <strong>Bill of Rights</strong>.</p>
+  <div class="task"><span class="n">4</span><div><strong>Follow the lines.</strong> Click a Virginia document on the left to light up what it inspired and read the matching words side by side.</div></div>
+  <div class="va-atlas">
+    <div>
+      <div class="board">
+        <svg id="board" viewBox="0 0 640 300" role="img" aria-label="Lines connecting Virginia's founding documents to the nation's">
+          <g id="links"></g>
+          <g class="doc va" data-doc="vdr" transform="translate(20,20)"><rect width="230" height="70" rx="3"/><text class="t" x="12" y="24">Virginia Declaration of Rights</text><text class="d" x="12" y="42">GEORGE MASON · JUNE 12, 1776</text><text x="12" y="60">Equal rights · press · jury · religion</text></g>
+          <g class="doc va" data-doc="vcon" transform="translate(20,115)"><rect width="230" height="70" rx="3"/><text class="t" x="12" y="24">Virginia Constitution</text><text class="d" x="12" y="42">JUNE 29, 1776</text><text x="12" y="60">First state constitution</text></g>
+          <g class="doc va" data-doc="stat" transform="translate(20,210)"><rect width="230" height="70" rx="3"/><text class="t" x="12" y="24">Statute for Religious Freedom</text><text class="d" x="12" y="42">THOMAS JEFFERSON · 1786</text><text x="12" y="60">No state church; belief is free</text></g>
+          <g class="doc us" data-doc="doi" transform="translate(390,20)"><rect width="230" height="70" rx="3"/><text class="t" x="12" y="24">Declaration of Independence</text><text class="d" x="12" y="42">JEFFERSON · JULY 4, 1776</text><text x="12" y="60">"All men are created equal"</text></g>
+          <g class="doc us" data-doc="uscon" transform="translate(390,115)"><rect width="230" height="70" rx="3"/><text class="t" x="12" y="24">U.S. Constitution</text><text class="d" x="12" y="42">MADISON · SEPT. 17, 1787</text><text x="12" y="60">"We the People…"</text></g>
+          <g class="doc us" data-doc="bor" transform="translate(390,210)"><rect width="230" height="70" rx="3"/><text class="t" x="12" y="24">Bill of Rights</text><text class="d" x="12" y="42">MADISON · 1791</text><text x="12" y="60">First ten amendments</text></g>
+        </svg>
+      </div>
+      <div class="quotes" id="quotes"></div>
+    </div>
+    <div class="va-side"><div id="card-docs"><div class="va-empty">Click a document on the board.</div></div></div>
+  </div>
+</section>
+
+<!-- ═══════ 5. CAPITAL ═══════ -->
+<section class="chapter" id="capital">
+  <div class="kicker">Section 5 · The capital moves again · VS.5c</div>
+  <h2 class="title">Williamsburg to <em>Richmond</em>, 1780.</h2>
+  <p class="blurb">Virginia's capital has moved twice, and both times the James River had a say. In 1780, with British warships raiding the coast, Williamsburg was too close to the water. Governor Jefferson and the Assembly moved the government to <strong>Richmond</strong>: 50 miles farther inland, more central as Virginians spread west, and on the James right at the Fall Line.</p>
+  <div class="task"><span class="n">5</span><div><strong>Move the capital.</strong> Press each year to see where the government sat and why it moved.</div></div>
+  <div class="caps">
+    <button class="va-btn" data-cap="1607">1607 · Jamestown</button>
+    <button class="va-btn" data-cap="1699">1699 · Williamsburg</button>
+    <button class="va-btn" data-cap="1780">1780 · Richmond</button>
+  </div>
+  <div class="va-atlas">
+    <div class="va-stage"><svg id="map-capital"></svg></div>
+    <div class="va-side"><div id="card-capital"></div></div>
+  </div>
+</section>
+
+<!-- ═══════ 6. YORKTOWN ═══════ -->
+<section class="chapter" id="yorktown">
+  <div class="kicker">Section 6 · The victory at Yorktown · VS.5d</div>
+  <h2 class="title">The <em>trap</em> at Yorktown.</h2>
+  <p class="blurb">In 1781 the British general <strong>Cornwallis</strong> marched his army into Virginia, burned Richmond's warehouses, and then dug in at <strong>Yorktown</strong> to wait for the Royal Navy. It never came. What came instead was a French fleet, a French army, and George Washington, who had marched 450 miles from New York in secret. Yorktown sits on a peninsula. With the water sealed and the land blocked, there was nowhere to go.</p>
+  <div class="task"><span class="n">6</span><div><strong>Spring the trap.</strong> Press the steps in order and watch the map. Then read how it ended, and why Washington did not accept the sword himself.</div></div>
+  <div class="steps" id="steps">
+    <button data-s="0">1 · Cornwallis digs in</button><button data-s="1">2 · Lafayette blocks the neck</button><button data-s="2">3 · The French fleet seals the Bay</button><button data-s="3">4 · Washington arrives</button><button data-s="4">5 · Surrender</button>
+  </div>
+  <div class="va-atlas">
+    <div><div class="va-stage"><svg id="map-york"></svg></div><div class="step-text" id="step-text" style="margin-top:12px">Press step 1.</div></div>
+    <div class="va-side"><div id="card-york"></div></div>
+  </div>
+</section>
+
+<div class="teacher">
+  <div class="teacher-card">
+    <div style="font-size:36px">🍎</div>
+    <div>
+      <h3>For teachers</h3>
+      <p>This chapter covers <span class="std">VS.5a</span> the principles and events behind independence, including patriot, loyalist, and neutral views and Dunmore's Proclamation (Sections 1–2), <span class="std">VS.5b</span> the contributions and experiences of Washington, Jefferson, Mason, Madison, James Armistead Lafayette, Indigenous people, women, and free and enslaved Black Virginians (Section 3), <span class="std">VS.5c</span> the move of the capital to Richmond (Section 5), <span class="std">VS.5d</span> Yorktown and the Treaty of Paris (Section 6), <span class="std">VS.6a</span> Washington, Madison, and Patrick Henry's roles (Sections 1, 3, 4), and <span class="std">VS.6b</span> / <span class="std">VS.6c</span> the Virginia Declaration of Rights and Statute for Religious Freedom and how they inspired the Declaration of Independence, the Virginia and U.S. Constitutions, and the Bill of Rights (Section 4). Quotations in Section 4 are from the documents themselves. Washington's and Jefferson's slaveholding is stated plainly on their cards, per school guidance.</p>
+    </div>
+  </div>
+</div>
+
+<div class="nextup">
+  <div class="nextup-card">
+    <div>
+      <h3>Next · Chapter 6</h3>
+      <div class="big">🐎 A Growing Nation</div>
+      <p>Virginians move west through the gaps, new machines change farms and roads, and in 1831 Nat Turner's rebellion shakes the state.</p>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <a class="chip" href="colony.html">← Chapter 4</a>
+      <a class="chip" href="../index.html">All chapters</a>
+      <span class="chip" style="opacity:.6">Chapter 6 · coming soon</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>REDS HALL OF DISCOVERY · VIRGINIA EXPLORER · CHAPTER 5: VIRGINIA DECLARES</div>
+  <div>Made with <span class="heart">♥</span> for the students of Redeemer Episcopal Day School</div>
+</footer>
+<button class="sound-toggle" id="soundToggle" aria-label="Turn sound off">🔊</button>
+
+<script src="../shared/va-map.js"></script>
+<script src="../shared/va-core.js"></script>
+<script src="../content/geography.js"></script>
+<script src="../content/first-peoples.js"></script>
+<script src="../content/jamestown.js"></script>
+<script src="../content/colony.js"></script>
+<script src="../content/revolution.js"></script>
+<script>
+VA.bindSoundToggle(document.getElementById('soundToggle'));
+const $ = id => document.getElementById(id);
+const COLORS = ['#24405B', '#A8321F', '#C9A227', '#F4EFE2'];
+const homes = {};
+function route(n) {
+  if (!n) return;
+  if (n.type === 'document') return homes.docs(n);
+  if (n.type === 'person' || (n.type === 'culture' && n.id.startsWith('group-'))) return homes.people(n);
+  if (n.type === 'event' && n.year >= 1781 && n.id !== 'event-arnold-1781') return homes.york(n);
+  if (['event-capital-richmond-1780', 'event-arnold-1781', 'place-richmond', 'place-williamsburg', 'place-jamestown'].includes(n.id)) return homes.capital(n);
+  if (n.type === 'event') return homes.road(n);
+  VA.renderCard($('card-road'), n, { onRelated: route });
+}
+const card = (node, el) => VA.renderCard(el, node, { onRelated: route });
+function zoom(map, minLon, maxLon, minLat, maxLat) { const a = VA_MAP.project(minLon, maxLat), b = VA_MAP.project(maxLon, minLat); map.svg.setAttribute('viewBox', `${a.x.toFixed(1)} ${a.y.toFixed(1)} ${(b.x - a.x).toFixed(1)} ${(b.y - a.y).toFixed(1)}`); map.svg.classList.add('va-zoomed'); }
+const NS = 'http://www.w3.org/2000/svg';
+const svgEl = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+const pathFrom = coords => 'M' + coords.map(([lo, la]) => { const p = VA_MAP.project(lo, la); return p.x.toFixed(1) + ' ' + p.y.toFixed(1); }).join(' L');
+
+/* ═══════ 1. ROAD — timeline + voices ═══════ */
+(() => {
+  const ids = ['event-stamp-act-1765', 'event-tea-1773', 'event-henry-speech-1775', 'event-gunpowder-1775', 'event-dunmore-proclamation-1775', 'event-may15-1776', 'event-declaration-rights-1776', 'event-independence-1776'];
+  const tl = VA.renderTimeline($('road-timeline'), ids.map(VA.get), { from: 1763, to: 1777, onPick: n => card(n, $('card-road')) });
+  homes.road = n => { tl.select(n.id); $('road').scrollIntoView({ behavior: 'smooth' }); };
+  const V = [
+    { q: 'Parliament has never met a Virginian. Only our own Assembly may tax us. If the king will not hear that, then we are done with the king.', who: 'A Piedmont planter and burgess', a: 'P', why: 'Patriot. "No taxation without representation" was the core argument.' },
+    { q: 'I swore an oath to King George when I became a merchant here. I will not break my word because a crowd in a tavern is angry.', who: 'A Scottish merchant in Norfolk', a: 'L', why: 'Loyalist. Many merchants and recent British immigrants stayed loyal; Norfolk was a loyalist town.' },
+    { q: 'I have a farm to plant and six children to feed. Whoever wins, they will want my taxes and my corn. I will keep my head down.', who: 'A small farmer in the Valley', a: 'N', why: 'Neutral. Perhaps a third of colonists tried to sit the war out.' },
+    { q: 'Lord Dunmore promises freedom to any of us who reaches his ships. The patriots promise us nothing. I know which way I am walking tonight.', who: 'An enslaved man near Norfolk', a: 'L', why: 'Sided with the king. For enslaved Virginians, Dunmore\'s Proclamation was the only offer of freedom on the table.' },
+    { q: 'Our faith forbids us to fight for any side. We will feed the hungry and bind wounds, whichever coat they wear.', who: 'A Quaker family in Loudoun County', a: 'N', why: 'Neutral. Quakers refused to bear arms, and some patriots punished them for it.' },
+    { q: 'The king\'s men promised to keep the settlers off our hunting grounds beyond the mountains. The Virginians keep coming anyway.', who: 'A Cherokee leader in the southwest', a: 'L', why: 'Sided with the king. Britain had tried to limit settlement west of the mountains; the patriots wanted that land.' },
+  ];
+  let done = 0, right = 0;
+  $('voices').innerHTML = VA.shuffle(V.map((v, i) => i)).map(i => `<div class="voice" data-i="${i}"><q>${V[i].q}</q><div class="who">${V[i].who}</div><div class="pick"><button data-a="P">Patriot</button><button data-a="L">Sided with the king</button><button data-a="N">Neutral</button></div><div class="why"></div></div>`).join('');
+  $('voices').querySelectorAll('.voice').forEach(el => { const v = V[+el.dataset.i]; el.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    if (el.classList.contains('right') || el.classList.contains('wrong')) return;
+    b.classList.add('sel'); const ok = b.dataset.a === v.a; el.classList.add(ok ? 'right' : 'wrong'); el.querySelector('.why').textContent = (ok ? '✅ ' : '❌ ') + v.why; done++; if (ok) right++; ok ? VA.sfx.snap() : VA.sfx.nope();
+    if (done === V.length) { const fb = $('voices-fb'); fb.className = 'va-feedback good'; fb.innerHTML = `<b>${right} of ${V.length}.</b> Virginians did not all want the same thing, and "freedom" meant different things depending on who you were.`; if (right >= V.length - 1) VA.confetti({ colors: COLORS }); }
+  })); });
+})();
+
+/* ═══════ 2. DECLARATION MATCH ═══════ */
+(() => {
+  const PAIRS = [
+    ['All men are created equal', 'Nobody is born better than anyone else, and no one is born a king.'],
+    ['Endowed by their Creator with certain unalienable Rights… Life, Liberty and the pursuit of Happiness', 'Everyone is born with rights that cannot be taken away.'],
+    ['Governments… deriving their just powers from the consent of the governed', 'A government is only fair if the people agree to be governed by it.'],
+    ['Whenever any Form of Government becomes destructive of these ends, it is the Right of the People to alter or to abolish it', 'If a government destroys people\'s rights, the people may change it or end it.'],
+  ];
+  let sel = null, matched = 0;
+  $('phrases').innerHTML = PAIRS.map((p, i) => `<button class="m phrase" data-i="${i}">“${p[0]}”</button>`).join('');
+  $('meanings').innerHTML = VA.shuffle(PAIRS.map((p, i) => i)).map(i => `<button class="m meaning" data-i="${i}">${PAIRS[i][1]}</button>`).join('');
+  document.querySelectorAll('.phrase').forEach(b => b.addEventListener('click', () => { if (b.classList.contains('done')) return; document.querySelectorAll('.phrase').forEach(x => x.classList.remove('sel')); b.classList.add('sel'); sel = b; VA.sfx.click(); }));
+  document.querySelectorAll('.meaning').forEach(b => b.addEventListener('click', () => {
+    if (b.classList.contains('done')) return;
+    if (!sel) { VA.toast('Click a phrase on the left first.', 'info'); return; }
+    if (b.dataset.i === sel.dataset.i) { b.classList.add('done'); sel.classList.add('done'); sel.classList.remove('sel'); sel = null; matched++; VA.sfx.snap();
+      if (matched === PAIRS.length) { $('match-fb').className = 'va-feedback good'; $('match-fb').innerHTML = '🏆 <b>All four.</b> Equal at birth, rights that cannot be taken, government by consent, and the right to change a bad one. Those four ideas are the whole Revolution.'; VA.confetti({ colors: COLORS }); } }
+    else { b.classList.add('shake'); setTimeout(() => b.classList.remove('shake'), 400); VA.sfx.nope(); }
+  }));
+  card(VA.get('document-declaration-independence'), $('card-decl'));
+})();
+
+/* ═══════ 3. VIRGINIANS ═══════ */
+(() => {
+  const ids = ['person-washington', 'person-jefferson', 'person-mason', 'person-madison', 'person-henry', 'person-james-armistead', 'person-marquis-lafayette', 'person-dunmore', 'group-women', 'group-black-virginians', 'group-indigenous-rev'];
+  const people = ids.map(VA.get);
+  $('people').innerHTML = people.map(p => `<button class="va-chip" data-p="${p.id}">${p.emoji} ${p.name}</button>`).join('');
+  const pins = ['place-mount-vernon', 'place-monticello', 'place-gunston-hall', 'place-montpelier', 'place-st-johns', 'place-yorktown', 'place-williamsburg'].map(VA.get);
+  const map = VA.mountMap($('map-people'), { interactive: ['pin'], layers: { county: false, minorRivers: false }, pins, labels: { regions: false, water: true, states: false }, onSelect: (ref, node) => card(node, $('card-people')) });
+  const HOME = { 'person-washington': 'place-mount-vernon', 'person-jefferson': 'place-monticello', 'person-mason': 'place-gunston-hall', 'person-madison': 'place-montpelier', 'person-henry': 'place-st-johns', 'person-marquis-lafayette': 'place-yorktown', 'person-dunmore': 'place-williamsburg' };
+  function pick(p) { card(p, $('card-people')); document.querySelectorAll('[data-p]').forEach(b => b.classList.toggle('active', b.dataset.p === p.id)); const h = HOME[p.id]; if (h) map.highlight({ kind: 'pin', id: h }); else if (p.lat != null && map.refs.pin[p.id]) map.highlight({ kind: 'pin', id: p.id }); else map.clearHighlight(); }
+  const ja = VA.get('person-james-armistead'); map.pin(ja);
+  document.querySelectorAll('[data-p]').forEach(b => b.addEventListener('click', () => { pick(VA.get(b.dataset.p)); VA.sfx.click(); }));
+  homes.people = n => { pick(n); $('virginians').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 4. INSPIRATION BOARD ═══════ */
+(() => {
+  const NODE = { vdr: 'document-va-declaration-rights', vcon: 'document-va-constitution-1776', stat: 'document-va-statute', doi: 'document-declaration-independence', uscon: 'document-us-constitution', bor: 'document-bill-of-rights' };
+  const LINKS = [
+    { from: 'vdr', to: 'doi', q: ['All men are by nature equally free and independent, and have certain inherent rights', 'Mason, Virginia Declaration of Rights, §1'], r: ['All men are created equal… endowed… with certain unalienable Rights', 'Jefferson, Declaration of Independence'] },
+    { from: 'vdr', to: 'bor', q: ['The freedom of the press is one of the great bulwarks of liberty', 'Mason, §12'], r: ['Congress shall make no law… abridging the freedom of speech, or of the press', 'First Amendment'] },
+    { from: 'vdr', to: 'bor', q: ['Excessive bail ought not to be required… nor cruel and unusual punishments inflicted', 'Mason, §9'], r: ['Excessive bail shall not be required… nor cruel and unusual punishments inflicted', 'Eighth Amendment'] },
+    { from: 'vdr', to: 'uscon', q: ['All power is vested in, and consequently derived from, the people', 'Mason, §2'], r: ['We the People of the United States… do ordain and establish this Constitution', 'Preamble'] },
+    { from: 'vcon', to: 'uscon', q: ['The legislative, executive, and judiciary department shall be separate and distinct', 'Virginia Constitution, 1776'], r: ['Articles I, II, and III: a Congress, a President, and the Courts', 'U.S. Constitution, 1787'] },
+    { from: 'stat', to: 'bor', q: ['No man shall be compelled to frequent or support any religious worship… nor shall otherwise suffer on account of his religious opinions', 'Jefferson, Statute for Religious Freedom'], r: ['Congress shall make no law respecting an establishment of religion, or prohibiting the free exercise thereof', 'First Amendment'] },
+  ];
+  const Y = { vdr: 55, vcon: 150, stat: 245, doi: 55, uscon: 150, bor: 245 };
+  const links = $('links');
+  LINKS.forEach((l, i) => { const p = svgEl('path', { class: 'link', 'data-i': i, d: `M250 ${Y[l.from]} C 320 ${Y[l.from]}, 320 ${Y[l.to]}, 390 ${Y[l.to]}` }, links); });
+  function pick(doc) {
+    document.querySelectorAll('.doc').forEach(d => d.classList.toggle('active', d.dataset.doc === doc));
+    const hits = LINKS.map((l, i) => ({ l, i })).filter(x => x.l.from === doc || x.l.to === doc);
+    document.querySelectorAll('.link').forEach(p => p.classList.toggle('lit', hits.some(h => h.i === +p.dataset.i)));
+    $('quotes').innerHTML = hits.map(({ l }) => `<div class="qpair"><div><q>${l.q[0]}</q><small>${l.q[1]}</small></div><div class="arrow">→</div><div><q>${l.r[0]}</q><small>${l.r[1]}</small></div></div>`).join('');
+    card(VA.get(NODE[doc]), $('card-docs')); VA.sfx.click();
+  }
+  document.querySelectorAll('.doc').forEach(d => { d.setAttribute('tabindex', '0'); d.setAttribute('role', 'button'); d.addEventListener('click', () => pick(d.dataset.doc)); d.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(d.dataset.doc); } }); });
+  homes.docs = n => { const doc = Object.keys(NODE).find(k => NODE[k] === n.id); if (doc) pick(doc); else card(n, $('card-docs')); $('documents').scrollIntoView({ behavior: 'smooth' }); };
+  pick('vdr');
+})();
+
+/* ═══════ 5. CAPITALS ═══════ */
+(() => {
+  const pins = ['place-jamestown', 'place-williamsburg', 'place-richmond'].map(VA.get);
+  const map = VA.mountMap($('map-capital'), { interactive: ['pin'], layers: { county: false, minorRivers: true, fallLine: true }, pins, labels: { regions: false, water: true, states: false }, onSelect: (ref, node) => card(node, $('card-capital')) });
+  zoom(map, -77.8, -75.9, 36.75, 37.9);
+  const C = { 1607: ['place-jamestown', 'Jamestown, 1607–1699: an island fort on the James, chosen to hide from Spanish ships.'], 1699: ['place-williamsburg', 'Williamsburg, 1699–1780: high ground, clean wells, the college. Then British warships made a capital 12 miles from the water look like a target.'], 1780: ['event-capital-richmond-1780', 'Richmond, 1780–today: farther up the James at the Fall Line, safer from the fleet, and central for a state whose people were moving west.'] };
+  function show(y) { document.querySelectorAll('[data-cap]').forEach(b => b.classList.toggle('active', b.dataset.cap === y)); const [id, note] = C[y]; const n = VA.get(id); card(n, $('card-capital')); map.highlight({ kind: 'pin', id: y === '1780' ? 'place-richmond' : id }); VA.toast(note, 'info', 4200); VA.sfx.click(); }
+  document.querySelectorAll('[data-cap]').forEach(b => b.addEventListener('click', () => show(b.dataset.cap)));
+  card(VA.get('event-capital-richmond-1780'), $('card-capital')); map.highlight({ kind: 'pin', id: 'place-richmond' }); document.querySelector('[data-cap="1780"]').classList.add('active');
+  homes.capital = n => { card(n, $('card-capital')); const ref = VA.refFor(n); if (ref && ref.kind === 'pin' && map.refs.pin[ref.id]) map.highlight(ref); $('capital').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 6. YORKTOWN STEPPER ═══════ */
+(() => {
+  const pins = ['place-yorktown', 'place-williamsburg', 'place-cape-henry', 'place-point-comfort'].map(VA.get);
+  const map = VA.mountMap($('map-york'), { interactive: ['pin'], layers: { county: false, minorRivers: true, pins: true }, pins, labels: { regions: false, water: true, states: false }, onSelect: (ref, node) => card(node, $('card-york')) });
+  zoom(map, -77.4, -75.7, 36.7, 37.75);
+  const fx = svgEl('g', { class: 'york-fx' }, map.svg);
+  const mark = (lon, lat, emoji, label) => { const p = VA_MAP.project(lon, lat); const t = svgEl('text', { x: p.x, y: p.y + 2, class: 'mk', 'font-size': '7' }, fx); t.textContent = emoji; if (label) { const l = svgEl('text', { x: p.x, y: p.y + 7, class: 'mk-label' }, fx); l.textContent = label; } };
+  const STEPS = [
+    { t: '<b>August 1781.</b> Cornwallis marches 8,000 British soldiers to Yorktown on the York River and starts digging trenches. He expects the Royal Navy to sail into the Chesapeake and carry him to safety or bring supplies.', draw: () => mark(-76.51, 37.24, '🇬🇧', 'Cornwallis · 8,000'), node: 'place-yorktown' },
+    { t: '<b>Late August.</b> The Marquis de Lafayette\'s small American army, which has shadowed Cornwallis all summer, takes position at Williamsburg, blocking the only road off the peninsula. James Armistead\'s reports from inside the British camp tell Lafayette what Cornwallis plans.', draw: () => mark(-76.71, 37.27, '🇺🇸', 'Lafayette'), node: 'person-james-armistead' },
+    { t: '<b>September 5.</b> Off Cape Henry, Admiral de Grasse\'s 24 French warships fight the Royal Navy in the Battle of the Capes and hold the mouth of the Bay. The British fleet sails back to New York. Cornwallis is cut off by sea.', draw: () => { svgEl('path', { d: pathFrom([[-76.15, 36.85], [-75.95, 36.98], [-75.85, 37.12]]), class: 'fleet' }, fx); mark(-75.95, 36.98, '⚓', 'French fleet'); }, node: 'event-battle-capes-1781' },
+    { t: '<b>September 28.</b> Washington and the French general Rochambeau arrive with 17,000 men after a secret 450-mile march from New York. They surround Yorktown and open fire. For three weeks the trenches creep closer.', draw: () => { svgEl('path', { d: pathFrom([[-77.0, 37.75], [-76.85, 37.5], [-76.72, 37.3], [-76.58, 37.25]]), class: 'march' }, fx); mark(-76.62, 37.22, '⚔️', 'Washington · 17,000'); }, node: 'event-siege-yorktown-1781' },
+    { t: '<b>October 19.</b> Cornwallis surrenders. He claims to be sick and sends General O\'Hara with his sword. Washington, refusing to be insulted, has his own second-in-command, General Lincoln, accept it. The bands play. The Revolution is, in every way that matters, won.', draw: () => mark(-76.51, 37.24, '🏳️', 'Surrender · Oct 19'), node: 'event-surrender-1781' },
+  ];
+  let next = 0;
+  document.querySelectorAll('#steps button').forEach(b => b.addEventListener('click', () => {
+    const s = +b.dataset.s;
+    if (s > next) { VA.toast('One step at a time: press the next step first.', 'info'); return; }
+    if (s === next) { STEPS[s].draw(); next++; b.classList.add('done'); }
+    document.querySelectorAll('#steps button').forEach(x => x.classList.toggle('on', x === b));
+    $('step-text').innerHTML = STEPS[s].t; card(VA.get(STEPS[s].node), $('card-york')); VA.sfx.click();
+    if (s === 4 && next === 5) { VA.confetti({ colors: COLORS }); VA.sfx.win(); }
+  }));
+  card(VA.get('place-yorktown'), $('card-york'));
+  homes.york = n => { card(n, $('card-york')); $('yorktown').scrollIntoView({ behavior: 'smooth' }); };
+})();
+</script>
+</body>
+</html>

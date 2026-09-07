@@ -54,7 +54,7 @@ window.VA = (() => {
       layers: {}, interactive: ['region', 'river', 'state', 'water', 'pin'], pins: [], labels: { regions: true, water: true, states: true },
       onSelect: null, onHover: null, regionFacts: null,
     }, opts);
-    const layers = Object.assign({ regions: true, rivers: true, minorRivers: false, water: true, neighbors: true, county: true, labels: true, pins: true, fallLine: false }, o.layers);
+    const layers = Object.assign({ regions: true, overlays: true, rivers: true, minorRivers: false, water: true, neighbors: true, county: true, labels: true, pins: true, fallLine: false }, o.layers);
     svg.setAttribute('viewBox', M.viewBox.join(' '));
     svg.classList.add('va-map');
     svg.innerHTML = '';
@@ -62,8 +62,8 @@ window.VA = (() => {
     const defs = svgEl('defs', {}, svg);
     svgEl('path', { d: M.states.VA.d }, svgEl('clipPath', { id: uid }, defs));
     const L = {};
-    for (const name of ['neighbors', 'regions', 'water', 'rivers', 'county', 'fallLine', 'outline', 'labels', 'pins', 'fx']) L[name] = svgEl('g', { class: 'va-layer va-layer-' + name }, svg);
-    const refs = { region: {}, river: {}, state: {}, water: {}, pin: {} };
+    for (const name of ['neighbors', 'regions', 'overlays', 'water', 'rivers', 'county', 'fallLine', 'outline', 'labels', 'pins', 'fx']) L[name] = svgEl('g', { class: 'va-layer va-layer-' + name }, svg);
+    const refs = { region: {}, river: {}, state: {}, water: {}, pin: {}, overlay: {} };
     const inter = kind => o.interactive.includes(kind);
     const wire = (el, ref) => {
       if (!inter(ref.kind)) { el.classList.add('va-inert'); return; }
@@ -89,6 +89,17 @@ window.VA = (() => {
       const r = M.regions[id]; if (!r) continue;
       const el = svgEl('path', { d: r.d, class: 'va-region', 'data-region': id }, rg);
       refs.region[id] = el; wire(el, { kind: 'region', id, name: r.name, nodeId: 'region-' + id });
+    }
+    // overlays: extra clickable areas (e.g. language groups). {id, name, nodeId, region:'coastal' | coords:[[lon,lat],...], cls}
+    if (o.overlays && o.overlays.length) {
+      const og = svgEl('g', { 'clip-path': 'url(#' + uid + ')' }, L.overlays);
+      for (const ov of o.overlays) {
+        let d = '';
+        if (ov.region) d = M.regions[ov.region].d;
+        else if (ov.coords) d = ov.coords.map(ring => 'M' + ring.map(([lo, la]) => { const p = M.project(lo, la); return p.x.toFixed(1) + ' ' + p.y.toFixed(1); }).join(' L') + 'Z').join('');
+        const el = svgEl('path', { d, class: 'va-overlay ' + (ov.cls || ''), 'data-overlay': ov.id }, og);
+        refs.overlay[ov.id] = el; wire(el, { kind: 'overlay', id: ov.id, name: ov.name, nodeId: ov.nodeId });
+      }
     }
     // water bodies
     for (const w of M.lakes) {

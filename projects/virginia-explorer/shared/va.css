@@ -52,6 +52,14 @@ svg.va-map{width:100%; height:auto; display:block; background:var(--va-sea, #E6F
 .va-fly-dot{fill:#fff; stroke:var(--va-red, #B3261E); stroke-width:3}
 .va-fly-trail{fill:none; stroke:var(--va-red, #B3261E); stroke-width:4; stroke-linecap:round; opacity:.8}
 .va-inert{pointer-events:none}
+/* overlays (language groups etc.) */
+.va-overlay{fill:var(--va-overlay, rgba(179,38,30,.35)); stroke:#fff; stroke-width:1.2; stroke-dasharray:5 3; transition:filter .15s, opacity .2s}
+.va-overlay.va-hit:hover, .va-overlay.va-hover{filter:brightness(1.15)}
+.va-overlay.va-lit{stroke:var(--va-ink, #1B2430); stroke-width:2; stroke-dasharray:none; filter:brightness(1.15) saturate(1.2)}
+.va-map.va-dim .va-overlay:not(.va-lit){opacity:.35}
+.va-overlay.lang-algonquian{fill:rgba(79,163,160,.62)}
+.va-overlay.lang-siouan{fill:rgba(214,166,72,.62)}
+.va-overlay.lang-iroquoian{fill:rgba(181,80,58,.62)}
 
 /* ---------- atlas layout: map + side panel ---------- */
 .va-atlas{display:grid; grid-template-columns:minmax(0,1.5fr) minmax(280px,.9fr); gap:18px; align-items:start}

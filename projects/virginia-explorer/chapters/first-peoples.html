@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>First Peoples · Virginia Explorer · REDS Hall of Discovery</title>
+<link rel="stylesheet" href="../shared/va.css"/>
+<style>
+  /* ═══════ CHAPTER 2 — "river and forest": dark earth, birch cream, river teal, clay red, woven-mat motif ═══════ */
+  :root{
+    --earth:#1E2A1F; --earth2:#2A3A2B; --birch:#F1E9D8; --birch2:#E3D8C2; --river:#4FA3A0; --clay:#B5503A; --ochre:#D6A648; --moss:#7FA36B; --ink:#1B2430;
+    --va-paper:#1E2A1F; --va-card:#F1E9D8; --va-ink:#1B2430; --va-ink-2:#4E5A4C; --va-line:#C9BEA6; --va-blue:#2F6B69; --va-red:#B5503A;
+    --va-sea:#16302E; --va-water:#3E7C79; --va-water-deep:#7FCFCB; --va-neighbor:#2B3A33; --va-neighbor-hover:#3A4C43; --va-far:#243129;
+    --va-r-coastal:#5D8F7A; --va-r-piedmont:#A98D52; --va-r-blueridge:#4A6E4F; --va-r-valley:#6E7F92; --va-r-plateau:#7C5F47;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body); background:var(--earth); color:var(--birch); min-height:100vh; -webkit-font-smoothing:antialiased; line-height:1.5;
+    background-image:radial-gradient(ellipse at 80% 0%, rgba(79,163,160,.16), transparent 50%), radial-gradient(ellipse at 10% 100%, rgba(214,166,72,.12), transparent 50%), linear-gradient(180deg, #1E2A1F, #243129 60%, #171f18)}
+  /* woven-mat motif */
+  body::before{content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.07;
+    background:repeating-linear-gradient(45deg, #F1E9D8 0 6px, transparent 6px 22px), repeating-linear-gradient(-45deg, #F1E9D8 0 6px, transparent 6px 22px)}
+  a{color:inherit; text-decoration:none}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  button{font:inherit}
+  .va-label{fill:var(--birch); stroke:#1E2A1F} .va-label-water{fill:#9EDAD6; stroke:#1E2A1F} .va-label-state{fill:#B9C2B5; stroke:#1E2A1F}
+  .va-outline{stroke:var(--birch)} .va-pin-label{fill:var(--birch); stroke:#1E2A1F} .va-state{stroke:#1E2A1F}
+  .va-region{stroke:#1E2A1F}
+  .va-stage, .side-box{background:var(--earth2); border-color:rgba(241,233,216,.14)}
+  .side-box{color:var(--birch)} .side-box p{color:var(--birch2)} .panel-title{color:var(--river)}
+  .va-empty{background:rgba(241,233,216,.05); border-color:rgba(241,233,216,.2); color:var(--birch2)}
+  .va-checklist li{background:rgba(241,233,216,.08); color:var(--birch)} .va-checklist li .tick{border-color:rgba(241,233,216,.3)}
+  .va-btn{background:rgba(241,233,216,.1); color:var(--birch); border-color:rgba(241,233,216,.2)} .va-btn.active{background:var(--clay)}
+  .va-ask{color:var(--birch)} .va-ask b{color:var(--ochre)} .va-score span{background:rgba(241,233,216,.1); color:var(--birch)} .va-score b{color:var(--ochre)}
+  .va-feedback{color:var(--birch); background:rgba(241,233,216,.08); border-left-color:var(--river)}
+  .va-feedback.good{background:rgba(127,163,107,.18); border-left-color:var(--moss)} .va-feedback.bad{background:rgba(181,80,58,.18); border-left-color:var(--clay)}
+
+  .topbar{position:sticky; top:0; z-index:20; background:rgba(30,42,31,.92); backdrop-filter:blur(12px); border-bottom:1px solid rgba(241,233,216,.14)}
+  .topbar-inner{max-width:1280px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px}
+  .brand-group{display:flex; align-items:center; gap:14px}
+  .back{display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:999px; background:rgba(241,233,216,.08); border:1px solid rgba(241,233,216,.2); font-family:var(--font-display); font-size:13px; transition:transform .15s}
+  .back:hover{transform:translateX(-3px)}
+  .brand{display:flex; align-items:center; gap:12px}
+  .brand .logo{width:42px; height:42px}
+  .brand .eyebrow{font-family:var(--font-mono); font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--birch2); opacity:.8}
+  .brand .wordmark{font-family:var(--font-display); font-weight:800; font-size:18px; line-height:1.1}
+  .brand .wordmark .unit{color:var(--ochre); font-weight:600}
+  .chapter-nav{display:flex; gap:6px; flex-wrap:wrap}
+  .chapter-nav a{font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; padding:6px 10px; border-radius:6px; color:var(--birch2); border:1px solid transparent}
+  .chapter-nav a:hover{border-color:rgba(241,233,216,.25)}
+  @media (max-width:900px){ .chapter-nav{display:none} }
+
+  .hero{position:relative; z-index:1; min-height:60vh; display:grid; place-items:center; overflow:hidden}
+  #hero-canvas{position:absolute; inset:0; width:100%; height:100%}
+  .hero-inner{position:relative; z-index:2; text-align:center; padding:60px 24px; max-width:880px}
+  .hero .eyebrow{font-family:var(--font-mono); font-size:12px; letter-spacing:.3em; text-transform:uppercase; color:var(--ochre); margin-bottom:14px}
+  .hero h1{font-size:clamp(44px, 7.5vw, 100px); letter-spacing:-.02em; line-height:.95; margin-bottom:16px; color:var(--birch); text-shadow:0 8px 40px rgba(0,0,0,.6)}
+  .hero h1 em{font-style:normal; color:var(--river)}
+  .hero .tag{font-size:clamp(17px,1.9vw,21px); line-height:1.55; color:var(--birch2); text-shadow:0 2px 12px rgba(0,0,0,.7)}
+  .hero .tag strong{color:var(--birch)}
+
+  section.chapter{position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:48px 24px 12px; scroll-margin-top:70px}
+  .kicker{font-family:var(--font-mono); font-size:12px; letter-spacing:.26em; text-transform:uppercase; color:var(--ochre); margin-bottom:8px}
+  h2.title{font-size:clamp(28px, 3.6vw, 44px); margin-bottom:12px; letter-spacing:-.01em; color:var(--birch)}
+  h2.title em{font-style:normal; color:var(--river)}
+  p.blurb{font-size:17px; line-height:1.65; max-width:78ch; color:var(--birch2); margin-bottom:20px}
+  p.blurb strong{color:var(--birch)}
+  .task{display:flex; gap:12px; align-items:flex-start; padding:12px 16px; border-radius:12px; background:rgba(214,166,72,.12); border:1px solid rgba(214,166,72,.35); font-size:14.5px; line-height:1.5; margin-bottom:14px; color:var(--birch)}
+  .task .n{flex:0 0 28px; height:28px; border-radius:999px; background:var(--ochre); color:#1B2430; display:grid; place-items:center; font-family:var(--font-display); font-weight:800}
+  .panel-title{font-family:var(--font-display); font-size:13px; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px}
+  .side-box{border:1px solid; border-radius:14px; padding:14px 16px}
+  .side-box p{font-size:14px; line-height:1.55}
+
+  /* the dig */
+  .dig{display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,1.2fr); gap:18px; align-items:start}
+  @media (max-width:900px){ .dig{grid-template-columns:1fr} }
+  .strata{border-radius:14px; overflow:hidden; border:1px solid rgba(241,233,216,.2); box-shadow:0 20px 50px rgba(0,0,0,.4)}
+  .stratum{position:relative; display:flex; align-items:center; gap:14px; padding:16px 18px; cursor:pointer; border:0; width:100%; text-align:left; color:var(--birch); font:inherit; transition:filter .15s}
+  .stratum:hover{filter:brightness(1.12)}
+  .stratum .depth{font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; color:rgba(241,233,216,.75); width:96px; flex:none}
+  .stratum .art{font-size:30px; width:44px; text-align:center; transition:transform .3s; filter:blur(4px); opacity:.35}
+  .stratum.found .art{filter:none; opacity:1; transform:scale(1.15)}
+  .stratum .what{font-family:var(--font-display); font-weight:700; font-size:15px}
+  .stratum .what small{display:block; font-family:var(--font-body); font-weight:400; font-size:12.5px; color:rgba(241,233,216,.8)}
+  .stratum.found .what small{color:var(--birch)}
+  .stratum:not(.found) .what{opacity:.7}
+  .s1{background:#5B4A3A} .s2{background:#6B5540} .s3{background:#7A5F44} .s4{background:#8A6A47} .s5{background:#9A7549}
+  .dig-note{font-family:var(--font-display); font-size:22px; line-height:1.2; min-height:60px; color:var(--birch)}
+  .dig-note small{display:block; font-family:var(--font-body); font-size:14px; color:var(--birch2); margin-top:6px; line-height:1.5}
+
+  /* seasons */
+  .seasons{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px}
+  @media (max-width:700px){ .seasons{grid-template-columns:repeat(2,1fr)} }
+  .season{font:inherit; font-family:var(--font-display); font-weight:800; font-size:16px; padding:16px 12px; border-radius:14px; border:2px solid rgba(241,233,216,.18); background:var(--earth2); color:var(--birch); cursor:pointer; text-align:center; transition:transform .15s, border-color .15s}
+  .season span{display:block; font-size:30px; margin-bottom:6px}
+  .season:hover{transform:translateY(-3px)}
+  .season.active{border-color:var(--ochre); background:rgba(214,166,72,.14)}
+  .season-card{background:var(--birch); color:var(--ink); border-radius:14px; padding:18px 20px; min-height:180px}
+  .season-card h3{font-size:22px; margin-bottom:8px; color:var(--va-blue)}
+  .season-card ul{padding-left:20px; font-size:14.5px; line-height:1.6}
+  .resources{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:14px}
+  @media (max-width:700px){ .resources{grid-template-columns:1fr} }
+  .res{background:rgba(241,233,216,.07); border:1px solid rgba(241,233,216,.15); border-radius:12px; padding:12px 14px; font-size:13.5px; line-height:1.5; color:var(--birch2)}
+  .res b{display:block; font-family:var(--font-display); font-size:15px; color:var(--birch); margin-bottom:4px}
+
+  .tribe-chips{display:flex; flex-wrap:wrap; gap:6px}
+  .tribe-chips .va-chip{background:rgba(241,233,216,.08); color:var(--birch); border-color:rgba(241,233,216,.22)}
+  .tribe-chips .va-chip.fed{border-color:var(--ochre)}
+  .teacher{max-width:1280px; margin:40px auto 0; padding:0 24px}
+  .teacher-card{border:1px dashed rgba(241,233,216,.25); border-radius:14px; padding:20px 22px; background:rgba(241,233,216,.05); display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start}
+  .teacher-card h3{font-size:16px; margin-bottom:6px; color:var(--ochre)}
+  .teacher-card p{font-size:13.5px; line-height:1.55; color:var(--birch2); max-width:80ch}
+  .teacher-card .std{font-family:var(--font-mono); font-size:11px; padding:2px 7px; border-radius:4px; background:rgba(214,166,72,.18); color:var(--ochre)}
+  .nextup{max-width:1280px; margin:40px auto 0; padding:0 24px}
+  .nextup-card{border-radius:18px; padding:30px 32px; background:linear-gradient(145deg, #3B2A1C, #8A6A47 60%, #E3D8C2); color:#fff; display:flex; flex-wrap:wrap; gap:18px; align-items:center; justify-content:space-between}
+  .nextup-card h3{font-size:13px; letter-spacing:.24em; text-transform:uppercase; opacity:.85}
+  .nextup-card .big{font-family:var(--font-display); font-size:clamp(24px,3.2vw,36px); font-weight:800; margin:6px 0 8px}
+  .nextup-card p{max-width:560px; font-size:14.5px; line-height:1.55}
+  .chip{display:inline-flex; align-items:center; gap:8px; padding:11px 16px; border-radius:999px; font-family:var(--font-display); font-weight:700; font-size:14px; background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.35); color:#fff}
+  .chip.active{background:#fff; color:#3B2A1C}
+  footer{position:relative; z-index:1; max-width:1280px; margin:36px auto 0; padding:24px; border-top:1px solid rgba(241,233,216,.14); display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:13px; color:var(--birch2)}
+  footer .heart{color:var(--clay)}
+  .sound-toggle{position:fixed; right:18px; bottom:18px; z-index:50; width:46px; height:46px; border-radius:999px; border:1px solid rgba(241,233,216,.25); background:rgba(30,42,31,.85); color:#fff; font-size:20px; cursor:pointer}
+  @media (max-width:640px){ .topbar-inner{padding:10px 14px} section.chapter{padding:36px 14px 8px} }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand-group">
+      <a class="back" href="../index.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 5l-7 7 7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        All chapters
+      </a>
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="60" height="60" rx="14" fill="#2A3A2B"/>
+          <path d="M14 46 Q32 30 50 46" stroke="#4FA3A0" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M22 40 L32 16 L42 40 Z" fill="#D6A648"/>
+          <circle cx="32" cy="24" r="3" fill="#B5503A"/>
+        </svg>
+        <div>
+          <div class="eyebrow">REDS Hall of Discovery · Virginia Explorer</div>
+          <div class="wordmark">First Peoples <span class="unit">· Chapter 2</span></div>
+        </div>
+      </div>
+    </div>
+    <nav class="chapter-nav" aria-label="Sections">
+      <a href="#dig">1 The dig</a><a href="#groups">2 Three languages</a><a href="#seasons">3 A year c.1600</a><a href="#today">4 Nations today</a><a href="#quiz">5 Test yourself</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="eyebrow">Chapter 2 · Virginia's Indigenous People · VS.2</div>
+    <h1>First <em>Peoples</em></h1>
+    <p class="tag">People have lived on this land for at least <strong>15,000 years</strong>. Long before Jamestown, Virginia was home to dozens of nations who spoke three families of languages, fished its rivers, farmed its river bottoms, and built a capital on the York. Their descendants are <strong>still here</strong>.</p>
+  </div>
+</section>
+
+<!-- ═══════ 1. THE DIG ═══════ -->
+<section class="chapter" id="dig">
+  <div class="kicker">Section 1 · Archaeology · VS.2a</div>
+  <h2 class="title">Reading the <em>ground</em>.</h2>
+  <p class="blurb">The first Virginians did not leave written records, so how do we know about them? <strong>Archaeologists</strong> dig carefully through the soil, layer by layer. Deeper layers are older. Every pot shard, stone blade, or bead they find is <strong>evidence</strong>, and each new find can change the story. Two Virginia sites changed it a lot.</p>
+  <div class="task"><span class="n">1</span><div><strong>Dig.</strong> Click each layer of soil, from the top down, to uncover what archaeologists found. Then click Werowocomoco and Cactus Hill on the map.</div></div>
+  <div class="dig">
+    <div>
+      <div class="strata" id="strata"></div>
+      <div class="side-box" style="margin-top:12px"><div class="dig-note" id="dig-note">Start at the top layer.<small>The top is today. Each click goes further back in time.</small></div></div>
+    </div>
+    <div class="va-atlas" style="grid-template-columns:1fr">
+      <div class="va-stage"><svg id="map-dig"></svg></div>
+      <div id="card-dig"><div class="va-empty">Click <b>Werowocomoco</b> or <b>Cactus Hill</b> on the map.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 2. THREE LANGUAGES ═══════ -->
+<section class="chapter" id="groups">
+  <div class="kicker">Section 2 · Language groups · VS.2b, VS.2c</div>
+  <h2 class="title">Three families of <em>languages</em>.</h2>
+  <p class="blurb">Around 1600 there was no single "Virginia Indian" people. There were many nations, each with its own name, leaders, and ways. Their languages belonged to three big families: <strong>Algonquian</strong> in the Tidewater, <strong>Siouan</strong> in the Piedmont, and <strong>Iroquoian</strong> in the far southwest and along the North Carolina line. Where each group lived had everything to do with the land.</p>
+  <div class="task"><span class="n">2</span><div><strong>Find all three.</strong> Click each colored area on the map. The boundaries are approximate; real borders between peoples were never sharp lines.</div></div>
+  <div class="va-atlas">
+    <div class="va-stage"><svg id="map-groups"></svg></div>
+    <div class="va-side">
+      <div class="side-box">
+        <div class="panel-title">Language groups found</div>
+        <ul class="va-checklist" id="group-list"></ul>
+      </div>
+      <div id="card-groups"><div class="va-empty">Click a colored area to meet the people who lived there.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 3. A YEAR AROUND 1600 ═══════ -->
+<section class="chapter" id="seasons">
+  <div class="kicker">Section 3 · People and environment · VS.2d</div>
+  <h2 class="title">A year in a Powhatan town, <em>around 1600</em>.</h2>
+  <p class="blurb">Virginia's early people did not fight the land; they <strong>adapted</strong> to it. The forest gave wood for houses and canoes. The rivers and the Bay gave fish, oysters, and a way to travel. Deer gave meat and hide. The river-bottom soil grew <strong>corn, beans, and squash</strong>. What people did depended on the <strong>season</strong>.</p>
+  <div class="task"><span class="n">3</span><div><strong>Turn the year.</strong> Pick a season to see what a Powhatan town was doing. Then compare the resources each region offered.</div></div>
+  <div class="seasons" id="seasons-row">
+    <button class="season active" data-season="spring"><span>🌱</span>Spring</button>
+    <button class="season" data-season="summer"><span>☀️</span>Summer</button>
+    <button class="season" data-season="fall"><span>🍂</span>Fall</button>
+    <button class="season" data-season="winter"><span>❄️</span>Winter</button>
+  </div>
+  <div class="season-card" id="season-card"></div>
+  <div class="resources">
+    <div class="res"><b>🌊 Tidewater (Algonquian)</b>Fish, oysters, and crabs from the rivers and Bay · rich soil for corn, beans, and squash · reeds and bark for <em>yehakins</em> (houses) · dugout canoes from big trees</div>
+    <div class="res"><b>🌾 Piedmont (Siouan)</b>Deer and turkey in the hills · river-bottom farms along the James and Rappahannock · stone for tools, clay for pots · trade with the coast and the mountains</div>
+    <div class="res"><b>⛰️ Mountains (Iroquoian)</b>Deer, bear, and elk in the forests · valley farms · trails through the gaps for trade · chestnuts, berries, and roots from the forest</div>
+  </div>
+</section>
+
+<!-- ═══════ 4. NATIONS TODAY ═══════ -->
+<section class="chapter" id="today">
+  <div class="kicker">Section 4 · Leading to the present day · VS.2e</div>
+  <h2 class="title">Still <em>here</em>.</h2>
+  <p class="blurb">Colonization brought disease, war, lost land, and laws that tried to erase Virginia's Indigenous people from the record. They survived. Today Virginia officially recognizes <strong>eleven tribes</strong>, and the United States recognizes <strong>seven</strong> of them as sovereign nations. Several are our neighbors in <strong>Central Virginia</strong>.</p>
+  <div class="task"><span class="n">4</span><div><strong>Meet the neighbors.</strong> Click a pin or a name. Gold-edged names are federally recognized. Then read about the woman whose name is on the 2018 recognition law.</div></div>
+  <div class="va-atlas">
+    <div>
+      <div class="va-stage"><svg id="map-today"></svg></div>
+      <div class="side-box" style="margin-top:12px">
+        <div class="panel-title">Virginia's recognized tribes</div>
+        <div class="tribe-chips" id="tribe-chips"></div>
+        <p style="margin-top:10px">Pins mark tribal centers, not reservations or historic lands. Only the Pamunkey and Mattaponi have reservations, both from treaties in the 1600s.</p>
+      </div>
+    </div>
+    <div class="va-side">
+      <div id="card-today"><div class="va-empty">Click a tribe on the map or in the list.</div></div>
+      <div class="side-box">
+        <div class="panel-title">Recognition</div>
+        <div class="tribe-chips"><button class="va-chip" data-node="person-thomasina-jordan">✊ Thomasina E. Jordan</button><button class="va-chip" data-node="event-recognition-2018">📜 The 2018 recognition law</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 5. QUIZ ═══════ -->
+<section class="chapter" id="quiz">
+  <div class="kicker">Section 5 · Test yourself</div>
+  <h2 class="title">Who lived <em>where</em>?</h2>
+  <p class="blurb">The labels are gone. Click the area of the map where each language group lived.</p>
+  <div class="va-atlas">
+    <div class="va-stage"><svg id="map-quiz"></svg></div>
+    <div class="va-side">
+      <div class="side-box">
+        <div class="va-ask" id="q-ask"></div>
+        <div class="va-score"><span>Score <b id="q-score">0</b></span><span>Question <b id="q-progress">–</b></span></div>
+        <div class="va-feedback" id="q-feedback"></div>
+        <div style="margin-top:10px"><button class="va-btn" id="q-restart">↺ Start over</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="teacher">
+  <div class="teacher-card">
+    <div style="font-size:36px">🍎</div>
+    <div>
+      <h3>For teachers</h3>
+      <p>This chapter covers <span class="std">VS.2a</span> archaeology at Werowocomoco and Cactus Hill (Section 1), <span class="std">VS.2b</span> and <span class="std">VS.2c</span> the three language groups and the diversity of nations (Section 2 and quiz), <span class="std">VS.2d</span> people and environment circa 1600 (Section 3), and <span class="std">VS.2e</span> Indigenous people leading to the present day, including state and federal recognition and Thomasina E. Jordan (Section 4). Language-group areas are approximate, as in every textbook map. Tribal pins mark present-day tribal centers.</p>
+    </div>
+  </div>
+</div>
+
+<div class="nextup">
+  <div class="nextup-card">
+    <div>
+      <h3>Next · Chapter 3</h3>
+      <div class="big">⛵ Jamestown</div>
+      <p>Three ships, 104 men and boys, and a swampy island on the James. Why here, why 1607, and how the colony barely survived.</p>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <a class="chip" href="lay-of-the-land.html">← Chapter 1</a>
+      <a class="chip" href="../index.html">All chapters</a>
+      <span class="chip" style="opacity:.6">Chapter 3 · coming soon</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>REDS Hall of Discovery · Virginia Explorer · Chapter 2: First Peoples</div>
+  <div>Made with <span class="heart">♥</span> for the students of Redeemer Episcopal Day School</div>
+</footer>
+<button class="sound-toggle" id="soundToggle" aria-label="Turn sound off">🔊</button>
+
+<script src="../shared/va-map.js"></script>
+<script src="../shared/va-core.js"></script>
+<script src="../content/geography.js"></script>
+<script src="../content/first-peoples.js"></script>
+<script>
+VA.bindSoundToggle(document.getElementById('soundToggle'));
+const $ = id => document.getElementById(id);
+const REDUCE = VA.reduceMotion();
+
+/* Language-group overlays: approximate areas (VS.2b). Algonquian = Coastal Plain; Siouan = Piedmont;
+   Iroquoian = far southwest + the Nottoway/Meherrin country near the NC line. */
+const OVERLAYS = [
+  { id: 'algonquian', name: 'Algonquian speakers', nodeId: 'lang-algonquian', region: 'coastal', cls: 'lang-algonquian' },
+  { id: 'siouan', name: 'Siouan speakers', nodeId: 'lang-siouan', region: 'piedmont', cls: 'lang-siouan' },
+  { id: 'iroquoian', name: 'Iroquoian speakers', nodeId: 'lang-iroquoian', cls: 'lang-iroquoian', coords: [
+    [[-83.8, 36.5], [-83.8, 37.15], [-83.0, 37.45], [-82.0, 37.4], [-81.2, 36.9], [-81.0, 36.5]],
+    [[-77.95, 36.5], [-77.95, 36.98], [-76.85, 36.98], [-76.85, 36.5]] ] },
+];
+const showCard = (node, el, map, dim = true) => { if (!node) return; VA.renderCard(el, node, { onRelated: r => route(r) }); const ref = VA.refFor(node); if (ref && ref.kind !== 'layer') map.highlight(ref, { dim }); };
+const homes = {};
+function route(node) { const h = node.type === 'tribe' && node.id.startsWith('lang-') ? homes.groups : node.type === 'tribe' || node.type === 'person' || node.type === 'event' ? homes.today : node.id === 'place-werowocomoco' || node.id === 'place-cactus-hill' ? homes.dig : null; if (h) h(node); }
+
+/* ═══════ HERO — river with drifting canoe reflections and fireflies (pure decoration) ═══════ */
+(() => {
+  const c = $('hero-canvas'); const ctx = c.getContext('2d'); let W, H;
+  const fit = () => { const r = c.getBoundingClientRect(); const d = Math.min(devicePixelRatio || 1, 2); c.width = r.width * d; c.height = r.height * d; ctx.setTransform(d, 0, 0, d, 0, 0); W = r.width; H = r.height; };
+  fit(); addEventListener('resize', fit);
+  const flies = Array.from({ length: 40 }, () => ({ x: Math.random(), y: Math.random() * .7, ph: Math.random() * 6.28, sp: .00003 + Math.random() * .00005 }));
+  function tick(t) {
+    ctx.clearRect(0, 0, W, H);
+    // river band
+    const ry = H * .72; const g = ctx.createLinearGradient(0, ry, 0, H); g.addColorStop(0, 'rgba(79,163,160,.35)'); g.addColorStop(1, 'rgba(22,48,46,.9)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, ry + 10); for (let x = 0; x <= W; x += 16) ctx.lineTo(x, ry + Math.sin(x / 90 + t * .0012) * 6); ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+    // ripples
+    ctx.strokeStyle = 'rgba(158,218,214,.25)'; ctx.lineWidth = 1;
+    for (let i = 0; i < 6; i++) { const y = ry + 24 + i * 22; ctx.beginPath(); for (let x = 0; x <= W; x += 12) ctx.lineTo(x, y + Math.sin(x / 60 + t * .0015 + i) * 3); ctx.stroke(); }
+    // tree line silhouettes
+    ctx.fillStyle = 'rgba(23,31,24,.85)';
+    for (let x = -20; x < W + 40; x += 34) { const h = 60 + ((x * 7919) % 90); ctx.beginPath(); ctx.moveTo(x, ry + 4); ctx.lineTo(x + 17, ry - h); ctx.lineTo(x + 34, ry + 4); ctx.closePath(); ctx.fill(); }
+    // fireflies
+    for (const f of flies) { const x = ((f.x + t * f.sp) % 1) * W, y = f.y * H + Math.sin(t * .0008 + f.ph) * 14; const a = .3 + .7 * (.5 + .5 * Math.sin(t * .003 + f.ph)); ctx.fillStyle = `rgba(214,166,72,${a * .9})`; ctx.beginPath(); ctx.arc(x, y, 2, 0, 6.28); ctx.fill(); ctx.fillStyle = `rgba(214,166,72,${a * .2})`; ctx.beginPath(); ctx.arc(x, y, 7, 0, 6.28); ctx.fill(); }
+    if (!REDUCE) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* ═══════ 1. THE DIG ═══════ */
+(() => {
+  const LAYERS = [
+    { cls: 's1', depth: 'Top · today', art: '🧢', what: 'A bottle cap and a plastic toy', small: 'Recent things sit on top. Archaeologists record them, then keep going.', note: 'Every dig starts with the present.', more: 'Layers build up over time as leaves, floods, and people pile new soil on old. The top is now.' },
+    { cls: 's2', depth: '1600s', art: '📿', what: 'Copper pieces and blue glass beads', small: 'Found at Werowocomoco. Not made in Virginia: they came from trade with the English at Jamestown.', note: 'Trade goods from 1607.', more: 'Copper and glass beads tell archaeologists this town was still busy and important when the English arrived, and that its people were trading with them.' },
+    { cls: 's3', depth: '1000s', art: '🏺', what: 'Broken pottery with rope patterns', small: 'Pots were shaped from river clay and pressed with cord before firing. The style tells which people made them and when.', note: 'A village that lasted centuries.', more: 'At Werowocomoco, pottery goes down through many layers, showing people lived there for hundreds of years before Powhatan.' },
+    { cls: 's4', depth: '~3,000 years ago', art: '🪓', what: 'A soapstone bowl fragment and a stone axe', small: 'Heavy soapstone bowls came before pottery. Axes cleared trees for gardens.', note: 'Before farming took over.', more: 'Stone tools change shape over time, so a tool\'s style can date a layer like a fingerprint.' },
+    { cls: 's5', depth: '15,000+ years ago', art: '🔪', what: 'Thin stone blades in a layer of sand', small: 'Found at Cactus Hill. Among the oldest human tools ever found in the Americas.', note: 'People were here before the Ice Age ended.', more: 'Cactus Hill\'s deepest blades are older than the "Clovis" points once thought to be America\'s first. They rewrote the timeline.' },
+  ];
+  const strata = $('strata'); let next = 0;
+  LAYERS.forEach((L, i) => {
+    const b = document.createElement('button'); b.className = 'stratum ' + L.cls; b.innerHTML = `<span class="depth">${L.depth}</span><span class="art">${L.art}</span><span class="what">${L.what}<small>${L.small}</small></span>`;
+    b.addEventListener('click', () => {
+      if (i > next) { VA.toast('Dig from the top down: click the layer above first.', 'info'); return; }
+      if (!b.classList.contains('found')) { b.classList.add('found'); next = Math.max(next, i + 1); VA.sfx.snap(); }
+      $('dig-note').innerHTML = `${L.note}<small>${L.more}</small>`;
+      if (next === LAYERS.length && i === LAYERS.length - 1) { VA.confetti(); VA.toast('You reached the bottom: 15,000 years of Virginians.', 'good', 3600); }
+    });
+    strata.appendChild(b);
+  });
+  const pins = ['place-werowocomoco', 'place-cactus-hill'].map(VA.get);
+  const map = VA.mountMap($('map-dig'), { interactive: ['pin'], layers: { county: false, minorRivers: false }, pins, labels: { regions: false, water: true, states: false }, onSelect: (ref, node) => showCard(node, $('card-dig'), map) });
+  homes.dig = n => { showCard(n, $('card-dig'), map); $('dig').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 2. THREE LANGUAGES ═══════ */
+(() => {
+  const found = new Set(); const list = $('group-list');
+  list.innerHTML = OVERLAYS.map(o => `<li data-id="${o.id}"><span class="tick"></span>${o.name}</li>`).join('');
+  const map = VA.mountMap($('map-groups'), { interactive: ['overlay'], overlays: OVERLAYS, layers: { county: false, minorRivers: false, water: true }, labels: { regions: false, water: true, states: false },
+    onSelect: (ref, node) => { showCard(node, $('card-groups'), map); if (!found.has(ref.id)) { found.add(ref.id); const li = list.querySelector(`[data-id="${ref.id}"]`); li.classList.add('done'); li.querySelector('.tick').textContent = '✓'; VA.sfx.snap(); if (found.size === 3) { VA.confetti(); VA.toast('All three: Algonquian by the coast, Siouan in the hills, Iroquoian in the mountains and the south.', 'good', 4200); } } } });
+  homes.groups = n => { showCard(n, $('card-groups'), map); $('groups').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 3. SEASONS ═══════ */
+(() => {
+  const S = {
+    spring: { t: '🌱 Spring: the rivers come alive', items: ['Fish crowd the rivers to spawn. People build <b>weirs</b> (fences of sticks in the water) to trap them.', 'Gardens are cleared and planted: corn first, then beans that climb the corn, then squash that shades the ground. The <b>three sisters</b>.', 'Food from last fall is running low, so spring fishing matters.'] },
+    summer: { t: '☀️ Summer: growing and gathering', items: ['Crops grow in the river-bottom fields. Children guard them from crows and deer.', 'People gather berries, nuts, and roots from the forest and dig for tuckahoe (a starchy root) in the marshes.', 'Oysters and crabs from the Bay; travel by dugout canoe between towns.'] },
+    fall: { t: '🍂 Fall: harvest and hunt', items: ['The corn harvest is the biggest event of the year, with feasts and ceremonies.', 'Hunting season begins. Deer give meat, hide for clothing, bone for tools, and sinew for string.', 'Food is dried and stored for winter.'] },
+    winter: { t: '❄️ Winter: hunting camps and making things', items: ['Whole towns may move to hunting camps in the forest.', 'People repair <b>yehakins</b> (houses of bent saplings covered in bark or reed mats), make pots, weave mats, and shape new stone tools.', 'Stories are told around the fire. The year turns.'] },
+  };
+  const card = $('season-card');
+  function show(k) { card.innerHTML = `<h3>${S[k].t}</h3><ul>${S[k].items.map(i => `<li>${i}</li>`).join('')}</ul>`; document.querySelectorAll('.season').forEach(b => b.classList.toggle('active', b.dataset.season === k)); }
+  document.querySelectorAll('.season').forEach(b => b.addEventListener('click', () => { show(b.dataset.season); VA.sfx.click(); }));
+  show('spring');
+})();
+
+/* ═══════ 4. NATIONS TODAY ═══════ */
+(() => {
+  const tribes = VA.find(n => n.type === 'tribe' && n.lat != null);
+  const map = VA.mountMap($('map-today'), { interactive: ['pin'], layers: { county: true, minorRivers: false }, pins: tribes, labels: { regions: false, water: true, states: false }, onSelect: (ref, node) => showCard(node, $('card-today'), map) });
+  const chips = $('tribe-chips');
+  chips.innerHTML = tribes.map(t => `<button class="va-chip ${t.recognized.startsWith('federal') ? 'fed' : ''}" data-node="${t.id}">${t.emoji} ${t.name}</button>`).join('');
+  document.querySelectorAll('[data-node]').forEach(b => b.addEventListener('click', () => { showCard(VA.get(b.dataset.node), $('card-today'), map); VA.sfx.click(); }));
+  homes.today = n => { showCard(n, $('card-today'), map); $('today').scrollIntoView({ behavior: 'smooth' }); };
+})();
+
+/* ═══════ 5. QUIZ ═══════ */
+(() => {
+  const map = VA.mountMap($('map-quiz'), { interactive: ['overlay'], overlays: OVERLAYS, layers: { county: false, minorRivers: false, pins: false }, labels: { regions: false, water: false, states: false }, onSelect: ref => q && q.handle(ref) });
+  map.svg.querySelectorAll('.va-overlay').forEach(p => p.style.fill = 'rgba(241,233,216,.28)');  // hide the colors: it's a test
+  const prompts = [
+    { ask: 'Click where the <b>Algonquian</b> speakers lived.', ref: { kind: 'overlay', id: 'algonquian' }, why: 'The Tidewater, along the rivers and the Bay.' },
+    { ask: 'Click where the <b>Siouan</b> speakers lived.', ref: { kind: 'overlay', id: 'siouan' }, why: 'The Piedmont, the rolling hills west of the Fall Line.' },
+    { ask: 'Click where the <b>Iroquoian</b> speakers lived.', ref: { kind: 'overlay', id: 'iroquoian' }, why: 'The far southwest mountains, and the Nottoway country in the south.' },
+    { ask: 'Click the language area of the <b>Powhatan</b> people.', ref: { kind: 'overlay', id: 'algonquian' }, why: 'Powhatan\'s people spoke an Algonquian language in the Tidewater.' },
+    { ask: 'Click the language area of the <b>Monacan</b> people.', ref: { kind: 'overlay', id: 'siouan' }, why: 'The Monacan are Siouan-descended people of the Piedmont.' },
+    { ask: 'Click the language area of the <b>Cherokee</b> and <b>Nottoway</b>.', ref: { kind: 'overlay', id: 'iroquoian' }, why: 'Both spoke Iroquoian languages.' },
+  ];
+  const E = { ask: $('q-ask'), feedback: $('q-feedback'), score: $('q-score'), progress: $('q-progress') };
+  let q;
+  function start() { E.score.textContent = 0; q = VA.quiz(map, { prompts, el: E, onDone: (s, t) => { E.feedback.className = 'va-feedback good'; E.feedback.innerHTML = s === t ? `🏆 <b>Perfect: ${s} of ${t}.</b>` : `🎉 <b>${s} of ${t}.</b> Press Start over to try again.`; if (s >= t - 1) VA.confetti(); } }); }
+  $('q-restart').addEventListener('click', () => { start(); VA.sfx.click(); });
+  start();
+})();
+</script>
+</body>
+</html>

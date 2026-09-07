@@ -1,0 +1,127 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Virginia Explorer — shared component styles.
+   Pages set the palette in :root; these rules only use the tokens below.
+     --va-paper   page ground          --va-ink      text
+     --va-ink-2   secondary text       --va-line     hairlines
+     --va-blue    primary accent       --va-red      highlight / alert accent
+     --va-card    card background      --va-water    water fill
+     --va-r-coastal / --va-r-piedmont / --va-r-blueridge / --va-r-valley / --va-r-plateau   region fills
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ---------- map ---------- */
+svg.va-map{width:100%; height:auto; display:block; background:var(--va-sea, #E6F0F6); border-radius:12px; font-family:var(--font-body, system-ui, sans-serif)}
+.va-layer.va-hidden{display:none}
+.va-state{fill:var(--va-neighbor, #ECE8DD); stroke:#fff; stroke-width:1.2}
+.va-far{fill:var(--va-far, #F1EEE6)}
+.va-region{stroke:#fff; stroke-width:.8; transition:filter .15s, opacity .2s}
+.va-region[data-region="coastal"]{fill:var(--va-r-coastal, #8CC1A8)}
+.va-region[data-region="piedmont"]{fill:var(--va-r-piedmont, #E2C078)}
+.va-region[data-region="blueridge"]{fill:var(--va-r-blueridge, #5F8F6A)}
+.va-region[data-region="valley"]{fill:var(--va-r-valley, #A9B7CF)}
+.va-region[data-region="plateau"]{fill:var(--va-r-plateau, #B08A66)}
+.va-outline{fill:none; stroke:var(--va-blue, #1F3A5F); stroke-width:1.6; pointer-events:none}
+.va-river{fill:none; stroke:var(--va-water-deep, #3F7CA8); stroke-linecap:round; stroke-linejoin:round; transition:stroke .15s, opacity .2s}
+.va-river-key{stroke-width:2.6} .va-river-major{stroke-width:1.5} .va-river-minor{stroke-width:.9; opacity:.6} .va-river-context{stroke-width:.9; opacity:.45}
+.va-water{fill:var(--va-water, #7FB3D5); stroke:var(--va-water-deep, #3F7CA8); stroke-width:.6}
+.va-water[data-feature="Swamp or Marsh"]{fill:#9DBB9A; stroke:#5F8F6A; stroke-dasharray:3 2}
+.va-county{fill:none; stroke:var(--va-red, #B3261E); stroke-width:1.6; stroke-dasharray:4 3; pointer-events:none}
+.va-fall-line{fill:none; stroke:var(--va-red, #B3261E); stroke-width:2.4; stroke-dasharray:7 5; stroke-linecap:round; pointer-events:none}
+.va-label{font-size:13px; font-weight:700; fill:var(--va-ink, #1B2430); paint-order:stroke; stroke:#fff; stroke-width:3px; stroke-linejoin:round; text-anchor:middle; pointer-events:none}
+.va-label-state{font-size:14px; letter-spacing:.12em; fill:var(--va-ink-2, #4E5A68); font-weight:600}
+.va-label-water{fill:var(--va-blue, #1F3A5F); font-style:italic; font-size:12px; font-weight:600}
+.va-pin-dot{fill:var(--va-red, #B3261E); stroke:#fff; stroke-width:1.5}
+.va-pin-label{font-size:11px; font-weight:600; fill:var(--va-ink, #1B2430); paint-order:stroke; stroke:#fff; stroke-width:3px; pointer-events:none}
+.va-hit{cursor:pointer; outline:none}
+.va-hit:focus-visible{filter:drop-shadow(0 0 4px var(--va-red, #B3261E))}
+.va-region.va-hit:hover, .va-region.va-hover{filter:brightness(1.1) saturate(1.25)}
+.va-state.va-hit:hover, .va-state.va-hover{fill:var(--va-neighbor-hover, #D9D2BF)}
+.va-river.va-hit:hover, .va-river.va-hover{stroke:var(--va-red, #B3261E)}
+.va-water.va-hit:hover, .va-water.va-hover{stroke:var(--va-red, #B3261E); stroke-width:1.6}
+.va-pin.va-hit:hover .va-pin-dot, .va-pin.va-hover .va-pin-dot{r:7}
+/* highlight + dim */
+.va-map.va-dim .va-region:not(.va-lit), .va-map.va-dim .va-state:not(.va-lit){opacity:.45}
+.va-map.va-dim .va-river:not(.va-lit){opacity:.35}
+.va-map.va-dim .va-water:not(.va-lit){opacity:.5}
+.va-region.va-lit{filter:brightness(1.12) saturate(1.3); stroke:var(--va-ink, #1B2430); stroke-width:1.6}
+.va-state.va-lit{fill:var(--va-neighbor-hover, #D9D2BF); stroke:var(--va-red, #B3261E); stroke-width:2}
+.va-river.va-lit{stroke:var(--va-red, #B3261E); stroke-width:3.4}
+.va-water.va-lit{stroke:var(--va-red, #B3261E); stroke-width:2}
+.va-pin.va-lit .va-pin-dot{r:8; fill:var(--va-blue, #1F3A5F)}
+@keyframes va-pulse{0%{filter:brightness(1)}30%{filter:brightness(1.5)}100%{filter:brightness(1)}}
+.va-pulse{animation:va-pulse 1.2s ease-out 1}
+.va-fly-dot{fill:#fff; stroke:var(--va-red, #B3261E); stroke-width:3}
+.va-fly-trail{fill:none; stroke:var(--va-red, #B3261E); stroke-width:4; stroke-linecap:round; opacity:.8}
+.va-inert{pointer-events:none}
+
+/* ---------- atlas layout: map + side panel ---------- */
+.va-atlas{display:grid; grid-template-columns:minmax(0,1.5fr) minmax(280px,.9fr); gap:18px; align-items:start}
+@media (max-width:900px){ .va-atlas{grid-template-columns:1fr} }
+.va-stage{background:var(--va-card, #fff); border:1px solid var(--va-line, #D8D3C6); border-radius:14px; padding:10px; box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.va-stage-tools{display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:8px 4px 2px}
+.va-side{position:sticky; top:84px; display:flex; flex-direction:column; gap:12px}
+@media (max-width:900px){ .va-side{position:static} }
+
+/* ---------- card ---------- */
+.va-card{background:var(--va-card, #fff); border:1px solid var(--va-line, #D8D3C6); border-radius:14px; padding:18px 20px; box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.va-card-top{display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:6px}
+.va-kind{font-family:var(--font-display, ui-rounded, system-ui, sans-serif); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--va-blue, #1F3A5F); background:color-mix(in srgb, var(--va-blue, #1F3A5F) 12%, transparent); padding:4px 9px; border-radius:999px}
+.va-tagline{font-size:12.5px; color:var(--va-ink-2, #4E5A68); font-style:italic; text-align:right}
+.va-card-title{font-family:var(--font-display, ui-rounded, system-ui, sans-serif); font-size:24px; line-height:1.1; margin:4px 0 8px; color:var(--va-ink, #1B2430)}
+.va-blurb{font-size:15.5px; line-height:1.55; margin-bottom:12px}
+.va-card-body p{font-size:14.5px; line-height:1.6; margin:0 0 10px}
+.va-card strong{color:var(--va-blue, #1F3A5F)}
+.va-card-img{margin:0 0 12px; border-radius:10px; overflow:hidden; background:var(--va-line, #D8D3C6)}
+.va-card-img img{display:block; width:100%; height:auto}
+.va-card-img figcaption{font-size:12px; color:var(--va-ink-2, #4E5A68); padding:6px 10px; background:color-mix(in srgb, var(--va-line, #D8D3C6) 40%, transparent)}
+.va-credit{opacity:.75}
+.va-card-noimg{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; height:96px; margin:0 0 12px; border-radius:10px; border:1px dashed var(--va-line, #D8D3C6); color:var(--va-ink-2, #4E5A68); background:color-mix(in srgb, var(--va-line, #D8D3C6) 25%, transparent)}
+.va-card-noimg span{font-size:34px; line-height:1} .va-card-noimg small{font-size:11px; letter-spacing:.1em; text-transform:uppercase}
+.va-facts{list-style:none; padding:0; margin:6px 0 0; display:grid; gap:6px}
+.va-facts li{font-size:13.5px; line-height:1.45; padding:8px 10px; border-radius:8px; background:color-mix(in srgb, var(--va-blue, #1F3A5F) 7%, transparent)}
+.va-related{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:12px; padding-top:12px; border-top:1px solid var(--va-line, #D8D3C6)}
+.va-related-label{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--va-ink-2, #4E5A68); margin-right:4px}
+.va-chip{font:inherit; font-size:12.5px; font-weight:600; padding:5px 10px; border-radius:999px; border:1px solid var(--va-line, #D8D3C6); background:var(--va-card, #fff); color:var(--va-ink, #1B2430); cursor:pointer}
+.va-chip:hover{border-color:var(--va-blue, #1F3A5F); color:var(--va-blue, #1F3A5F)}
+.va-standards{margin-top:10px; display:flex; gap:6px; flex-wrap:wrap}
+.va-std{font-family:var(--font-mono, ui-monospace, monospace); font-size:11px; padding:2px 7px; border-radius:4px; background:color-mix(in srgb, var(--va-red, #B3261E) 10%, transparent); color:var(--va-red, #B3261E)}
+.va-btn{font:inherit; font-family:var(--font-display, ui-rounded, system-ui, sans-serif); font-weight:700; font-size:14px; padding:10px 16px; border-radius:999px; border:1px solid var(--va-line, #D8D3C6); background:var(--va-card, #fff); color:var(--va-ink, #1B2430); cursor:pointer; transition:transform .15s, background .15s}
+.va-btn:hover{transform:translateY(-2px)}
+.va-btn.primary{background:var(--va-blue, #1F3A5F); color:#fff; border-color:transparent}
+.va-btn.active{background:var(--va-red, #B3261E); color:#fff; border-color:transparent}
+.va-btn[disabled]{opacity:.45; cursor:not-allowed; transform:none}
+.va-show{margin-top:12px}
+.va-empty{padding:20px; color:var(--va-ink-2, #4E5A68); font-size:14.5px; line-height:1.6; border:1px dashed var(--va-line, #D8D3C6); border-radius:14px; background:color-mix(in srgb, var(--va-card, #fff) 60%, transparent)}
+
+/* ---------- index ---------- */
+.va-index{list-style:none; padding:0; margin:0; display:grid; gap:6px}
+.va-index-group{font-family:var(--font-display, ui-rounded, system-ui, sans-serif); font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--va-ink-2, #4E5A68); margin:16px 0 8px}
+.va-index-item{font:inherit; display:flex; gap:10px; align-items:center; width:100%; text-align:left; padding:9px 12px; border-radius:10px; border:1px solid var(--va-line, #D8D3C6); background:var(--va-card, #fff); color:var(--va-ink, #1B2430); cursor:pointer}
+.va-index-item:hover{border-color:var(--va-blue, #1F3A5F)}
+.va-index-item b{display:block; font-size:14.5px} .va-index-item small{display:block; font-size:12px; color:var(--va-ink-2, #4E5A68)}
+.va-index-emoji{font-size:20px; width:28px; text-align:center}
+
+/* ---------- quiz & checklist ---------- */
+.va-ask{font-family:var(--font-display, ui-rounded, system-ui, sans-serif); font-size:22px; line-height:1.2; min-height:56px}
+.va-ask b{color:var(--va-red, #B3261E)}
+.va-feedback{margin-top:10px; padding:10px 14px; border-radius:10px; font-size:14.5px; line-height:1.5; border-left:4px solid var(--va-blue, #1F3A5F); background:color-mix(in srgb, var(--va-blue, #1F3A5F) 7%, transparent); min-height:44px}
+.va-feedback:empty{display:none}
+.va-feedback.good{border-left-color:#2F8F5B; background:rgba(47,143,91,.10)}
+.va-feedback.bad{border-left-color:var(--va-red, #B3261E); background:color-mix(in srgb, var(--va-red, #B3261E) 9%, transparent)}
+.va-score{display:flex; gap:8px; flex-wrap:wrap}
+.va-score span{font-family:var(--font-mono, ui-monospace, monospace); font-size:13px; padding:6px 10px; border-radius:8px; background:color-mix(in srgb, var(--va-line, #D8D3C6) 45%, transparent)}
+.va-score b{color:var(--va-blue, #1F3A5F)}
+.va-checklist{list-style:none; padding:0; margin:0; display:grid; gap:6px}
+.va-checklist li{display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; background:color-mix(in srgb, var(--va-line, #D8D3C6) 35%, transparent); font-size:14px}
+.va-checklist li .tick{width:22px; height:22px; border-radius:999px; border:2px solid var(--va-line, #D8D3C6); display:inline-flex; align-items:center; justify-content:center; font-size:13px; color:#fff}
+.va-checklist li.done{background:rgba(47,143,91,.12)} .va-checklist li.done .tick{background:#2F8F5B; border-color:#2F8F5B}
+/* drag-label game */
+.va-labels{display:flex; flex-wrap:wrap; gap:8px}
+.va-drag{font-family:var(--font-display, ui-rounded, system-ui, sans-serif); font-weight:700; font-size:14px; padding:9px 14px; border-radius:999px; background:var(--va-blue, #1F3A5F); color:#fff; cursor:grab; user-select:none; touch-action:none; box-shadow:0 6px 16px rgba(0,0,0,.18)}
+.va-drag.placed{background:#2F8F5B; cursor:default; opacity:.9}
+.va-drag.dragging{position:fixed; z-index:500; cursor:grabbing; transform:translate(-50%,-50%) scale(1.05); pointer-events:none}
+
+/* ---------- toast ---------- */
+.va-toast{position:fixed; left:50%; top:18px; transform:translate(-50%,-160%); z-index:400; padding:12px 22px; border-radius:999px; background:var(--va-ink, #1B2430); color:#fff; box-shadow:0 12px 40px rgba(0,0,0,.35); font-family:var(--font-display, ui-rounded, system-ui, sans-serif); font-size:15px; font-weight:700; transition:transform .32s cubic-bezier(.4,.2,.2,1); pointer-events:none; max-width:min(92vw,560px); text-align:center}
+.va-toast.show{transform:translate(-50%,0)}
+.va-toast[data-kind="good"]{background:#2F8F5B} .va-toast[data-kind="bad"]{background:var(--va-red, #B3261E)}
+@media (prefers-reduced-motion: reduce){ .va-pulse{animation:none} .va-btn, .va-toast{transition:none} }

@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Virginia Explorer · REDS Hall of Discovery</title>
+<link rel="stylesheet" href="shared/va.css"/>
+<style>
+  /* ═══════ VIRGINIA EXPLORER landing — deep blue field, cardinal accent, dogwood cream, region colors ═══════ */
+  :root{
+    --bg:#0F2A4F; --bg2:#163B6B; --cream:#F4E9D8; --pale:#C9D7EA; --cardinal:#D63A2F; --gold:#E2C078; --green:#8CC1A8; --dogwood:#FFF6EE;
+    --va-paper:#0F2A4F; --va-card:#FFFFFF; --va-ink:#1B2430; --va-ink-2:#4E5A68; --va-line:#D8D3C6; --va-blue:#1F3A5F; --va-red:#B3261E;
+    --va-sea:#E6F0F6; --va-water:#7FB3D5; --va-water-deep:#3F7CA8; --va-neighbor:#ECE8DD; --va-neighbor-hover:#D9D2BF; --va-far:#F1EEE6;
+    --va-r-coastal:#8CC1A8; --va-r-piedmont:#E2C078; --va-r-blueridge:#5F8F6A; --va-r-valley:#A9B7CF; --va-r-plateau:#B08A66;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{font-family:var(--font-body); color:var(--cream); background:var(--bg); overflow-x:hidden; -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(ellipse at 15% 0%, rgba(214,58,47,.20), transparent 50%), radial-gradient(ellipse at 90% 100%, rgba(140,193,168,.16), transparent 50%), linear-gradient(180deg, #0F2A4F, #163B6B 55%, #0B1F3B)}
+  /* faint latitude/longitude lines */
+  body::before{content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.35;
+    background:linear-gradient(rgba(244,233,216,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(244,233,216,.08) 1px, transparent 1px); background-size:72px 72px}
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  .page{position:relative; z-index:1}
+
+  .topbar{display:flex; align-items:center; justify-content:space-between; gap:18px; padding:22px 36px; max-width:1320px; margin:0 auto}
+  .brand-group{display:flex; align-items:center; gap:18px}
+  .back{display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:999px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); font-family:var(--font-display); font-size:13px; transition:transform .15s ease, background .15s ease}
+  .back:hover{transform:translateX(-3px); background:rgba(255,255,255,.14)}
+  .brand{display:flex; align-items:center; gap:14px}
+  .brand .logo{width:54px; height:54px; filter:drop-shadow(0 0 16px rgba(214,58,47,.4))}
+  .brand .eyebrow{font-family:var(--font-mono); font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--pale)}
+  .brand .wordmark{font-family:var(--font-display); font-weight:800; font-size:24px; line-height:1}
+  .school-pill{display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:999px; background:rgba(244,233,216,.12); border:1px solid rgba(255,255,255,.2); font-family:var(--font-display); font-size:13px}
+  .school-pill .dot{width:8px;height:8px;border-radius:999px;background:var(--gold);box-shadow:0 0 14px var(--gold)}
+
+  .hero{max-width:1320px; margin:0 auto; padding:50px 36px 30px; display:grid; grid-template-columns:1fr 1.1fr; gap:36px; align-items:center}
+  @media (max-width:980px){ .hero{grid-template-columns:1fr} }
+  .hero .eyebrow{font-family:var(--font-mono); color:var(--gold); letter-spacing:.34em; font-size:12px; text-transform:uppercase; margin-bottom:18px}
+  .hero h1{font-size:clamp(50px, 7.5vw, 110px); letter-spacing:-.02em; line-height:.92; margin-bottom:18px; color:var(--dogwood)}
+  .hero h1 span{display:block; color:var(--cardinal); font-size:.62em; letter-spacing:.02em}
+  .hero .tag{font-size:clamp(17px,1.9vw,21px); line-height:1.55; max-width:52ch; color:var(--pale); margin-bottom:26px}
+  .hero .tag strong{color:var(--dogwood)}
+  .cta-row{display:flex; gap:12px; flex-wrap:wrap}
+  .btn{display:inline-flex; align-items:center; gap:10px; padding:15px 26px; border-radius:999px; font-family:var(--font-display); font-size:16px; font-weight:700; transition:transform .15s ease, box-shadow .15s ease}
+  .btn.primary{background:var(--cardinal); color:#fff; box-shadow:0 14px 40px rgba(214,58,47,.4)}
+  .btn.primary:hover{transform:translateY(-3px); box-shadow:0 20px 55px rgba(214,58,47,.55)}
+  .btn.ghost{background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.22)}
+  .btn.ghost:hover{background:rgba(255,255,255,.14); transform:translateY(-2px)}
+  .hero-map{background:#fff; border-radius:18px; padding:10px; box-shadow:0 30px 80px rgba(0,0,0,.45)}
+  .hero-map .hint{font-family:var(--font-mono); font-size:11px; color:#4E5A68; padding:6px 6px 2px; letter-spacing:.06em}
+  .hero-readout{font-family:var(--font-display); font-size:16px; color:#1B2430; padding:2px 6px 6px; min-height:26px}
+
+  .chapters{max-width:1320px; margin:0 auto; padding:30px 36px 60px}
+  .chapters .hdr{margin-bottom:26px}
+  .chapters h3{font-family:var(--font-mono); font-size:12px; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); margin-bottom:10px}
+  .chapters h2{font-size:clamp(30px,4vw,50px); margin-bottom:10px; color:var(--dogwood)}
+  .chapters .tagline{color:var(--pale); font-size:16px; max-width:70ch}
+  .era{margin-top:34px}
+  .era-hdr{display:flex; align-items:baseline; gap:14px; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,.12)}
+  .era-hdr h4{font-size:18px; color:var(--dogwood)}
+  .era-hdr span{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--pale)}
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+  @media (max-width:980px){ .grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:560px){ .grid{grid-template-columns:1fr} }
+  .card{position:relative; overflow:hidden; border-radius:18px; padding:20px 20px 18px; min-height:210px; color:#1B2430; background:#fff; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 18px 50px rgba(0,0,0,.35); transition:transform .2s ease, box-shadow .2s ease}
+  .card:hover{transform:translateY(-6px); box-shadow:0 30px 70px rgba(0,0,0,.5)}
+  .card .num{font-family:var(--font-mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#4E5A68}
+  .card h4{font-size:22px; margin-top:6px; line-height:1.1}
+  .card p{margin-top:8px; font-size:13.5px; line-height:1.5; color:#4E5A68}
+  .card .std{margin-top:10px; display:flex; gap:5px; flex-wrap:wrap}
+  .card .std span{font-family:var(--font-mono); font-size:10.5px; padding:2px 6px; border-radius:4px; background:rgba(179,38,30,.1); color:#B3261E}
+  .card .foot{display:flex; justify-content:space-between; align-items:center; margin-top:14px; font-family:var(--font-display); font-weight:700; font-size:14px; color:var(--va-blue)}
+  .card .bg{position:absolute; right:-14px; bottom:-18px; font-size:110px; opacity:.12; line-height:1; pointer-events:none}
+  .card.soon{opacity:.72; background:#EEF2F6}
+  .card.soon .foot{color:#4E5A68}
+  .card.open{border:2px solid var(--cardinal)}
+  .index-row{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:34px}
+  @media (max-width:980px){ .index-row{grid-template-columns:repeat(2,1fr)} }
+  .index-card{border-radius:14px; padding:16px 18px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); display:flex; gap:12px; align-items:center; transition:background .15s}
+  .index-card:hover{background:rgba(255,255,255,.14)}
+  .index-card .ic{font-size:28px}
+  .index-card b{display:block; font-family:var(--font-display); font-size:16px; color:var(--dogwood)}
+  .index-card small{color:var(--pale); font-size:12.5px}
+
+  .teacher{max-width:1320px; margin:0 auto 40px; padding:0 36px}
+  .teacher-card{padding:28px 32px; border-radius:18px; background:rgba(244,233,216,.06); border:1px dashed rgba(255,255,255,.22); display:flex; gap:22px; align-items:flex-start; flex-wrap:wrap}
+  .teacher-card .icon{font-size:44px; line-height:1}
+  .teacher-card h3{font-size:20px; margin-bottom:8px; color:var(--gold)}
+  .teacher-card p{font-size:14.5px; line-height:1.6; color:var(--pale); max-width:86ch}
+  .teacher-card .tbl{overflow-x:auto; margin-top:12px}
+  .teacher-card table{border-collapse:collapse; font-size:13px; min-width:520px}
+  .teacher-card th, .teacher-card td{text-align:left; padding:6px 10px; border-bottom:1px solid rgba(255,255,255,.12); vertical-align:top}
+  .teacher-card th{font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold)}
+  .teacher-card td b{color:var(--dogwood)}
+  footer{padding:36px; max-width:1320px; margin:0 auto; border-top:1px solid rgba(255,255,255,.1); display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:center; font-size:13px; color:var(--pale)}
+  footer .heart{color:var(--cardinal)}
+  footer .school{font-family:var(--font-display); letter-spacing:.08em; color:var(--dogwood)}
+  @media (max-width:640px){ .topbar{padding:16px 18px} .hero{padding:30px 18px 20px} .chapters,.teacher{padding-left:18px;padding-right:18px} }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="topbar">
+    <div class="brand-group">
+      <a class="back" href="../../index.html">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 5l-7 7 7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Hall of Discovery
+      </a>
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="60" height="60" rx="16" fill="#F4E9D8"/>
+          <path d="M12 26 L24 18 L36 24 L52 20 L50 34 L40 46 L30 40 L18 42 Z" fill="#8CC1A8" stroke="#1F3A5F" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M18 30 L30 34 L42 30" stroke="#3F7CA8" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <circle cx="34" cy="33" r="4" fill="#D63A2F" stroke="#fff" stroke-width="1.5"/>
+        </svg>
+        <div>
+          <div class="eyebrow">REDS Hall of Discovery · Social Studies Wing</div>
+          <div class="wordmark">Virginia Explorer</div>
+        </div>
+      </div>
+    </div>
+    <div class="school-pill"><span class="dot"></span>Virginia Studies · Grades 4–5</div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Exhibit 04 · A map you can click through</div>
+      <h1>Virginia <span>Explorer</span></h1>
+      <p class="tag">Every story in Virginia's history happened <strong>somewhere</strong>. Start with the land: five regions, four rivers, one Bay. Then follow the people who lived here, from the first nations to today, with every place pinned <strong>where it really is</strong>.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="chapters/lay-of-the-land.html">🗺️ Start with Chapter 1</a>
+        <a class="btn ghost" href="explore.html">📍 Browse places</a>
+      </div>
+    </div>
+    <div class="hero-map">
+      <div class="hint">HOVER THE MAP · CLICK A REGION OR RIVER</div>
+      <svg id="hero-map"></svg>
+      <div class="hero-readout" id="hero-readout">Five regions, from the Coastal Plain to the Appalachian Plateau.</div>
+    </div>
+  </section>
+
+  <section class="chapters" id="chapters">
+    <div class="hdr">
+      <h3>The Chapters</h3>
+      <h2>Eleven chapters. One map.</h2>
+      <p class="tagline">Chapters follow the order of Virginia's story. Each one adds a layer to the same map. Chapter 1 is open; the rest are being built.</p>
+    </div>
+
+    <div class="era">
+      <div class="era-hdr"><h4>The Land</h4><span>Geography</span></div>
+      <div class="grid">
+        <a class="card open" href="chapters/lay-of-the-land.html">
+          <div><div class="num">Chapter 1 · Open</div><h4>The Lay of the Land</h4><p>Five regions, four rivers, the Bay, the swamp, and six neighbors. Find them, label them, follow a river, and test yourself on a blank map.</p><div class="std"><span>VS.1a</span><span>VS.1b</span><span>VS.1c</span></div></div>
+          <div class="foot"><span>Enter →</span></div><div class="bg">🗺️</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="era">
+      <div class="era-hdr"><h4>Before 1607</h4><span>Virginia's Indigenous People</span></div>
+      <div class="grid">
+        <div class="card soon"><div><div class="num">Chapter 2 · Next up</div><h4>First Peoples</h4><p>Three language groups, Werowocomoco and Cactus Hill, life around 1600, and the nations that are here today.</p><div class="std"><span>VS.2a–e</span></div></div><div class="foot"><span>Being built</span></div><div class="bg">🏹</div></div>
+      </div>
+    </div>
+
+    <div class="era">
+      <div class="era-hdr"><h4>1607 – 1781</h4><span>Colony and Revolution</span></div>
+      <div class="grid">
+        <div class="card soon"><div><div class="num">Chapter 3</div><h4>Jamestown</h4><p>Why here? The 1606 charter, the hard years, tobacco, and 1619.</p><div class="std"><span>VS.3a–g</span></div></div><div class="foot"><span>Coming</span></div><div class="bg">⛵</div></div>
+        <div class="card soon"><div><div class="num">Chapter 4</div><h4>Life in the Colony</h4><p>Who lived here, how they worked, the laws they made, and why the capital moved to Williamsburg.</p><div class="std"><span>VS.4a–f</span></div></div><div class="foot"><span>Coming</span></div><div class="bg">🌾</div></div>
+        <div class="card soon"><div><div class="num">Chapter 5</div><h4>Virginia Declares</h4><p>Virginians in the Revolution, the documents that inspired a nation, and Yorktown.</p><div class="std"><span>VS.5a–d</span><span>VS.6a–c</span></div></div><div class="foot"><span>Coming</span></div><div class="bg">📜</div></div>
+      </div>
+    </div>
+
+    <div class="era">
+      <div class="era-hdr"><h4>1781 – 1877</h4><span>A growing nation, a divided one</span></div>
+      <div class="grid">
+        <div class="card soon"><div><div class="num">Chapter 6</div><h4>A Growing Nation</h4><p>Washington, Madison, and Henry; moving west; Nat Turner's Rebellion.</p><div class="std"><span>VS.6a</span><span>VS.6d–e</span></div></div><div class="foot"><span>Coming</span></div><div class="bg">🐎</div></div>
+        <div class="card soon"><div><div class="num">Chapter 7</div><h4>A House Divided</h4><p>Harpers Ferry, secession, the battles on Virginia soil, and the people who lived through them.</p><div class="std"><span>VS.7a–g</span></div></div><div class="foot"><span>Coming</span></div><div class="bg">⚔️</div></div>
+        <div class="card soon"><div><div class="num">Chapter 8</div><h4>Rebuilding and Rails</h4><p>Reconstruction, Freedmen's schools, Jim Crow, railroads, and growing cities.</p><div class="std"><span>VS.8a–f</span><span>VS.9a–b</span></div></div><div class="foot"><span>Coming</span></div><div class="bg">🚂</div></div>
+      </div>
+    </div>
+
+    <div class="era">
+      <div class="era-hdr"><h4>1900 – Today</h4><span>Modern Virginia</span></div>
+      <div class="grid">
+        <div class="card soon"><div><div class="num">Chapter 9</div><h4>Virginia in the World</h4><p>Two world wars, Massive Resistance, and the Virginians who changed civil rights.</p><div class="std"><span>VS.10a–b</span><span>VS.11a–b</span></div></div><div class="foot"><span>Coming</span></div><div class="bg">✊</div></div>
+        <div class="card soon"><div><div class="num">Chapter 10</div><h4>Mother of Presidents</h4><p>Eight presidents, where they were born, and where they lived.</p><div class="std"><span>VS.12</span></div></div><div class="foot"><span>Coming</span></div><div class="bg">🎩</div></div>
+        <div class="card soon"><div><div class="num">Chapter 11</div><h4>Virginia Today</h4><p>What each region makes, and how Virginians reach the world.</p><div class="std"><span>VS.13a–b</span></div></div><div class="foot"><span>Coming</span></div><div class="bg">🌐</div></div>
+      </div>
+    </div>
+
+    <div class="index-row">
+      <a class="index-card" href="explore.html#places"><span class="ic">📍</span><div><b>Places</b><small>Every place on the map, A to Z</small></div></a>
+      <a class="index-card" href="explore.html#people"><span class="ic">👤</span><div><b>People</b><small>Virginians you should know</small></div></a>
+      <a class="index-card" href="explore.html#events"><span class="ic">📅</span><div><b>Events &amp; timeline</b><small>The story in order</small></div></a>
+      <a class="index-card" href="explore.html#standards"><span class="ic">🍎</span><div><b>Standards index</b><small>For teachers: VS.1 to VS.13</small></div></a>
+    </div>
+  </section>
+
+  <section class="teacher">
+    <div class="teacher-card">
+      <div class="icon">🍎</div>
+      <div>
+        <h3>For teachers</h3>
+        <p>Virginia Explorer follows the <strong>2023 Virginia Studies Standards of Learning</strong> (VS.1–VS.13) in chronological order. It is a reference and exploration tool, not an assessment: nothing is graded or saved. The only quizzes are geography self-checks (regions, rivers, bordering states, and, in Chapter 2, the Indigenous language groups). The map is generated from U.S. Geological Survey and U.S. Census Bureau data. Images are public domain and credited on each card.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Standard</th><th>Where it lives</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><b>VS.1a–c</b> Physical geography</td><td>Chapter 1: The Lay of the Land</td><td>Open</td></tr>
+            <tr><td><b>VS.2a–e</b> Indigenous nations</td><td>Chapter 2: First Peoples</td><td>Being built</td></tr>
+            <tr><td><b>VS.3–VS.6c</b> Jamestown to the Revolution</td><td>Chapters 3–5</td><td>Planned</td></tr>
+            <tr><td><b>VS.6d–VS.9</b> Growth, Civil War, Reconstruction</td><td>Chapters 6–8</td><td>Planned</td></tr>
+            <tr><td><b>VS.10–VS.13</b> 1900 to today</td><td>Chapters 9–11</td><td>Planned</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>
+      <span class="school">REDEEMER EPISCOPAL DAY SCHOOL</span>
+      <div style="margin-top:4px">REDS Hall of Discovery · Virginia Explorer</div>
+    </div>
+    <div>Made with <span class="heart">♥</span> for the students of Redeemer Episcopal Day School</div>
+  </footer>
+</div>
+
+<script src="shared/va-map.js"></script>
+<script src="shared/va-core.js"></script>
+<script src="content/geography.js"></script>
+<script>
+(() => {
+  const readout = document.getElementById('hero-readout');
+  const map = VA.mountMap(document.getElementById('hero-map'), {
+    interactive: ['region', 'river', 'state', 'water'], layers: { county: false, minorRivers: false, fallLine: false },
+    labels: { regions: false, water: true, states: true },
+    onHover: ref => { if (ref) readout.textContent = ref.name + (VA.get(ref.nodeId || '') ? ' — ' + VA.get(ref.nodeId).tagline : ''); },
+    onSelect: (ref, node) => { readout.textContent = node ? node.emoji + ' ' + node.name + ' — ' + node.tagline : ref.name; map.highlight(ref); VA.sfx.click(); },
+  });
+})();
+</script>
+</body>
+</html>

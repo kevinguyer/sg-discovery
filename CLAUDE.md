@@ -33,9 +33,16 @@ projects/
     shared/slicer-core.js          geometry + draggable/sliceable board engine (window.SlicerCore)
     shared/slicer.css              toast, tool buttons, readouts, answer rows
     README.md                      engine API + unit anatomy
-  virginia-explorer/               Social Studies wing (in progress; see docs/PRD-virginia-explorer.md)
-    map-preview.html               review page for the generated map
+  virginia-explorer/               Social Studies wing (Chapter 1 open; see docs/PRD-virginia-explorer.md)
+    index.html                     landing: hero map, chapter cards by era, teacher panel
+    explore.html                   index of every node: Places / People / Events tabs + Standards table
+    chapters/*.html                one page per chapter (lay-of-the-land.html = Chapter 1)
+    content/*.js                   content nodes, one file per topic (geography.js …); VA.add([...])
     shared/va-map.js               GENERATED map data (window.VA_MAP) — never hand-edit
+    shared/va-core.js              engine: content registry, mountMap, cards, index, quiz, feedback (window.VA)
+    shared/va.css                  map styling, atlas layout, cards, quiz, toast
+    assets/img/ + assets/CREDITS.md  public-domain images with a credit row each
+    map-preview.html               plain review page for the generated map
     tools/build-map.py             regenerates va-map.js from public-domain GIS data
     tools/SOURCES.md               where the data comes from and how to re-run the build
 .claude/launch.json                `python -m http.server 8765` for the Claude Code browser preview

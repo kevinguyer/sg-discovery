@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Explore · Virginia Explorer · REDS Hall of Discovery</title>
+<link rel="stylesheet" href="shared/va.css"/>
+<style>
+  /* ═══════ EXPLORE — the index: people, places, events, standards. Card-catalog feel on atlas paper. ═══════ */
+  :root{
+    --va-paper:#F7F5EE; --va-card:#FFFFFF; --va-ink:#1B2430; --va-ink-2:#4E5A68; --va-line:#D8D3C6;
+    --va-blue:#1F3A5F; --va-red:#B3261E; --va-sea:#E6F0F6; --va-water:#7FB3D5; --va-water-deep:#3F7CA8;
+    --va-neighbor:#ECE8DD; --va-neighbor-hover:#D9D2BF; --va-far:#F1EEE6;
+    --va-r-coastal:#8CC1A8; --va-r-piedmont:#E2C078; --va-r-blueridge:#5F8F6A; --va-r-valley:#A9B7CF; --va-r-plateau:#B08A66;
+    --font-display: ui-rounded, 'Arial Rounded MT Bold', 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-body); background:var(--va-paper); color:var(--va-ink); min-height:100vh; line-height:1.5; -webkit-font-smoothing:antialiased}
+  a{color:inherit; text-decoration:none}
+  h1,h2,h3{font-family:var(--font-display); font-weight:800; line-height:1.05}
+  button{font:inherit}
+  .topbar{position:sticky; top:0; z-index:20; background:rgba(247,245,238,.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--va-line)}
+  .topbar-inner{max-width:1280px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px}
+  .back{display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:999px; background:#fff; border:1px solid var(--va-line); font-family:var(--font-display); font-size:13px}
+  .wordmark{font-family:var(--font-display); font-weight:800; font-size:18px}
+  .wordmark span{color:var(--va-red); font-weight:600}
+  .wrap{max-width:1280px; margin:0 auto; padding:34px 24px 60px}
+  h1{font-size:clamp(32px,4.5vw,52px); color:var(--va-blue); margin-bottom:8px}
+  .lead{color:var(--va-ink-2); font-size:16px; max-width:70ch; margin-bottom:22px}
+  .tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px}
+  .tab{font-family:var(--font-display); font-weight:700; font-size:14px; padding:10px 16px; border-radius:999px; border:1px solid var(--va-line); background:#fff; cursor:pointer; color:var(--va-ink)}
+  .tab.active{background:var(--va-blue); color:#fff; border-color:transparent}
+  .tab small{font-family:var(--font-mono); font-weight:400; opacity:.75; margin-left:6px}
+  .search{width:100%; max-width:420px; padding:10px 14px; border-radius:10px; border:1px solid var(--va-line); font:inherit; font-size:15px; margin-bottom:16px; background:#fff}
+  .layout{display:grid; grid-template-columns:minmax(260px,.9fr) minmax(0,1.4fr); gap:18px; align-items:start}
+  @media (max-width:900px){ .layout{grid-template-columns:1fr} }
+  .list{background:#fff; border:1px solid var(--va-line); border-radius:14px; padding:12px; max-height:70vh; overflow:auto}
+  .detail{position:sticky; top:84px; display:grid; gap:12px}
+  @media (max-width:900px){ .detail{position:static} }
+  .mapbox{background:#fff; border:1px solid var(--va-line); border-radius:14px; padding:8px}
+  .std-table{width:100%; border-collapse:collapse; font-size:14px; background:#fff; border:1px solid var(--va-line); border-radius:14px; overflow:hidden}
+  .std-table th,.std-table td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--va-line); vertical-align:top}
+  .std-table th{font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--va-ink-2); background:var(--va-paper)}
+  .std-table td.code{font-family:var(--font-mono); color:var(--va-red); white-space:nowrap}
+  .std-table .chips{display:flex; flex-wrap:wrap; gap:5px}
+  .hidden{display:none}
+  footer{max-width:1280px; margin:0 auto; padding:24px; border-top:1px solid var(--va-line); font-size:13px; color:var(--va-ink-2); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px}
+  footer .heart{color:var(--va-red)}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+  <div style="display:flex; align-items:center; gap:14px">
+    <a class="back" href="index.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 5l-7 7 7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> All chapters</a>
+    <div class="wordmark">Virginia Explorer <span>· Explore</span></div>
+  </div>
+</div></header>
+
+<div class="wrap">
+  <h1>Explore</h1>
+  <p class="lead">Every place, person, and event in Virginia Explorer, in one list. Pick anything and the map shows you where it is. This index grows as chapters are added.</p>
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="places">📍 Places <small id="n-places"></small></button>
+    <button class="tab" data-tab="people">👤 People <small id="n-people"></small></button>
+    <button class="tab" data-tab="events">📅 Events <small id="n-events"></small></button>
+    <button class="tab" data-tab="standards">🍎 Standards</button>
+  </div>
+  <input class="search" id="search" type="search" placeholder="Search by name…" aria-label="Search">
+
+  <div class="layout" id="browse">
+    <div class="list" id="list"></div>
+    <div class="detail">
+      <div class="mapbox"><svg id="map"></svg></div>
+      <div id="card"><div class="va-empty">Pick something from the list to read about it and see it on the map.</div></div>
+    </div>
+  </div>
+
+  <div id="standards" class="hidden">
+    <table class="std-table">
+      <thead><tr><th>Standard</th><th>What students learn</th><th>Content nodes</th></tr></thead>
+      <tbody id="std-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<footer><div>REDS Hall of Discovery · Virginia Explorer · Explore</div><div>Made with <span class="heart">♥</span> for the students of Redeemer Episcopal Day School</div></footer>
+
+<script src="shared/va-map.js"></script>
+<script src="shared/va-core.js"></script>
+<script src="content/geography.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const STD = [
+    ['VS.1a', 'Locate Virginia and its bordering states'], ['VS.1b', 'The five geographic regions'], ['VS.1c', 'Bodies of water and their impact'],
+    ['VS.2a', 'Archaeology and Werowocomoco'], ['VS.2b', 'Algonquian, Siouan, and Iroquoian language groups'], ['VS.2c', 'Diversity among Indigenous nations'], ['VS.2d', 'Indigenous people and their environment c. 1600'], ['VS.2e', 'Indigenous people leading to the present day'],
+    ['VS.3', 'Jamestown: causes and effects'], ['VS.4', 'Life in the Virginia colony'], ['VS.5', 'Virginia in the American Revolution'], ['VS.6', 'The new nation and Virginians'], ['VS.7', 'The Civil War and Virginia'], ['VS.8', 'Reconstruction'], ['VS.9', 'Railroads, industry, cities'], ['VS.10', 'World War I and II'], ['VS.11', 'The Civil Rights Movement in Virginia'], ['VS.12', 'Mother of Presidents'], ['VS.13', 'Virginia in the global economy'],
+  ];
+  const groups = { places: n => ['place', 'region', 'water', 'state', 'tribe'].includes(n.type), people: n => n.type === 'person', events: n => n.type === 'event' };
+  const groupName = { region: 'Regions', water: 'Water', state: 'Neighbors', place: 'Places', tribe: 'Nations', person: 'People', event: 'Events' };
+  let tab = 'places';
+  const map = VA.mountMap($('map'), { interactive: ['region', 'river', 'state', 'water', 'pin'], layers: { county: true, minorRivers: false, fallLine: false }, labels: { regions: false, water: false, states: true },
+    onSelect: (ref, node) => { if (node) pick(node); } });
+  for (const n of VA.find(n => n.lat != null)) map.pin(n);
+  function pick(node) {
+    VA.renderCard($('card'), node, { teacher: true, onRelated: pick });
+    const ref = VA.refFor(node);
+    if (ref && ref.kind === 'layer') { map.setLayer(ref.id, true); map.clearHighlight(); } else if (ref) map.highlight(ref);
+    location.hash = tab + '/' + node.id;
+  }
+  function render() {
+    const q = $('search').value.trim().toLowerCase();
+    const list = VA.find(groups[tab]).filter(n => !q || n.name.toLowerCase().includes(q) || (n.tagline || '').toLowerCase().includes(q)).sort((a, b) => a.name.localeCompare(b.name));
+    if (!list.length) { $('list').innerHTML = `<div class="va-empty">Nothing here yet. ${tab === 'people' ? 'People arrive with Chapter 2.' : tab === 'events' ? 'Events arrive with Chapter 3.' : 'Try another search.'}</div>`; return; }
+    VA.renderIndex($('list'), list, { onPick: pick, groupBy: n => groupName[n.type] });
+  }
+  function renderStandards() {
+    $('std-body').innerHTML = STD.map(([code, what]) => { const nodes = VA.byStandard(code); return `<tr><td class="code">${code}</td><td>${what}</td><td><div class="chips">${nodes.length ? nodes.map(n => `<button class="va-chip" data-id="${n.id}">${n.emoji || ''} ${VA.esc(n.name)}</button>`).join('') : '<span style="color:var(--va-ink-2)">coming with a later chapter</span>'}</div></td></tr>`; }).join('');
+    $('std-body').querySelectorAll('[data-id]').forEach(b => b.addEventListener('click', () => { setTab('places'); pick(VA.get(b.dataset.id)); }));
+  }
+  function setTab(t) {
+    tab = t; document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
+    const std = t === 'standards'; $('browse').classList.toggle('hidden', std); $('standards').classList.toggle('hidden', !std); $('search').classList.toggle('hidden', std);
+    if (std) renderStandards(); else render();
+  }
+  document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+  $('search').addEventListener('input', render);
+  for (const t of ['places', 'people', 'events']) $('n-' + t).textContent = VA.find(groups[t]).length;
+  const [h, id] = location.hash.replace('#', '').split('/');
+  setTab(['places', 'people', 'events', 'standards'].includes(h) ? h : 'places');
+  if (id && VA.get(id)) pick(VA.get(id));
+})();
+</script>
+</body>
+</html>
